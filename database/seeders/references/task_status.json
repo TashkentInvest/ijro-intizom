@@ -1,0 +1,35 @@
+[
+    {
+        "name": "Active"
+    },
+    {
+        "name": "Canceled"
+    },
+    {
+        "name": "Accepted"
+    },
+    {
+        "name": "Completed"
+    },
+    {
+        "name": "Deleted"
+    },
+    {
+        "name": "ORDER_ACTIVE"
+    },
+    {
+        "name": "TIME_IS_OVER"
+    },
+    {
+        "name": "ADMIN_REJECT"
+    },
+    {
+        "name": "XODIM_REJECT"
+    },
+    {
+        "name": "SHEF_APPROVED"
+    },
+    {
+        "name": "SHEF_REJECTED"
+    }
+]

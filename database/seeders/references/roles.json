@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Super Admin",
+        "guard_name": "web",
+        "title": "Super Admin"
+    },
+    {
+        "name": "Manager",
+        "guard_name": "web",
+        "title": "Manager"
+    },
+    {
+        "name": "Employee",
+        "guard_name": "web",
+        "title": "Employee"
+    }
+]
