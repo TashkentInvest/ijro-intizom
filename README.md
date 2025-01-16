@@ -8,124 +8,105 @@ This is ready admin panel template with
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
 
-## create schedule cron command on windows
-```
-schtasks /create /tn "MyPHPTask" /tr "C:\xampp\php\php.exe C:\Users\user\Desktop\logistic-new\artisan schedule:run" /sc minute /mo 1 /st 00:00
-```
-
-```
-php artisan schedulu:run 
-```
-
-
-middle php собеседование
 
 composer require barryvdh/laravel-dompdf maatwebsite/excel
 
 
 ```
+    Schema::create('tasks', function (Blueprint $table) {
+        $table->id();
+        $table->enum('task_type', ['meeting', 'ht_task', 'emp_task']);
+        $table->unsignedBigInteger('user_id');
+        $table->string('short_name');
+        $table->text('description');
+        $table->timestamp('start_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+        $table->timestamp('end_date')->nullable();
+        $table->timestamps();
 
-1)
-type_request ozgartramz +++
-
-2)
-is_later & is_extra addelni checkbox addelna bolshi kere va radio bolishi kere  +++
-
-3)
-status 0 == first, status1 = silver, status 2 = extra +++
-
-4) fines da modal da description qoshb qoysh kere report->score validatsa qlsh kere +++
-
-5) off-days hato bervotti +++
-
-6) request & order history
-
-7) bot error message +++
-
-8) command cron qvorsh kere +++
-
-9) fines qganda score minus bomayapt misolchun 5-10 = 0 bovotti +++
-
-10) download pdf-exel qoshish kere +++
-
-11) Cheque - managerlada bo'midi faqat admin uchun. Faqat o'ziniki ko'rsa mayli +++
-
-12) dashboard, monitoring timer, manage->cheque, request history & order history, daily->chekced & unchecked, controller->report pdf qatta kereligini
-
-```
-
-$user->last_finishedtask = $user->updated_at;
-$user->save();
-
-```
-composer require guzzlehttp/guzzle:^7.8 +++
-```
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+    });
 
 
-### New bugs from dm
-```
+    Schema::create('statuses', function (Blueprint $table) {
+        $table->id();
+        $table->unsignedBigInteger('task_id');
+        $table->string('name');
+        $table->timestamps();
 
-dashboard filter korw kere +++
+        $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+    });
 
-driver name korsh kere +++
 
-employee blade korvorsh kere +++
+    Schema::create('task_assignments', function (Blueprint $table) {
+        $table->id();
+        $table->unsignedBigInteger('task_id');
+        $table->unsignedBigInteger('user_id'); // Employee assigned to the task
+        $table->unsignedBigInteger('nazoratchi_id'); // Supervisor or controller
+        $table->unsignedBigInteger('employee_id'); // Redundant, same as user_id
+        $table->enum('status', ['pending', 'in_progress', 'completed', 'rejected']);
+        $table->timestamp('emp_confirmed_at')->nullable();
+        $table->timestamp('emp_finished_at')->nullable();
+        $table->timestamp('nazoratchi_confirmed_at')->nullable();
+        $table->timestamp('nazoratchi_rejected_at')->nullable();
+        $table->timestamp('user_confirmed_at')->nullable();
+        $table->timestamp('user_rejected_at')->nullable();
+        $table->timestamps();
 
-shift return redicrect qoysh keree +++
+        $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('nazoratchi_id')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('employee_id')->references('id')->on('users')->onDelete('cascade');
+    });
 
-logo fix +++
 
-checked unchecked ishlamyapti +++
+    Schema::create('task_comments', function (Blueprint $table) {
+        $table->id();
+        $table->unsignedBigInteger('task_id');
+        $table->unsignedBigInteger('user_id');
+        $table->unsignedBigInteger('parent_id')->nullable();
+        $table->text('comment');
+        $table->timestamps();
 
-report da score not found +++
+        $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('parent_id')->references('id')->on('task_comments')->onDelete('cascade');
+    });
 
-request history employee uchun alohida bolsh kere +++
 
-report middle keremas +++
+    Schema::create('comment_reads', function (Blueprint $table) {
+        $table->id();
+        $table->unsignedBigInteger('comment_id');
+        $table->unsignedBigInteger('user_id');
+        $table->timestamp('read_at')->useCurrent();
 
-task edit Completed , accepterdlani ob tawash kere +++
+        $table->foreign('comment_id')->references('id')->on('task_comments')->onDelete('cascade');
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+    });
 
-driver delete qsa task yaratib bomayapti +++
+    Schema::create('notifications', function (Blueprint $table) {
+        $table->uuid('id')->primary();
+        $table->string('type');
+        $table->morphs('notifiable'); // Stores notifiable_id and notifiable_type
+        $table->json('data');
+        $table->timestamp('read_at')->nullable();
+        $table->timestamps();
+    });
 
-dashboard korvorsh jere +++
+    Schema::create('files', function (Blueprint $table) {
+        $table->id();
+        $table->string('file_name');
+        $table->string('file_path');
+        $table->string('file_type');
+        $table->unsignedBigInteger('user_id');
+        $table->unsignedBigInteger('task_id')->nullable();
+        $table->unsignedBigInteger('comment_id')->nullable();
+        $table->timestamps();
 
-rollback task ishlamyapti +++
+        $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+        $table->foreign('comment_id')->references('id')->on('task_comments')->onDelete('cascade');
+    });
 
-cheque korsh kere +++
-
-get trashed items request history +++
-
-task create only once +++
-
-Eployee accoundan log out qisyam online qob ketvotti +++
-
-Accountlani offline qilib qo'yish knopkasi yo'q +++
-
-daily check qganda task status update qlsh kere +++
-
-dashboard fix qilish kere +++
-
-request history- Filtrla yo'q (Driver / Company / date / employee) +++
-
-Распределитель ишламаяпти +++
-
-user->last_finishedtask update now qlsh kere +++
-
-voqt tugasa update bomyapti +++
-
-emp delete qlomidgan qlsh kere +++
-
-daily ga modal da kopro info chqazsh kere +++
-
-not found page la qlish kere +++
-
-crud delete la blan chqazsh kere
-
-trash rollback blade qilish kere
-
-employerga user status control qlsh mumknmas +++
-
-employer taskini admin confirm qsa employer last_finished == now () bolshi kere +++
 
 ```
 
