@@ -27,7 +27,7 @@
     @yield('styles')
 </head>
 
-<body>
+<body class="sidebar-dark">
     <div class="main-wrapper">
 
         <!-- partial:partials/_sidebar.html -->

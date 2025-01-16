@@ -2,7 +2,7 @@
     <div class="sidebar-header">
         <a href="#" class="sidebar-brand">
             {{-- Tash<span>Invest</span> --}}
-            <img style="width: 120px; padding:20px" src="https://toshkentinvest.uz/assets/frontend/tild6238-3031-4265-a564-343037346231/tic_logo_blue.png" alt="">
+            <img style="width: 130px; padding:20px; margin: 20px 0 !important;" src="{{asset('assets/TIC_white.png')}}" alt="">
         </a>
         <div class="sidebar-toggler not-active">
             <span></span>
