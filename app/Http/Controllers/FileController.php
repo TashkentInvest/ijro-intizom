@@ -1,107 +1,56 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
-    // Fetch and display all files
     public function index()
     {
-        // If the user is a Super Admin, show all files
-        if (Auth::user()->roles[0]->name === 'Super Admin') {
-            $files = File::orderByDesc('created_at')->get();
-        } else {
-            // For regular users, only show their files
-            $files = File::where('user_id', Auth::id())->orderByDesc('created_at')->get();
-        }
-
-        return view('files.index', compact('files'));
+        $files = File::all();
+        return response()->json($files);
     }
-
-    // Render the file upload form
-    public function create()
-    {
-        return view('files.create');
-    }
-
-    // Store uploaded files
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'department' => 'required',
-    //         'files.*' => 'required', // Validate each file
-    //     ]);
-
-    //     foreach ($request->file('files') as $file) {
-    //         $fileModel = new File();
-    //         $fileModel->name = $request->name;
-    //         $fileModel->department = $request->department;
-    //         $fileModel->user_id = Auth::id();   
-
-    //         if ($file) {
-    //             $filePath = $file->store('uploads', 'local');
-    //             $fileModel->file_name = $filePath;
-    //             $fileModel->slug = Str::random(16);
-    //         }
-
-    //         $fileModel->save();
-    //     }
-
-    //     return redirect()->route('files.index');
-    // }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'department' => 'required',
-            'files.*' => 'required', // Ensure each file is valid
+            'file_name' => 'required|string',
+            'file' => 'required|file',
+            'user_id' => 'required|exists:users,id',
+            'task_id' => 'nullable|exists:tasks,id',
+            'comment_id' => 'nullable|exists:task_comments,id',
         ]);
 
-        foreach ($request->file('files') as $file) {
-            $fileModel = new File();
-            $fileModel->name = $request->name;
-            $fileModel->department = $request->department;
-            $fileModel->user_id = Auth::id();
+        $filePath = $request->file('file')->store('task_files');
 
-            if ($file) {
-                $originalFileName = $file->getClientOriginalName();
-                $filePath = $file->storeAs('uploads', $originalFileName, 'local'); // Store with original name
+        $file = File::create([
+            'file_name' => $request->file_name,
+            'file_path' => $filePath,
+            'file_type' => $request->file->getClientMimeType(),
+            'user_id' => $request->user_id,
+            'task_id' => $request->task_id,
+            'comment_id' => $request->comment_id,
+        ]);
 
-                $fileModel->file_name = $filePath; // Store the path
-                $fileModel->slug = Str::random(16);
-            }
-
-            $fileModel->save();
-        }
-
-        return redirect()->route('files.index');
+        return response()->json($file, 201);
     }
 
-
-
-    // Show and download a file by its slug
-    public function show($slug)
+    public function show(File $file)
     {
-        $file = File::where('slug', $slug)->firstOrFail();
+        return response()->json($file);
+    }
 
-        // Authorize the action using the policy
-        if (!Auth::user()->can('view', $file)) {
-            abort(403, 'Unauthorized access');
-        }
+    public function destroy(File $file)
+    {
+        Storage::delete($file->file_path);
+        $file->delete();
+        return response()->json(['message' => 'File deleted successfully']);
+    }
 
-        $filePath = storage_path("app/{$file->file_name}");
-
-        if (!file_exists($filePath)) {
-            return abort(404, 'File not found');
-        }
-
-        return response()->download($filePath);
+    public function download(File $file)
+    {
+        return response()->download(storage_path('app/' . $file->file_path));
     }
 }

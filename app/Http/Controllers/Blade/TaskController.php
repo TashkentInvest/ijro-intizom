@@ -10,7 +10,7 @@ use App\Models\Order;
 use App\Models\RoleTask;
 use Illuminate\Http\Request;
 use App\Models\TaskStatus;
-use App\Models\Tasks;
+use App\Models\Task;
 use App\Models\TaskUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +20,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasksHistories = Tasks::with('document')
+        $tasksHistories = Task::with('document')
         ->where('status_id', TaskStatus::ACTIVE)
         ->where('status_id', TaskStatus::SHEF_APPROVED)
         ->get()->all();
@@ -148,7 +148,7 @@ class TaskController extends Controller
     public function edit($id)
     {
         // Fetch the task and related data
-        $task = Tasks::with(['roles', 'user', 'task_users'])->findOrFail($id);
+        $task = Task::with(['roles', 'user', 'task_users'])->findOrFail($id);
         $categories = Category::all(); // Adjust as necessary
         $roles = Role::all();
         $users = User::all();
@@ -160,7 +160,7 @@ class TaskController extends Controller
     public function show($id)
     {
         // Fetch the task and related data
-        $item = Tasks::where('id', $id)
+        $item = Task::where('id', $id)
             ->with(['roles', 'user', 'task_users', 'category', 'order', 'files', 'document']) // Load files relationship
             ->findOrFail($id);
 
@@ -192,7 +192,7 @@ class TaskController extends Controller
     {
         try {
     //  dd($request);       // Find the task by ID
-            $task = Tasks::findOrFail($id);
+            $task = Task::findOrFail($id);
 
             // Validate the incoming request
             $validatedData = $request->validate([
@@ -303,7 +303,7 @@ class TaskController extends Controller
     public function destroy($id)
     {
         // dd('ads');
-        $task = Tasks::find($id);
+        $task = Task::find($id);
 
         if (!$task) {
             return redirect()->back()->with('error', 'Task not found.');
@@ -321,7 +321,7 @@ class TaskController extends Controller
     public function adminConfirm(Request $request, $id)
     {
         // Find the task by its ID
-        $task = Tasks::find($id);
+        $task = Task::find($id);
     
         // Only approve if the task is not already approved
         if ($task->status_id != TaskStatus::SHEF_APPROVED) {

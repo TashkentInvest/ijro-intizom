@@ -18,7 +18,6 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FileDownloadController;
-use App\Http\Controllers\FinesController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManualEventController;
 use App\Http\Controllers\QarorlarController;
@@ -225,3 +224,57 @@ Route::get('/language/{lang}', function ($lang) {
 | This is the end of Blade (front-end) Routes
 |-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\
 */
+
+Route::middleware('auth')->group(function () {
+
+    // Task Routes
+    Route::get('tasks', [TaskController::class, 'index']); // List all tasks
+    Route::post('tasks', [TaskController::class, 'store']); // Create a new task
+    Route::get('tasks/{task}', [TaskController::class, 'show']); // Show a task
+    Route::put('tasks/{task}', [TaskController::class, 'update']); // Update task
+    Route::delete('tasks/{task}', [TaskController::class, 'destroy']); // Delete task
+    Route::get('tasks/{task}/history', [TaskController::class, 'history']); // View task history
+
+    // Task Assignment Routes
+    Route::get('task-assignments', [TaskAssignmentController::class, 'index']); // List all task assignments
+    Route::post('task-assignments', [TaskAssignmentController::class, 'store']); // Assign a task
+    Route::get('task-assignments/{taskAssignment}', [TaskAssignmentController::class, 'show']); // Show a specific task assignment
+    Route::put('task-assignments/{taskAssignment}', [TaskAssignmentController::class, 'update']); // Update task assignment
+    Route::delete('task-assignments/{taskAssignment}', [TaskAssignmentController::class, 'destroy']); // Delete task assignment
+    Route::patch('task-assignments/{taskAssignment}/accept', [TaskAssignmentController::class, 'accept']); // Accept task
+    Route::patch('task-assignments/{taskAssignment}/reject', [TaskAssignmentController::class, 'reject']); // Reject task
+    Route::patch('task-assignments/{taskAssignment}/complete', [TaskAssignmentController::class, 'complete']); // Complete task
+
+    // Task Comment Routes
+    Route::get('task-comments', [TaskCommentController::class, 'index']); // List all task comments
+    Route::post('task-comments', [TaskCommentController::class, 'store']); // Create a new comment
+    Route::get('task-comments/{taskComment}', [TaskCommentController::class, 'show']); // Show a specific comment
+    Route::put('task-comments/{taskComment}', [TaskCommentController::class, 'update']); // Update comment
+    Route::delete('task-comments/{taskComment}', [TaskCommentController::class, 'destroy']); // Delete comment
+    Route::post('task-comments/{taskComment}/reply', [TaskCommentController::class, 'reply']); // Reply to comment
+
+    // Comment Read Routes
+    Route::get('comment-reads', [CommentReadController::class, 'index']); // List all comment reads
+    Route::post('comment-reads', [CommentReadController::class, 'store']); // Mark comment as read
+    Route::post('comment-reads/{commentRead}/mark-as-read', [CommentReadController::class, 'markAsRead']); // Mark specific comment as read
+
+    // Notification Routes
+    Route::get('notifications', [NotificationController::class, 'index']); // List all notifications
+    Route::get('notifications/{notification}', [NotificationController::class, 'show']); // Show a specific notification
+    Route::post('notifications/{notification}/mark-as-read', [NotificationController::class, 'markAsRead']); // Mark notification as read
+
+    // File Routes
+    Route::get('files', [FileController::class, 'index']); // List all files
+    Route::post('files', [FileController::class, 'store']); // Upload a file
+    Route::get('files/{file}', [FileController::class, 'show']); // Show a specific file
+    Route::delete('files/{file}', [FileController::class, 'destroy']); // Delete a file
+    Route::get('files/{file}/download', [FileController::class, 'download']); // Download a file
+
+    // Audit Routes
+    Route::get('audits', [AuditController::class, 'index']); // List all audits
+    Route::get('audits/{audit}', [AuditController::class, 'show']); // Show a specific audit
+
+    // Task History Routes
+    Route::get('task-histories', [TaskHistoryController::class, 'index']); // List all task histories
+    Route::get('task-histories/{taskHistory}', [TaskHistoryController::class, 'show']); // Show specific task history
+});

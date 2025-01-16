@@ -124,10 +124,6 @@ composer require barryvdh/laravel-dompdf maatwebsite/excel
         $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
     });
 
-   
-
-
-
 ```
 
 ```
