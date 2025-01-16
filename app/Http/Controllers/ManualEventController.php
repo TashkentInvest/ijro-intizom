@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Tasks;
 use App\Models\ManualEvent;
-use App\Models\TaskStatus;
+use App\Models\Task;
 use Illuminate\Support\Facades\Cache;
 
 class ManualEventController extends Controller
@@ -32,7 +31,8 @@ class ManualEventController extends Controller
         // We'll cache the calendar data for 60 minutes (adjust as needed).
         $calendarData = Cache::remember('calendar_data', 60, function () use ($isSuperAdmin) {
             // 1. Fetch tasks with non-null issue_date, eager load relationships
-            $query = Tasks::where('status_id', '!=', TaskStatus::DELETED)->with('task_users', 'status');
+            $query = Task::where('status_id', '!=', true)->with('task_users', 'status');
+            // $query = Task::where('status_id', '!=', TaskStatus::DELETED)->with('task_users', 'status');
 
             // If the user is not a Super Admin, filter tasks by the user's own tasks
             if (!$isSuperAdmin) {

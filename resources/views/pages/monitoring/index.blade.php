@@ -26,7 +26,7 @@
             border-radius: 4px 4px 0 0;
             background-color: #f8f9fa;
             transition: background-color 0.3s ease, color 0.3s ease;
-            white-space: nowrap; /* Prevent text wrapping */
+            white-space: nowrap;
         }
 
         /* Tab link hover effect */
@@ -151,15 +151,17 @@
                                         <!-- Status Filter -->
                                         <div class="col-md-6">
                                             <label for="status" class="form-label">Статус</label>
-                                            <select name="status" id="status" class="form-select">
-                                                <option value="">Ҳаммаси</option>
-                                                @foreach ($taskStatuses as $status)
-                                                    <option value="{{ $status->id }}"
-                                                        {{ request('status') == $status->id ? 'selected' : '' }}>
-                                                        {{ $status->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                            @if (isset($taskStatuses))
+                                                <select name="status" id="status" class="form-select">
+                                                    <option value="">Ҳаммаси</option>
+                                                    @foreach ($taskStatuses as $status)
+                                                        <option value="{{ $status->id }}"
+                                                            {{ request('status') == $status->id ? 'selected' : '' }}>
+                                                            {{ $status->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            @endif
                                         </div>
                                         <!-- Date From Filter -->
                                         <div class="col-md-3">

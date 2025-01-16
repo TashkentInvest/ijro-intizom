@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Blade;
 
 use App\Http\Controllers\Controller;
 use App\Models\TaskStatus;
-use App\Models\Tasks;
+use App\Models\Task;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,17 +27,17 @@ class MonitoringController extends Controller
         $dateTo = $request->input('date_to');
         $search = $request->input('search');
 
-        // Initialize the query to fetch tasks
+        // Initialize the query to fetch task
         if (auth()->user()->email == 'baxrom.shakirov@toshkentinevst.uz' || auth()->user()->email == 'superadmin@example.com') {
-            $query = Tasks::query()
+            $query = Task::query()
                 ->orderBy('id', 'desc')
 
                 ->with(['roles', 'category', 'task_users', 'user']);
 
         } else {
-            $query = Tasks::query()
+            $query = Task::query()
                 ->orderBy('id', 'desc')
-                ->where('status_id', '!=', TaskStatus::SHEF_REJECTED)
+                ->where('status_id', '!=', true)
 
                 ->with(['roles', 'category', 'task_users', 'user']);
 
@@ -99,10 +99,10 @@ class MonitoringController extends Controller
         $allTasks = $query->where('status_id', '!=', 5)->get();
 
         // Separate tasks by status
-        $inProgressTasks = $allTasks->where('status_id', TaskStatus::ACTIVE);
-        $pendingTasks = $allTasks->where('status_id', TaskStatus::ACCEPTED);
-        $completedTasks = $allTasks->where('status_id', TaskStatus::Completed);
-        $employeeRejectedTasks = $allTasks->where('status_id', TaskStatus::XODIM_REJECT);
+        $inProgressTasks = $allTasks->where('status_id', true);
+        $pendingTasks = $allTasks->where('status_id', true);
+        $completedTasks = $allTasks->where('status_id', true);
+        $employeeRejectedTasks = $allTasks->where('status_id', true);
 
         // Prepare role names by task
         $roleNamesByTask = $allTasks->mapWithKeys(function ($task) {
@@ -112,16 +112,15 @@ class MonitoringController extends Controller
         // Get data for filter dropdowns
         $roles = Role::all();
         $users = User::all();
-        $statuses = TaskStatus::all();
+        // $statuses = TaskStatus::all();
 
         return view('pages.monitoring.index', [
-            'taskStatuses'            => $statuses,
             'allTasks'                => $allTasks,
             'inProgressTasks'         => $inProgressTasks,
             'pendingTasks'            => $pendingTasks,
             'completedTasks'          => $completedTasks,
             'employeeRejectedTasks'   => $employeeRejectedTasks,
-            'trashedTasks'            => Tasks::onlyTrashed()->get(),
+            'trashedTasks'            => Task::onlyTrashed()->get(),
             'roleNamesByTask'         => $roleNamesByTask,
             'roles'                   => $roles,
             'users'                   => $users,
