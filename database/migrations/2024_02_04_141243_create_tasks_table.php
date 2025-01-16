@@ -15,57 +15,16 @@
         {
             Schema::create('tasks', function (Blueprint $table) {
                 $table->id();
-    
-                          
-                $table->unsignedBigInteger('user_id'); //user_id
-                $table->foreign('user_id')->references('id')->on('users');
-    
-                $table->unsignedBigInteger('nazoratchi_id'); //nazoratchi_id
-                $table->foreign('nazoratchi_id')->references('id')->on('users');
-    
-                $table->unsignedBigInteger('employee_id'); //employee_id
-                $table->foreign('employee_id')->references('id')->on('users');
-
-                $table->unsignedBigInteger('finished_user_id')->nullable(); // finished employee id
-                $table->foreign('finished_user_id')->references('id')->on('users');
-    
-                $table->unsignedBigInteger('task_id');
-                $table->foreign('task_id')->references('id')->on('tasks');
-
-                $table->enum('task_type', ['meeting', 'employee_task', 'hr_task']);
-                
-                $table->unsignedBigInteger('status_id')->default(1);
-                $table->foreign('status_id')->references('id')->on('task_status');
-    
-         
-                // Additional columns
-                $table->string('poruchenie')->nullable();                
-                $table->dateTime('issue_date')->nullable();             
-                $table->dateTime('planned_completion_date')->nullable(); 
-                
-                $table->string('attached_file')->nullable(); 
-                $table->string('attached_file_employee')->nullable(); 
-                $table->string('short_name')->nullable(); 
-                $table->text('note')->nullable(); 
-                $table->string('assign_type')->nullable(); 
-                $table->text('reject_comment')->nullable(); 
-                $table->dateTime('reject_time')->nullable(); 
-    
-                $table->foreignId('document_id')->nullable()->constrained('documents')->nullOnDelete();
-
-                $table->integer('completed_time')->nullable();
-                
-                $table->integer('checked_status')->default(0);
-                $table->text('checked_comment')->nullable(); 
-                $table->dateTime('checked_time')->nullable(); 
-    
-                // Optional role relationship
-                $table->unsignedBigInteger('role_id')->nullable();
-                $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
-
-                $table->softDeletes();
+                $table->enum('task_type', ['meeting', 'ht_task', 'emp_task']);
+                $table->unsignedBigInteger('user_id');
+                $table->string('short_name');
+                $table->text('description');
+                $table->timestamp('start_date')->default(DB::raw('CURRENT_TIMESTAMP'));
+                $table->timestamp('end_date')->nullable();
                 $table->timestamps();
-    
+                $table->softDeletes(); // Adding the softDeletes column for deletion tracking
+        
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             });
         }
 

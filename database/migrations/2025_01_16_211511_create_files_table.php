@@ -15,15 +15,18 @@ class CreateFilesTable extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
+            $table->string('file_name');
+            $table->string('file_path');
+            $table->string('file_type');
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('task_id')->nullable();
-            $table->foreign('task_id')->references('id')->on('tasks');
-            $table->string('name')->nullable();        
-            $table->string('department')->nullable();  
-            $table->string('file_name')->nullable();   
-            $table->string('slug')->unique()->nullable();
+            $table->unsignedBigInteger('comment_id')->nullable();
             $table->timestamps();
+            $table->softDeletes(); // Adding softDeletes for this table
+    
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->foreign('comment_id')->references('id')->on('task_comments')->onDelete('cascade');
         });
     }
 
