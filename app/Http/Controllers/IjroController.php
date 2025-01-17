@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\File;
 use App\Models\RoleTask;
 use App\Models\Task;
+use App\Models\TaskAssignment;
 use App\Models\TaskUser;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -150,7 +151,7 @@ class IjroController extends Controller
     public function compose()
     {
 
-        abort_if_forbidden('left-request.add');
+        // abort_if_forbidden('left-request.add');
         $categories = Category::all();
         $count = 1;
         $users = User::get()->all();
@@ -362,8 +363,32 @@ class IjroController extends Controller
     {
         // Ensure the authenticated user is allowed to accept this task
         if ($task->users->contains('id', auth()->id())) {
-            // Logic to mark the task as accepted, for example:
-            $task->status = 'accepted'; // Update the task status
+
+            // Check if a task assignment exists for the current task and the authenticated user
+            $taskAssignment = TaskAssignment::where('task_id', $task->id)
+                ->where('employee_id', auth()->id())
+                ->first();
+
+            // If no assignment exists, create a new one
+            if (!$taskAssignment) {
+                $taskAssignment = TaskAssignment::create([
+                    'task_id' => $task->id,
+                    'user_id' => $task->user_id, // Assuming this is the manager or creator of the task
+                    'nazoratchi_id' => $task->nazoratchi_id ?? $task->user_id, // Assuming this is the supervisor
+                    'employee_id' => auth()->user()->id, // The employee accepting the task
+                    'status' => 'pending', // Initial status
+                    'emp_readed_at' => now(), // Current timestamp
+                    'emp_accepted_at' => now(), // Current timestamp
+                ]);
+            } else {
+                // If the task assignment exists, just update the timestamps
+                $taskAssignment->emp_readed_at = now();
+                $taskAssignment->emp_accepted_at = now();
+                $taskAssignment->save();
+            }
+
+            // Update the task status
+            // $task->status = 'accepted'; // Mark the task as accepted
             $task->save();
 
             // Redirect or return a response

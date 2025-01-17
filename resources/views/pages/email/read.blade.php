@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="row inbox-wrapper">
-        <div class="col-lg-12">
+        <div class="col-lg-9">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-lg-3 email-aside border-lg-right">
+                        <div class="col-lg-4 email-aside border-lg-right">
                             @include('pages.email.__aside')
                         </div>
-                        <div class="col-lg-9 email-content">
+                        <div class="col-lg-8 email-content">
                             <!-- Task Header -->
                             <div class="email-head">
                                 <div class="email-head-subject">
@@ -87,8 +87,11 @@
                             @if ($task->users->contains('id', auth()->id()))
                                 <!-- Show Qabul qilish button if user is assigned -->
                                 <div class="email-actions mt-4">
-                                    <a href="{{ route('ijro.accept', $task->id) }}" class="btn btn-success shadow-sm">Қабул
-                                        қилиш</a>
+                                    <form action="{{ route('ijro.accept', $task->id) }}" method="POST">
+                                        @csrf
+                                        @method('POST') <!-- Use POST method -->
+                                        <button type="submit" class="btn btn-success shadow-sm">Қабул қилиш</button>
+                                    </form>
                                 </div>
                             @else
                                 <!-- Show Back to Inbox and Edit Task buttons if user is not assigned -->
@@ -100,9 +103,62 @@
                             @endif
                             <hr class="mt-4">
                         </div>
+                    
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="col-md-12 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Timeline</h6>
+                    <div id="content">
+                        <ul class="timeline">
+                            <li class="event" >
+                                <h3>Registration</h3>
+                                <p>Get here on time, it's first come first serve. Be late, get turned away.
+                                </p>
+
+                                <span class="mt-2 text-sm text-small text-bold">12:30 - 1:00pm</span>
+                            </li>
+                            <li class="event">
+                                <h3>Opening Ceremony</h3>
+                                <p>Get ready for an exciting event, this will kick off in amazing fashion
+                                    with MOP & Busta Rhymes as an opening show.</p>
+                            </li>
+                            <li class="event" >
+                                <h3>Main Event</h3>
+                                <p>This is where it all goes down. You will compete head to head with your
+                                    friends and rivals. Get ready!</p>
+                            </li>
+                            <li class="event">
+                                <h3>Closing Ceremony</h3>
+                                <p>See how is the victor and who are the losers. The big stage is where the
+                                    winners bask in their own glory.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .timeline {
+                border-left: 3px solid #727cf5;
+                border-bottom-right-radius: 4px;
+                border-top-right-radius: 4px;
+                background: rgba(114, 124, 245, 0.09);
+                margin: 0 auto;
+                letter-spacing: 0.2px;
+                position: relative;
+                line-height: 1.4em;
+                font-size: 1.03em;
+                padding: 50px;
+                list-style: none;
+                text-align: left;
+                max-width: 100% !important;
+            }
+        </style>
     </div>
 @endsection
