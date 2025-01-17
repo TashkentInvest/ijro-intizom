@@ -42,7 +42,7 @@
     <script src="{{ asset('edo_template/assets/vendors/feather-icons/feather.min.js') }}"></script>
 </head>
 
-<body>
+<body class="sidebar-dark">
     <div class="main-wrapper">
         @include('layouts.edo_sidebar')
         {{-- @include('layouts.edo-setting_nav') --}}
