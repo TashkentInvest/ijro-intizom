@@ -17,7 +17,8 @@ class Task extends Model
         'description',
         'start_date',
         'end_date',
-        'document_id'
+        'document_id',
+        'has_star'
     ];
 
     protected $dates = ['start_date', 'end_date', 'deleted_at'];

@@ -23,6 +23,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManualEventController;
 use App\Http\Controllers\QarorlarController;
 use App\Http\Controllers\StatisticsController;
+use App\Http\Controllers\TaskCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -286,6 +287,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/email/create', [IjroController::class, 'create'])->name('ijroCreate');
     Route::get('email/edit/{id}', [IjroController::class, 'edit'])->name('ijro.edit');
     Route::post('email/update/{id}', [IjroController::class, 'update'])->name('ijro.update');
+
+    Route::post('/task_assignments', [TaskAssignmentController::class, 'store'])->name('task_assignments.store');
+    Route::post('/task_comments', [TaskCommentController::class, 'store'])->name('task_comments.store');
+    Route::post('/files', [FileController::class, 'store'])->name('files.store');
 
 
     Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');

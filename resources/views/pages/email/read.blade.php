@@ -27,7 +27,6 @@
                             </div>
                             <div class="email-body">
                                 <p>{{ $task->description }}</p>
-                            
                             </div>
                             @if ($task->files->count() > 0)
                                 <div class="email-attachments">
@@ -37,7 +36,7 @@
                                             <li>
                                                 <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank">
                                                     <span data-feather="file"></span> {{ $file->file_name }}
-                                                    <span class="text-muted tx-11">({{ $file->file_size }} MB)</span>
+                                                    <span class="text-muted tx-11">({{ number_format($file->file_size / 1024, 2) }} MB)</span>
                                                 </a>
                                                 <div class="text-muted tx-11">Файл қўшган: {{ $file->user->name }}</div>
                                             </li>
@@ -49,13 +48,15 @@
                                 <a href="{{ route('ijro.index') }}" class="btn btn-secondary">Кириш жўнатмаларига қайтиш</a>
                                 <a href="{{ route('ijro.edit', $task->id) }}" class="btn btn-primary">Топшириқни таҳрирлаш</a>
                             </div>
+                            <hr>
+
                          
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    
 @endsection
+

@@ -10,20 +10,96 @@ use App\Models\Task;
 use App\Models\TaskUser;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 class IjroController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::get();
+        // Get the current authenticated user
+        $user = Auth::user();
+        $isSuperAdmin = $user->roles()->where('name', 'Super Admin')->exists();
+
+        // Get filter parameters from the request
+        $roleFilter = $request->input('role');
+        $userFilter = $request->input('user');
+        $statusFilter = $request->input('status');
+        $taskTypeFilter = $request->input('task_type');
+        $hasStarFilter = $request->input('has_star');
+        $dateFrom = $request->input('date_from');
+        $dateTo = $request->input('date_to');
+        $search = $request->input('search');
+
+        // Initialize the query to fetch tasks
+        $query = Task::query()
+            ->orderBy('id', 'desc')
+            ->with(['user', 'users', 'taskAssignments', 'taskComments', 'files']);
+
+        // If the user is not a super admin, restrict the query
+        if (!$isSuperAdmin) {
+            $query->where('status_id', '!=', true);  // Exclude completed or archived tasks
+        }
+
+        // Apply role and user filters if needed
+        if (!$isSuperAdmin) {
+            $roleIds = $user->roles()->pluck('id')->toArray();
+
+            // Filter tasks by roles and assigned users
+            $query->where(function ($q) use ($roleIds, $user) {
+                $q->whereHas('user.roles', function ($q) use ($roleIds) {
+                    $q->whereIn('roles.id', $roleIds);
+                })
+                    ->orWhereHas('users', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
+            });
+        }
+
+        // Apply Task Type Filter
+        if ($taskTypeFilter) {
+            $query->where('task_type', $taskTypeFilter);
+        }
+
+        // Apply Starred Filter
+        if ($hasStarFilter !== null) {
+            $query->where('has_star', $hasStarFilter);
+        }
+
+        // Apply Status Filter (assuming you use `status_id` field, if not, you can adjust it)
+        if ($statusFilter) {
+            $query->where('status_id', $statusFilter);
+        }
+
+        // Apply Date Range Filter
+        if ($dateFrom) {
+            $query->whereDate('start_date', '>=', $dateFrom);
+        }
+
+        if ($dateTo) {
+            $query->whereDate('end_date', '<=', $dateTo);
+        }
+
+        // Apply Search Filter (search in `short_name` and `description`)
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('short_name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Fetch tasks
+        $tasks = $query->get();
+
         return view('pages.email.inbox', compact('tasks'));
     }
+
     public function read($id)
     {
         $task = Task::find($id);
-        return view('pages.email.read', compact('task'));
+        $users = User::all(); // Retrieve all users
+        return view('pages.email.read', compact('task', 'users'));
     }
     public function compose()
     {
@@ -121,7 +197,7 @@ class IjroController extends Controller
         $task = Task::with('users')->findOrFail($id);
         $users = User::all();
         $documents = Document::with('category')->get();
-    
+
         return view('pages.email.edit', compact('task', 'users', 'documents'));
     }
 
