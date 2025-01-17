@@ -22,9 +22,7 @@ class SystemInitSeeder extends Seeder
             [
                 RoleSeeder::class,
                 UserSeeder::class,
-                CategorySeeder::class, // boshliq (xusanakan , baxtyoraka)
-                TaskStatusSeeder::class,
-                // TaskSeeder::class,
+
             ]
         );
     }

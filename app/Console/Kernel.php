@@ -16,7 +16,6 @@ class Kernel extends ConsoleKernel
         Commands\DemoCron::class,
         Commands\DemoCronStop::class,
         Commands\DemoCronStart::class,
-        Commands\UserShift::class,
     ];
 
     /**

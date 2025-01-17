@@ -22,7 +22,6 @@
                                     <ul class="nav">
                                         <li><a href="../../../demo_1/pages/email/inbox.html"><span class="icon"><i data-feather="inbox"></i></span>Inbox<span class="badge badge-danger-muted text-white font-weight-bold float-right">2</span></a></li>
                                         <li class="active"><a href="#"><span class="icon"><i data-feather="mail"></i></span>Sent Mail</a></li>
-                                        <li><a href="#"><span class="icon"><i data-feather="briefcase"></i></span>Important<span class="badge badge-info-muted text-white font-weight-bold float-right">4</span></a></li>
                                         <li><a href="#"><span class="icon"><i data-feather="file"></i></span>Drafts</a></li>
                                         <li><a href="#"><span class="icon"><i data-feather="star"></i></span>Tags</a></li>
                                         <li><a href="#"><span class="icon"><i data-feather="trash"></i></span>Trash</a></li>
@@ -48,9 +47,9 @@
                                 <div class="email-compose-fields">
                                     <div class="row">
                                         <!-- Document Selector -->
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-12 col-lg-6 mb-3" id="documentField">
                                             <label>Хужжат номи</label>
-                                            <select name="document_id" class="js-example-basic-single w-100" required>
+                                            <select name="document_id" class="js-example-basic-single form-control w-100" required>
                                                 @foreach ($documents as $doc)
                                                     <option value="{{ $doc->id }}" @if(old('document_id') == $doc->id) selected @endif>
                                                         {{ $doc->title }} ({{ $doc->category ? $doc->category->name : 'Категория йўқ' }})
@@ -59,18 +58,18 @@
                                             </select>
                                         </div>
 
-                                               <!-- Task Type Selector -->
-                                               <div class="col-md-12 mb-3">
-                                                <label>Топшириқ тури</label>
-                                                <select name="task_type" class="form-control" required>
-                                                    <option value="meeting" @if(old('task_type') == 'meeting') selected @endif>Учрашув</option>
-                                                    <option value="hr_task" @if(old('task_type') == 'hr_task') selected @endif>HR вазифаси</option>
-                                                    <option value="emp_task" @if(old('task_type') == 'emp_task') selected @endif>Ходим вазифаси</option>
-                                                </select>
-                                            </div>
+                                        <!-- Task Type Selector -->
+                                        <div class="col-md-12 col-lg-6 mb-3">
+                                            <label>Топшириқ тури</label>
+                                            <select name="task_type" id="taskType" class="form-control" required>
+                                                <option value="meeting" @if(old('task_type') == 'meeting') selected @endif>Учрашув</option>
+                                                <option value="hr_task" @if(old('task_type') == 'hr_task') selected @endif>HR вазифаси</option>
+                                                <option value="emp_task" @if(old('task_type') == 'emp_task') selected @endif>Ходим вазифаси</option>
+                                            </select>
+                                        </div>
 
                                         <!-- Assign Users -->
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-12 col-lg-6 mb-3">
                                             <label>Фойдаланувчиларга</label>
                                             <select name="users[]" class="form-control select2" multiple="multiple" required>
                                                 @foreach ($users as $user)
@@ -82,19 +81,19 @@
                                         </div>
 
                                         <!-- Completion Date -->
-                                        <div class="col-md-6 mb-3">
+                                        <div class="col-md-6 col-lg-6 mb-3">
                                             <label>Бажариш муддати</label>
                                             <input type="datetime-local" name="planned_completion_date" class="form-control" value="{{ old('planned_completion_date') }}" required>
                                         </div>
 
                                         <!-- File Upload -->
-                                        <div class="col-md-12 mb-3">
+                                        <div class="col-md-12 col-lg-6 mb-3">
                                             <label>Файллар (ихтиёрий)</label>
                                             <input type="file" name="attached_file[]" class="form-control" multiple>
                                         </div>
 
-                                        <!-- Qisqa ном -->
-                                        <div class="col-md-12 mb-3">
+                                        <!-- Short Name -->
+                                        <div class="col-md-12 col-lg-6 mb-3">
                                             <label>Қисқа ном</label>
                                             <input name="short_name" class="form-control" value="{{ old('short_name') }}">
                                         </div>
@@ -119,4 +118,22 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const taskType = document.getElementById('taskType');
+            const documentField = document.getElementById('documentField');
+
+            function toggleDocumentField() {
+                if (taskType.value === 'hr_task') {
+                    documentField.style.display = 'block';
+                } else {
+                    documentField.style.display = 'none';
+                }
+            }
+
+            taskType.addEventListener('change', toggleDocumentField);
+            toggleDocumentField(); // Initial check
+        });
+    </script>
 @endsection
