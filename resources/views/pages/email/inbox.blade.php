@@ -15,7 +15,6 @@
                                     <div class="col-lg-6">
                                         <div class="email-title mb-2 mb-md-0">
                                             <span class="icon"><i data-feather="inbox"></i></span>
-                                            Inbox
                                             <span class="new-messages">
                                                 @if (request('status') == 'all')
                                                     ({{ $statusCounts['all'] }} хабарлар сони)
@@ -27,7 +26,6 @@
                                                     ({{ $statusCounts['rejected'] }} хабарлар сони)
                                                 @elseif(request('status') == 'delayed')
                                                     ({{ $statusCounts['delayed'] }} хабарлар сони)
-                                             
                                                 @endif
                                             </span>
                                         </div>
@@ -36,12 +34,14 @@
                                     <div class="col-lg-6">
                                         <div class="email-search">
                                             <div class="input-group input-search">
-                                                <input class="form-control" type="text" placeholder="Search mail...">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-outline-secondary" type="button">
-                                                        <i data-feather="search"></i>
-                                                    </button>
-                                                </span>
+                                                <form action="{{ route('ijro.index') }}" method="GET" class="w-100 d-flex">
+                                                    <input class="form-control" type="text" name="search" value="{{ request('search') }}" placeholder="Қидириш...">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-outline-secondary" type="submit">
+                                                            <i data-feather="search"></i>
+                                                        </button>
+                                                    </span>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -72,6 +72,11 @@
                                         </a>
                                     </div>
                                 @endforeach
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="pagination-wrapper">
+                                {{ $tasks->appends(request()->query())->links() }}
                             </div>
                         </div>
                     </div>

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 
 class IjroController extends Controller
@@ -70,8 +71,8 @@ class IjroController extends Controller
             });
         }
     
-        // Fetch filtered tasks
-        $tasks = $query->get();
+        // Fetch filtered tasks with pagination (20 tasks per page)
+        $tasks = $query->paginate(10);
     
         // Initialize a new query for counting tasks with the same filters
         $countQuery = Task::query();
@@ -127,14 +128,10 @@ class IjroController extends Controller
             })->count(),
         ];
     
-        // dd($statusCounts); // Debug to see the actual counts
-    
         // Return view with tasks and counts
         return view('pages.email.inbox', compact('tasks', 'statusCounts'));
     }
     
-
-
 
     public function read($id)
     {
@@ -207,18 +204,20 @@ class IjroController extends Controller
 
             // Handle file uploads
             if ($request->hasFile('attached_file')) {
-                foreach ($request->file('attached_file') as $file) {
-                    $path = $file->store('files');
-
-                    File::create([
-                        'file_name' => $file->getClientOriginalName(),
-                        'file_path' => $path,
-                        'file_type' => $file->getClientMimeType(),
-                        'user_id' => auth()->user()->id,
-                        'task_id' => $task->id
-                    ]);
+                if ($request->hasFile('attached_file')) {
+                    foreach ($request->file('attached_file') as $file) {
+                        $path = $file->store('files', 'public'); // Store the file in the public disk
+        
+                        File::create([
+                            'file_name' => $file->getClientOriginalName(),
+                            'file_path' => 'storage/' . $path, // Store relative path for public access
+                            'file_type' => $file->getClientMimeType(),
+                            'user_id' => auth()->user()->id,
+                            'task_id' => $task->id
+                        ]);
+                    }
                 }
-            }
+            }        
 
             // Commit transaction
             DB::commit();
@@ -248,18 +247,20 @@ class IjroController extends Controller
         // Validate the request
         $validatedData = $request->validate([
             'task_type' => 'required|in:meeting,hr_task,emp_task',
-            'users' => 'nullable|array', // Ensure users is an array
+            'users' => 'nullable|array',
             'users.*' => 'nullable|exists:users,id',
             'short_name' => 'required|string|max:255',
             'description' => 'required|string',
             'end_date' => 'nullable|date',
             'document_id' => 'nullable|exists:documents,id',
-            'attached_file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,zip|max:2048'
+            'attached_file.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx,zip|max:2048',
+            'delete_files' => 'nullable|array',
+            'delete_files.*' => 'nullable|exists:files,id' // Ensure each selected file exists in the DB
         ]);
-
+    
         // Start transaction
         DB::beginTransaction();
-
+    
         try {
             // Find the task and update it
             $task = Task::findOrFail($id);
@@ -270,7 +271,7 @@ class IjroController extends Controller
                 'end_date' => $validatedData['end_date'],
                 'document_id' => $validatedData['document_id'] ?? null
             ]);
-
+    
             // Update associated users
             TaskUser::where('task_id', $task->id)->delete();
             if (isset($validatedData['users']) && is_array($validatedData['users'])) {
@@ -284,34 +285,50 @@ class IjroController extends Controller
                     }
                 }
             }
-
+    
+            // Handle file deletions
+            if (isset($validatedData['delete_files']) && is_array($validatedData['delete_files'])) {
+                foreach ($validatedData['delete_files'] as $fileId) {
+                    $file = File::find($fileId);
+    
+                    if ($file) {
+                        // Delete the file from the filesystem
+                        Storage::delete($file->file_path);
+    
+                        // Delete the file record from the database
+                        $file->delete();
+                    }
+                }
+            }
+    
             // Handle file uploads
             if ($request->hasFile('attached_file')) {
                 foreach ($request->file('attached_file') as $file) {
-                    $path = $file->store('files');
-
+                    $path = $file->store('files', 'public'); // Store the file in the public disk
+    
                     File::create([
                         'file_name' => $file->getClientOriginalName(),
-                        'file_path' => $path,
+                        'file_path' => 'storage/' . $path, // Store relative path for public access
                         'file_type' => $file->getClientMimeType(),
                         'user_id' => auth()->user()->id,
                         'task_id' => $task->id
                     ]);
                 }
             }
-
+    
             // Commit transaction
             DB::commit();
-
+    
             return redirect()->route('ijro.index')->with('success', 'Task updated successfully!');
         } catch (\Exception $e) {
             // Rollback transaction on error
             DB::rollBack();
             \Log::info($e);
-
+    
             return redirect()->back()->with('error', 'Failed to update task: ' . $e->getMessage());
         }
     }
+    
 
     public function accept(Task $task)
     {

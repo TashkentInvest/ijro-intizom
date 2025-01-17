@@ -39,11 +39,11 @@
                                             <label>Топшириқ тури</label>
                                             <select name="task_type" id="taskType" class="form-control" required>
                                                 <option value="meeting" @if (old('task_type') == 'meeting') selected @endif>
-                                                    Учрашув</option>
-                                                <option value="hr_task" @if (old('task_type') == 'hr_task') selected @endif>HR
-                                                    вазифаси</option>
+                                                    Эслатмалар</option>
+                                                <option value="hr_task" @if (old('task_type') == 'hr_task') selected @endif>
+                                                    Ҳужжат алмашинуви</option>
                                                 <option value="emp_task" @if (old('task_type') == 'emp_task') selected @endif>
-                                                    Ходим вазифаси</option>
+                                                    Шахсий топшириқ</option>
                                             </select>
                                         </div>
 
