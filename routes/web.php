@@ -292,6 +292,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/task_comments', [TaskCommentController::class, 'store'])->name('task_comments.store');
     Route::post('/files', [FileController::class, 'store'])->name('files.store');
 
+    Route::post('/tasks/{task}/accept', [IjroController::class, 'accept'])->name('ijro.accept');
+
+
 
     Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
 });

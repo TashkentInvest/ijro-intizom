@@ -271,4 +271,20 @@ class IjroController extends Controller
             return redirect()->back()->with('error', 'Failed to update task: ' . $e->getMessage());
         }
     }
+
+    public function accept(Task $task)
+    {
+        // Ensure the authenticated user is allowed to accept this task
+        if ($task->users->contains('id', auth()->id())) {
+            // Logic to mark the task as accepted, for example:
+            $task->status = 'accepted'; // Update the task status
+            $task->save();
+
+            // Redirect or return a response
+            return redirect()->route('ijro.index')->with('success', 'Task accepted successfully');
+        }
+
+        // If the user is not assigned to the task, show an error
+        return redirect()->route('ijro.index')->with('error', 'You are not assigned to this task');
+    }
 }
