@@ -11,11 +11,11 @@
     </div>
     <div class="aside-nav collapse">
         <ul class="nav">
-            <li><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="inbox"></i></span>Кириш қутиси<span class="badge badge-danger-muted text-white font-weight-bold float-right">2</span></a></li>
-            <li class="active"><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="mail"></i></span>Юборилган топшириқлар</a></li>
-            <li><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="file"></i></span>Қораламалар</a></li>
-            <li><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="star"></i></span>Теглар</a></li>
-            <li><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="trash"></i></span>Чиқиндилар</a></li>
+            <li><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="inbox"></i></span>Барча топшириқлар<span class="badge badge-danger-muted text-white font-weight-bold float-right">2</span></a></li>
+            <li class="active"><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="clock"></i></span>Бажарилмоқда</a></li>
+            <li><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="check"></i></span>Бажарилган</a></li>
+            <li><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="alert-circle"></i></span>Бажарилмаган</a></li>
+            <li><a href="{{route('ijro.index')}}"><span class="icon"><i data-feather="alert-triangle"></i></span>Муддатидан кеч бажарилган</a></li>
         </ul>
         {{-- <span class="title">Ёрлиқлар</span>
         <ul class="nav nav-pills nav-stacked">
