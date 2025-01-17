@@ -18,18 +18,20 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->enum('task_type', ['meeting', 'hr_task', 'emp_task']);
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('nazoratchi_id')->nullable();
             $table->integer('has_star')->default(0);
             $table->string('short_name');
             $table->text('description');
             $table->timestamp('start_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('end_date')->nullable();
             $table->timestamps();
-            $table->softDeletes(); // Adding the softDeletes column for deletion tracking
-
+            $table->softDeletes();
+            
             $table->unsignedBigInteger('document_id')->nullable();
             $table->foreign('document_id')->references('id')->on('documents');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('nazoratchi_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
