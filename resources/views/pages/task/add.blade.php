@@ -51,7 +51,6 @@
                                             </select>
                                         </div>
 
-                                      
 
                                         <!-- Completion Date -->
                                         <div class="col-md-6 mb-3">
