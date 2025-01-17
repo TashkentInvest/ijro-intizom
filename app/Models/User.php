@@ -147,28 +147,19 @@ class User extends Authenticatable
     }
 
 
-    public function orders()
-    {
-        return $this->hasMany(Order::class);
-    }
-
-    // Relationship with orders finished by the user
-    public function finishedOrders()
-    {
-        return $this->hasMany(Order::class, 'finished_user_id');
-    }
     public function tasks()
     {
-        return $this->hasMany(Tasks::class);
+        return $this->hasMany(Task::class);
     }
     public function user_tasks()
     {
-        return $this->belongsToMany(Tasks::class, 'task_user', 'user_id', 'task_id');
+        return $this->belongsToMany(Task::class, 'task_user', 'user_id', 'task_id');
     }
 
 
-    public function userOfDays()
+    public function sessions()
     {
-        return $this->hasMany(UserOffDay::class);
+        return $this->hasMany(UserSession::class);
     }
+
 }

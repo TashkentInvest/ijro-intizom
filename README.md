@@ -1,16 +1,14 @@
 ## About Template
 
 This is ready admin panel template with
-- [Laravel 8](https://laravel.com/docs/8.x)
-- [Laravel-permissions (Spatie.be)](https://spatie.be/docs/laravel-permission/v3/introduction)
-- [Authorization laravel/ui](https://github.com/laravel/ui)
+
+-   [Laravel 8](https://laravel.com/docs/8.x)
+-   [Laravel-permissions (Spatie.be)](https://spatie.be/docs/laravel-permission/v3/introduction)
+-   [Authorization laravel/ui](https://github.com/laravel/ui)
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-
-
 composer require barryvdh/laravel-dompdf maatwebsite/excel
-
 
 ```
     Schema::create('tasks', function (Blueprint $table) {
@@ -128,7 +126,7 @@ composer require barryvdh/laravel-dompdf maatwebsite/excel
 
 ```
 * * * * * cd /c/Users/user/Desktop/logistic-new && php artisan schedule:run >> /dev/null 2>&1
-    
+
 sudo update-alternatives --config php
 ```
 
@@ -173,4 +171,65 @@ composer require barryvdh/laravel-dompdf
 
         return response()->json(['message' => 'Task deleted successfully!'], 200);
     }
+```
+
+## Seans Activity
+
+```
+    Schema::create('user_sessions', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Relating to the users table
+        $table->string('ip_address');
+        $table->string('mac_address')->nullable(); // Optional, as not all devices may have this info available
+        $table->timestamp('login_at')->useCurrent(); // Timestamp of when the user logged in
+        $table->timestamp('last_activity')->nullable(); // Last time the user was active
+        $table->enum('session_type', ['web', 'mobile', 'api'])->default('web'); // Identifying the platform used to log in
+        $table->string('user_agent')->nullable(); // To store browser info
+        $table->string('location')->nullable(); // Optional, you could store the location based on IP or user input
+        $table->timestamps();
+    });
+
+    public function storeSession(Request $request)
+    {
+        // Get user details (e.g., authenticated user)
+        $user = auth()->user();
+
+        // Create a new session record
+        $session = new UserSession([
+            'user_id' => $user->id,
+            'ip_address' => $request->ip(),  // Get the user's IP address
+            'mac_address' => $request->header('X-MAC-Address'), // MAC address if available (client-side)
+            'login_at' => now(),
+            'session_type' => $request->input('session_type', 'web'), // Web, mobile, etc.
+            'user_agent' => $request->header('User-Agent'),
+            'location' => $this->getLocationFromIp($request->ip()) // Optional: implement a function to retrieve location based on IP
+        ]);
+
+        $session->save();
+    }
+
+    private function getLocationFromIp($ip)
+    {
+        // Optionally, you can use a service like ipstack, or a local IP geolocation library
+        return 'New York'; // Placeholder - you would use an actual geolocation service here
+    }
+
+
+    use App\Models\UserSession;
+
+
+    $user = auth()->user();
+
+    $userSession = UserSession::create([
+        'user_id' => $user->id,
+        'ip_address' => request()->ip(),
+        'mac_address' => request()->header('X-MAC-Address'),
+        'login_at' => now(),
+        'session_type' => request()->input('session_type', 'web'),
+        'user_agent' => request()->header('User-Agent'),
+        'location' => $this->getLocationFromIp(request()->ip()),
+    ]);
+
+    $userSession->updateLastActivity();
+
 ```
