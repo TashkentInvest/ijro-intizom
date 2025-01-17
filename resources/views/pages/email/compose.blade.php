@@ -69,13 +69,13 @@
                                         <!-- Short Name -->
                                         <div class="col-md-12 col-lg-6 mb-3">
                                             <label>Қисқа ном</label>
-                                            <input name="short_name" class="form-control" value="{{ old('short_name') }}">
+                                            <input name="short_name" class="form-control" value="{{ old('short_name') }}" required>
                                         </div>
 
                                         <!-- Notes -->
                                         <div class="col-md-12 mb-3">
                                             <label>Эслатма (Ихтиёрий)</label>
-                                            <textarea name="description" rows="3" class="form-control">{{ old('description') }}</textarea>
+                                            <textarea name="description" required rows="3" class="form-control">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
                                 </div>
