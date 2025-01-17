@@ -76,20 +76,7 @@
                                             <input type="file" name="attached_file[]" class="form-control" multiple>
                                         </div>
 
-                                        @foreach ($task->files as $file)
-
-                                        <div class="col-4">
-
-                                            <div class="file-item">
-                                                <label>
-                                                    <input type="checkbox" name="delete_files[]"
-                                                        value="{{ $file->id }}">
-                                                    {{ $file->file_name }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                        @endforeach
-
+                                       
 
                                         <!-- Қисқа ном -->
                                         <div class="col-md-12 col-lg-6 mb-3">
@@ -103,6 +90,28 @@
                                             <label>Изоҳ (ихтиёрий)</label>
                                             <textarea name="description" required rows="3" class="form-control">{{ $task->description }}</textarea>
                                         </div>
+
+                                        @foreach ($task->files as $file)
+                                        <div class="col-md-12 col-lg-4 col-xl-4 col-4">
+
+                                            <div class="file-item">
+                                                <label>
+                                                    <input type="checkbox" name="delete_files[]"
+                                                        value="{{ $file->id }}">
+                                                    {{ $file->file_name }}
+                                                </label>
+
+                                                <a href="{{ asset('tasks/' . $task->id . '/' . $file->file_name) }}"
+                                                    target="_blank">
+                                                    <span data-feather="file"></span> {{ $file->file_name }}
+                                                    <span
+                                                        class="text-muted tx-11">({{ number_format($file->file_size / 1024, 2) }}
+                                                        MB)</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                        
                                     </div>
                                 </div>
 

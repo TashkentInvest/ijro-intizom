@@ -45,7 +45,7 @@
                                     <div class="col-md-6 mt-2">
                                         <strong>Vazifani topshirgan foydalanuvchilar:</strong>
                                         <ul class="list-unstyled">
-                                            @foreach($task->users as $user)
+                                            @foreach ($task->users as $user)
                                                 <li>{{ $user->name }} ({{ $user->email }})</li>
                                             @endforeach
                                         </ul>
@@ -62,13 +62,18 @@
                             <!-- File Attachments -->
                             @if ($task->files->count() > 0)
                                 <div class="email-attachments mt-4">
-                                    <div class="title">Yuklamalar <span>({{ $task->files->count() }} fayl(lar))</span></div>
+                                    <div class="title">Yuklamalar <span>({{ $task->files->count() }} fayl(lar))</span>
+                                    </div>
                                     <ul class="list-unstyled">
                                         @foreach ($task->files as $file)
                                             <li>
-                                                <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank">
+                                                <!-- Updated file path to match public path -->
+                                                <a href="{{ asset('tasks/' . $task->id . '/' . $file->file_name) }}"
+                                                    target="_blank">
                                                     <span data-feather="file"></span> {{ $file->file_name }}
-                                                    <span class="text-muted tx-11">({{ number_format($file->file_size / 1024, 2) }} MB)</span>
+                                                    <span
+                                                        class="text-muted tx-11">({{ number_format($file->file_size / 1024, 2) }}
+                                                        MB)</span>
                                                 </a>
                                                 <div class="text-muted tx-11">Yuklagan: {{ $file->user->name }}</div>
                                             </li>
@@ -77,17 +82,21 @@
                                 </div>
                             @endif
 
+
                             <!-- Task Actions -->
                             @if ($task->users->contains('id', auth()->id()))
                                 <!-- Show Qabul qilish button if user is assigned -->
                                 <div class="email-actions mt-4">
-                                    <a href="{{ route('ijro.accept', $task->id) }}" class="btn btn-success shadow-sm">Qabul qilish</a>
+                                    <a href="{{ route('ijro.accept', $task->id) }}" class="btn btn-success shadow-sm">Qabul
+                                        qilish</a>
                                 </div>
                             @else
                                 <!-- Show Back to Inbox and Edit Task buttons if user is not assigned -->
                                 <div class="email-actions mt-4 d-flex justify-content-between">
-                                    <a href="{{ route('ijro.index') }}" class="btn btn-secondary shadow-sm">Qabul qilish qutisiga qaytish</a>
-                                    <a href="{{ route('ijro.edit', $task->id) }}" class="btn btn-primary shadow-sm">Vazifani tahrirlash</a>
+                                    <a href="{{ route('ijro.index') }}" class="btn btn-secondary shadow-sm">Qabul qilish
+                                        qutisiga qaytish</a>
+                                    <a href="{{ route('ijro.edit', $task->id) }}"
+                                        class="btn btn-primary shadow-sm">Vazifani tahrirlash</a>
                                 </div>
                             @endif
                             <hr class="mt-4">
