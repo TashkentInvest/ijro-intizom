@@ -22,6 +22,7 @@ class IjroController extends Controller
         // Get the current authenticated user
         $user = Auth::user();
         $isSuperAdmin = $user->roles()->where('name', 'Super Admin')->exists();
+        $isSpecificUser = $user->email == 'shakirov@gmail.com';
 
         // Get filter parameters from the request
         $statusFilter = $request->input('status');
@@ -36,7 +37,14 @@ class IjroController extends Controller
             ->orderBy('id', 'desc')
             ->with(['user', 'users', 'taskAssignments', 'taskComments', 'files']);
 
-        // If the user is not a super admin, restrict the query
+        // Check if the user is neither super admin nor the specific user, and restrict tasks to only those assigned to the user
+        if (!$isSuperAdmin && !$isSpecificUser) {
+            $query->whereHas('users', function ($q) {
+                $q->where('users.id', auth()->id()); // Specify 'users.id' to avoid ambiguity
+            });
+        }
+
+        // If the user is not a super admin, restrict the query to exclude completed or archived tasks
         if (!$isSuperAdmin) {
             $query->where('status_id', '!=', true);  // Exclude completed or archived tasks
         }
@@ -71,7 +79,7 @@ class IjroController extends Controller
             });
         }
 
-        // Fetch filtered tasks with pagination (20 tasks per page)
+        // Fetch filtered tasks with pagination (10 tasks per page)
         $tasks = $query->paginate(10);
 
         // Initialize a new query for counting tasks with the same filters

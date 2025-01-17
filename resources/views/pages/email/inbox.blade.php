@@ -34,8 +34,10 @@
                                     <div class="col-lg-6">
                                         <div class="email-search">
                                             <div class="input-group input-search">
-                                                <form action="{{ route('ijro.index') }}" method="GET" class="w-100 d-flex">
-                                                    <input class="form-control" type="text" name="search" value="{{ request('search') }}" placeholder="Қидириш...">
+                                                <form action="{{ route('ijro.index') }}" method="GET"
+                                                    class="w-100 d-flex">
+                                                    <input class="form-control" type="text" name="search"
+                                                        value="{{ request('search') }}" placeholder="Қидириш...">
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-outline-secondary" type="submit">
                                                             <i data-feather="search"></i>
@@ -52,11 +54,11 @@
                                 @foreach ($tasks as $task)
                                     <div class="email-list-item email-list-item--unread">
                                         <div class="email-list-actions">
-                                            <div class="form-check form-check-flat form-check-primary">
+                                            {{-- <div class="form-check form-check-flat form-check-primary">
                                                 <label class="form-check-label">
                                                     <input type="checkbox" class="form-check-input">
                                                 </label>
-                                            </div>
+                                            </div> --}}
                                             <a class="favorite active" href="#"><span><i
                                                         data-feather="star"></i></span></a>
                                         </div>
@@ -65,6 +67,12 @@
                                                 <span class="from">{{ $task->short_name }}</span>
                                                 <p class="msg">{{ $task->description }}</p>
                                             </div>
+                                            <ul class="list-unstyled">
+                                                <b>Масул Шахс(лар): </b>
+                                                @foreach ($task->users as $user)
+                                                    <li>{{ $user->name }} ({{ $user->email }})</li>
+                                                @endforeach
+                                            </ul>
                                             <span class="date">
                                                 <span class="icon"><i data-feather="paperclip"></i> </span>
                                                 {{ $task->start_date->format('d M') }}
