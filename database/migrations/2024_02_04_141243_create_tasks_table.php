@@ -25,6 +25,9 @@ class CreateTasksTable extends Migration
             $table->timestamps();
             $table->softDeletes(); // Adding the softDeletes column for deletion tracking
 
+            $table->unsignedBigInteger('document_id')->nullable();
+            $table->foreign('document_id')->references('id')->on('documents');
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

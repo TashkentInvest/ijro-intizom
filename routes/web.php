@@ -283,6 +283,9 @@ Route::middleware('auth')->group(function () {
     Route::get('email/index', [IjroController::class, 'index'])->name('ijro.index');
     Route::get('email/read', [IjroController::class, 'read'])->name('ijro.read');
     Route::get('email/compose', [IjroController::class, 'compose'])->name('ijro.compose');
+    Route::post('/email/create', [IjroController::class, 'create'])->name('ijroCreate');
+
+
     Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
 
 

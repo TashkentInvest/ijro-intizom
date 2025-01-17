@@ -16,14 +16,14 @@
                                     Создать Новое Поручение
                                 </div>
                             </div>
-                            <form id="taskForm" action="{{ route('taskCreate') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('ijroCreate') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="email-compose-fields">
                                     <div class="row">
                                         <!-- Document Selector -->
                                         <div class="col-md-12 col-lg-6 mb-3" id="documentField">
                                             <label>Хужжат номи</label>
-                                            <select name="document_id" class="js-example-basic-single form-control w-100" required>
+                                            <select name="document_id" class="js-example-basic-single form-control w-100">
                                                 @foreach ($documents as $doc)
                                                     <option value="{{ $doc->id }}" @if(old('document_id') == $doc->id) selected @endif>
                                                         {{ $doc->title }} ({{ $doc->category ? $doc->category->name : 'Категория йўқ' }})
@@ -57,7 +57,7 @@
                                         <!-- Completion Date -->
                                         <div class="col-md-6 col-lg-6 mb-3">
                                             <label>Бажариш муддати</label>
-                                            <input type="datetime-local" name="planned_completion_date" class="form-control" value="{{ old('planned_completion_date') }}" required>
+                                            <input type="datetime-local" name="end_date" class="form-control" value="{{ old('end_date') }}" required>
                                         </div>
 
                                         <!-- File Upload -->
@@ -75,7 +75,7 @@
                                         <!-- Notes -->
                                         <div class="col-md-12 mb-3">
                                             <label>Эслатма (Ихтиёрий)</label>
-                                            <textarea name="note" rows="3" class="form-control">{{ old('note') }}</textarea>
+                                            <textarea name="description" rows="3" class="form-control">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
                                 </div>

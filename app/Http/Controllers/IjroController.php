@@ -4,18 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Document;
+use App\Models\File;
+use App\Models\RoleTask;
+use App\Models\Task;
+use App\Models\TaskUser;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+
 class IjroController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return view('pages.email.inbox');
     }
-    public function read(){
+    public function read()
+    {
         return view('pages.email.read');
     }
-    public function compose(){
+    public function compose()
+    {
 
         abort_if_forbidden('left-request.add');
         $categories = Category::all();
@@ -30,5 +39,78 @@ class IjroController extends Controller
 
         return view('pages.email.compose', compact('categories', 'count', 'users', 'roles', 'documents'));
         // return view('pages.email.compose');
+    }
+
+
+    public function create(Request $request)
+    {
+        // Validate the request
+        $validatedData = $request->validate([
+            'task_type' => 'nullable',
+
+            'users' => 'nullable|array', // Ensure users is an array
+            'users.*' => 'nullable',
+            'short_name' => 'nullable',
+            'description' => 'nullable',
+            'end_date' => 'nullable',
+            'document_id' => 'nullable',
+            'attached_file.*' => 'nullable'
+        ]);
+
+        // dd($request);
+        // Start transaction
+        DB::beginTransaction();
+
+        try {
+            // Create the task
+            $task = Task::create([
+                'task_type' => $validatedData['task_type'],
+                'user_id' => auth()->user()->id, // Assuming the currently authenticated user is the creator
+                'short_name' => $validatedData['short_name'],
+                'description' => $validatedData['description'],
+                'end_date' => $validatedData['end_date'],
+                'document_id' => $validatedData['document_id'] ?? null
+            ]);
+
+            // Check and associate users with the task
+            if (isset($validatedData['users']) && is_array($validatedData['users'])) {
+                foreach ($validatedData['users'] as $userId) {
+                    // dd('request');
+                    $user = User::find($userId);
+                    if ($user) {
+                        TaskUser::create([
+                            'task_id' => $task->id,
+                            'user_id' => $user->id
+                        ]);
+                    }
+                }
+            }
+
+            // Handle file uploads
+            if ($request->hasFile('attached_file')) {
+                foreach ($request->file('attached_file') as $file) {
+                    $path = $file->store('files');
+
+                    File::create([
+                        'file_name' => $file->getClientOriginalName(),
+                        'file_path' => $path,
+                        'file_type' => $file->getClientMimeType(),
+                        'user_id' => auth()->user()->id,
+                        'task_id' => $task->id
+                    ]);
+                }
+            }
+
+            // Commit transaction
+            DB::commit();
+
+            return redirect()->route('ijro.index')->with('success', 'Task created successfully!');
+        } catch (\Exception $e) {
+            // Rollback transaction on error
+            DB::rollBack();
+            \Log::info($e);
+
+            return redirect()->back()->with('error', 'Failed to create task: ' . $e->getMessage());
+        }
     }
 }
