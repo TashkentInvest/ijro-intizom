@@ -13,7 +13,7 @@ composer require barryvdh/laravel-dompdf maatwebsite/excel
 ```
     Schema::create('tasks', function (Blueprint $table) {
         $table->id();
-        $table->enum('task_type', ['meeting', 'ht_task', 'emp_task']);
+        $table->enum('task_type', ['meeting', 'hr_task', 'emp_task']);
         $table->unsignedBigInteger('user_id');
         $table->string('short_name');
         $table->text('description');
