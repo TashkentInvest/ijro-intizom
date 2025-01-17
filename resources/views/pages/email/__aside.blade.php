@@ -11,32 +11,39 @@
     </div>
     <div class="aside-nav collapse">
         <ul class="nav">
-            <li>
+            <li class="{{ request('status') == 'all' ? 'active' : '' }}">
                 <a href="{{ route('ijro.index', ['status' => 'all']) }}">
                     <span class="icon"><i data-feather="inbox"></i></span>Барча топшириқлар
-                    <span class="badge badge-danger-muted text-white font-weight-bold float-right">2</span>
+                    {{-- <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $statusCounts['all'] }}</span> --}}
                 </a>
             </li>
-            <li class="active">
+            <li class="{{ request('status') == 'in_progress' ? 'active' : '' }}">
                 <a href="{{ route('ijro.index', ['status' => 'in_progress']) }}">
                     <span class="icon"><i data-feather="clock"></i></span>Бажарилмоқда
+                    {{-- <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $statusCounts['in_progress'] }}</span> --}}
                 </a>
             </li>
-            <li>
+            {{-- @dump($statusCounts) --}}
+            <li class="{{ request('status') == 'completed' ? 'active' : '' }}">
                 <a href="{{ route('ijro.index', ['status' => 'completed']) }}">
                     <span class="icon"><i data-feather="check"></i></span>Бажарилган
+                    {{-- <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $statusCounts['completed'] }}</span> --}}
                 </a>
             </li>
-            <li>
+            <li class="{{ request('status') == 'rejected' ? 'active' : '' }}">
                 <a href="{{ route('ijro.index', ['status' => 'rejected']) }}">
                     <span class="icon"><i data-feather="alert-circle"></i></span>Бажарилмаган
+                    {{-- <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $statusCounts['rejected'] }}</span> --}}
                 </a>
             </li>
-            <li>
+            <li class="{{ request('status') == 'delayed' ? 'active' : '' }}">
                 <a href="{{ route('ijro.index', ['status' => 'delayed']) }}">
                     <span class="icon"><i data-feather="alert-triangle"></i></span>Муддатидан кеч бажарилган
+                    {{-- <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $statusCounts['delayed'] }}</span> --}}
                 </a>
             </li>
         </ul>
     </div>
+
+    
 </div>

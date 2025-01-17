@@ -21,90 +21,118 @@ class IjroController extends Controller
         // Get the current authenticated user
         $user = Auth::user();
         $isSuperAdmin = $user->roles()->where('name', 'Super Admin')->exists();
-
+    
         // Get filter parameters from the request
-        $roleFilter = $request->input('role');
-        $userFilter = $request->input('user');
         $statusFilter = $request->input('status');
         $taskTypeFilter = $request->input('task_type');
         $hasStarFilter = $request->input('has_star');
         $dateFrom = $request->input('date_from');
         $dateTo = $request->input('date_to');
         $search = $request->input('search');
-
+    
         // Initialize the query to fetch tasks
         $query = Task::query()
             ->orderBy('id', 'desc')
             ->with(['user', 'users', 'taskAssignments', 'taskComments', 'files']);
-
+    
         // If the user is not a super admin, restrict the query
         if (!$isSuperAdmin) {
             $query->where('status_id', '!=', true);  // Exclude completed or archived tasks
         }
-
-        // Apply role and user filters if needed
-        if (!$isSuperAdmin) {
-            $roleIds = $user->roles()->pluck('id')->toArray();
-
-            // Filter tasks by roles and assigned users
-            $query->where(function ($q) use ($roleIds, $user) {
-                $q->whereHas('user.roles', function ($q) use ($roleIds) {
-                    $q->whereIn('roles.id', $roleIds);
-                })
-                    ->orWhereHas('users', function ($q) use ($user) {
-                        $q->where('user_id', $user->id);
-                    });
-            });
-        }
-
-        // Apply Task Type Filter
+    
+        // Apply filters (task type, starred, status, date range, etc.)
         if ($taskTypeFilter) {
             $query->where('task_type', $taskTypeFilter);
         }
-
-        // Apply Starred Filter
+    
         if ($hasStarFilter !== null) {
             $query->where('has_star', $hasStarFilter);
         }
-
-        // Apply Status Filter for Task Assignments (status column in task_assignments)
-        if ($statusFilter && $statusFilter != 'all') {
-            // Apply specific status filters (in_progress, completed, rejected, delayed)
+    
+        if ($statusFilter && $statusFilter !== 'all') {
             $query->whereHas('taskAssignments', function ($q) use ($statusFilter) {
-                if ($statusFilter == 'in_progress') {
-                    $q->where('status', 'in_progress');
-                } elseif ($statusFilter == 'completed') {
-                    $q->where('status', 'completed');
-                } elseif ($statusFilter == 'rejected') {
-                    $q->where('status', 'rejected');
-                } elseif ($statusFilter == 'delayed') {
-                    $q->where('status', 'delayed');
-                }
+                $q->where('status', $statusFilter);
             });
         }
-
-        // Apply Date Range Filter
+    
         if ($dateFrom) {
             $query->whereDate('start_date', '>=', $dateFrom);
         }
-
+    
         if ($dateTo) {
             $query->whereDate('end_date', '<=', $dateTo);
         }
-
-        // Apply Search Filter (search in `short_name` and `description`)
+    
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('short_name', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
-
-        // Fetch tasks
+    
+        // Fetch filtered tasks
         $tasks = $query->get();
-
-        return view('pages.email.inbox', compact('tasks'));
+    
+        // Initialize a new query for counting tasks with the same filters
+        $countQuery = Task::query();
+    
+        if (!$isSuperAdmin) {
+            $countQuery->where('status_id', '!=', true); // Exclude completed or archived tasks
+        }
+    
+        // Apply filters to the count query
+        if ($taskTypeFilter) {
+            $countQuery->where('task_type', $taskTypeFilter);
+        }
+    
+        if ($hasStarFilter !== null) {
+            $countQuery->where('has_star', $hasStarFilter);
+        }
+    
+        if ($statusFilter && $statusFilter !== 'all') {
+            $countQuery->whereHas('taskAssignments', function ($q) use ($statusFilter) {
+                $q->where('status', $statusFilter);
+            });
+        }
+    
+        if ($dateFrom) {
+            $countQuery->whereDate('start_date', '>=', $dateFrom);
+        }
+    
+        if ($dateTo) {
+            $countQuery->whereDate('end_date', '<=', $dateTo);
+        }
+    
+        if ($search) {
+            $countQuery->where(function ($q) use ($search) {
+                $q->where('short_name', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+    
+        // Calculate the task counts based on status
+        $statusCounts = [
+            'all' => $countQuery->count(),
+            'in_progress' => $countQuery->whereHas('taskAssignments', function ($query) {
+                $query->where('status', 'in_progress');
+            })->count(),
+            'completed' => $countQuery->whereHas('taskAssignments', function ($query) {
+                $query->where('status', 'completed');
+            })->count(),
+            'rejected' => $countQuery->whereHas('taskAssignments', function ($query) {
+                $query->where('status', 'rejected');
+            })->count(),
+            'delayed' => $countQuery->whereHas('taskAssignments', function ($query) {
+                $query->where('status', 'delayed');
+            })->count(),
+        ];
+    
+        // dd($statusCounts); // Debug to see the actual counts
+    
+        // Return view with tasks and counts
+        return view('pages.email.inbox', compact('tasks', 'statusCounts'));
     }
+    
 
 
 

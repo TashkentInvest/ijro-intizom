@@ -15,9 +15,24 @@
                                     <div class="col-lg-6">
                                         <div class="email-title mb-2 mb-md-0">
                                             <span class="icon"><i data-feather="inbox"></i></span>
-                                            Inbox <span class="new-messages">({{$tasks->count()}} new messages)</span>
+                                            Inbox
+                                            <span class="new-messages">
+                                                @if (request('status') == 'all')
+                                                    ({{ $statusCounts['all'] }} хабарлар сони)
+                                                @elseif(request('status') == 'in_progress')
+                                                    ({{ $statusCounts['in_progress'] }} хабарлар сони)
+                                                @elseif(request('status') == 'completed')
+                                                    ({{ $statusCounts['completed'] }} хабарлар сони)
+                                                @elseif(request('status') == 'rejected')
+                                                    ({{ $statusCounts['rejected'] }} хабарлар сони)
+                                                @elseif(request('status') == 'delayed')
+                                                    ({{ $statusCounts['delayed'] }} хабарлар сони)
+                                             
+                                                @endif
+                                            </span>
                                         </div>
                                     </div>
+
                                     <div class="col-lg-6">
                                         <div class="email-search">
                                             <div class="input-group input-search">
@@ -32,7 +47,7 @@
                                     </div>
                                 </div>
                             </div>
-                       
+
                             <div class="email-list">
                                 @foreach ($tasks as $task)
                                     <div class="email-list-item email-list-item--unread">
@@ -42,7 +57,8 @@
                                                     <input type="checkbox" class="form-check-input">
                                                 </label>
                                             </div>
-                                            <a class="favorite active" href="#"><span><i data-feather="star"></i></span></a>
+                                            <a class="favorite active" href="#"><span><i
+                                                        data-feather="star"></i></span></a>
                                         </div>
                                         <a href="{{ route('ijro.read', $task->id) }}" class="email-list-detail">
                                             <div>
