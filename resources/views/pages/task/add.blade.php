@@ -38,16 +38,6 @@
 
                                       
 
-                                        <div class="col-md-12 mb-3">
-                                            <label>Хужжат тури</label>
-                                            <select name="category_id" class="js-example-basic-single w-100" required>
-                                                @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" @if(old('category_id') == $category->id) selected @endif>
-                                                    {{ $category->name }}
-                                                </option>
-                                            @endforeach
-                                            </select>
-                                        </div>
 
                                         <!-- Assign Users -->
                                         <div class="col-md-12 mb-3">
@@ -61,11 +51,7 @@
                                             </select>
                                         </div>
 
-                                        <!-- Issue Date -->
-                                        <div class="col-md-6 mb-3">
-                                            <label>Берилган санаси</label>
-                                            <input type="datetime-local" name="issue_date" class="form-control" value="{{ old('issue_date') }}" required>
-                                        </div>
+                                      
 
                                         <!-- Completion Date -->
                                         <div class="col-md-6 mb-3">

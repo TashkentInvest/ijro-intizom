@@ -21,8 +21,7 @@ class TaskController extends Controller
     public function index()
     {
         $tasksHistories = Task::with('document')
-        ->where('status_id', TaskStatus::ACTIVE)
-        ->where('status_id', TaskStatus::SHEF_APPROVED)
+      
         ->get()->all();
         return view('tasks.index', compact('tasksHistories'));
     }
@@ -36,7 +35,6 @@ class TaskController extends Controller
     {
         abort_if_forbidden('left-request.add');
         $categories = Category::all();
-        $taskStatuses = TaskStatus::all();
         $count = 1;
         $users = User::get()->all();
         $documents = Document::with('category')->get();
