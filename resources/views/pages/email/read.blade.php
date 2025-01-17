@@ -87,16 +87,15 @@
                             @if ($task->users->contains('id', auth()->id()))
                                 <!-- Show Qabul qilish button if user is assigned -->
                                 <div class="email-actions mt-4">
-                                    <a href="{{ route('ijro.accept', $task->id) }}" class="btn btn-success shadow-sm">Qabul
-                                        qilish</a>
+                                    <a href="{{ route('ijro.accept', $task->id) }}" class="btn btn-success shadow-sm">Қабул
+                                        қилиш</a>
                                 </div>
                             @else
                                 <!-- Show Back to Inbox and Edit Task buttons if user is not assigned -->
                                 <div class="email-actions mt-4 d-flex justify-content-between">
-                                    <a href="{{ route('ijro.index') }}" class="btn btn-secondary shadow-sm">Qabul qilish
-                                        qutisiga qaytish</a>
+                                    <a href="{{ route('ijro.index') }}" class="btn btn-secondary shadow-sm">Ортга</a>
                                     <a href="{{ route('ijro.edit', $task->id) }}"
-                                        class="btn btn-primary shadow-sm">Vazifani tahrirlash</a>
+                                        class="btn btn-primary shadow-sm">Вазифани таҳрирлаш</a>
                                 </div>
                             @endif
                             <hr class="mt-4">
