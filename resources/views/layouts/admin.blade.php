@@ -57,7 +57,7 @@
                     </form>
                     <ul class="navbar-nav">
                        
-                        <li class="nav-item dropdown nav-notifications">
+                        {{-- <li class="nav-item dropdown nav-notifications">
                             <a class="nav-link dropdown-toggle" href="#" id="notificationDropdown"
                                 role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i data-feather="bell"></i>
@@ -121,7 +121,7 @@
                                     <a href="javascript:;">View all</a>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                         <li class="nav-item dropdown nav-profile">
                             <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -139,16 +139,16 @@
                                 </div>
                                 <div class="dropdown-body">
                                     <ul class="profile-nav p-0 pt-3">
-                                        <li class="nav-item">
-                                            <a href="pages/general/profile.html" class="nav-link">
+                                        {{-- <li class="nav-item">
+                                            <a href="{{route('userIndex')}}" class="nav-link">
                                                 <i data-feather="user"></i>
                                                 <span>Profile</span>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="nav-item">
-                                            <a href="javascript:;" class="nav-link">
+                                            <a href="{{route('userEdit', auth()->user()->id)}}" class="nav-link">
                                                 <i data-feather="edit"></i>
-                                                <span>Edit Profile</span>
+                                                <span>Таҳрир қилиш</span>
                                             </a>
                                         </li>
 
@@ -159,7 +159,7 @@
                                                 <i data-feather="log-out"></i>
                                                 <button
                                                     style="background: transparent; border:none; outline:none; padding:0;margin:0;"
-                                                    type="submit">Log Out</button>
+                                                    type="submit">Чиқиш</button>
                                             </form>
 
                                         </li>
