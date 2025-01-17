@@ -35,12 +35,12 @@
 
 
             
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="{{ route('monitoringIndex') }}" class="nav-link">
                     <i class="link-icon" data-feather="box"></i>
                     <span class="link-title">Топшириқлар</span>
                 </a>
-            </li>
+            </li> --}}
             
             @if(auth()->user()->roles->first()->name == 'Super Admin')
             <li class="nav-item">

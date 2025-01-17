@@ -153,7 +153,7 @@
                 <h1>@lang('panel.welcome')</h1>
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ url('/home') }}" class="btn btn-success">@lang('global.home')</a>
+                        <a href="{{ url('/  ') }}" class="btn btn-success">@lang('global.home')</a>
                     @else
                         <a href="{{ route('login') }}" class="btn btn-success">@lang('global.login')</a>
                     @endauth

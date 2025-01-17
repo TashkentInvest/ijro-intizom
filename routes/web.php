@@ -175,7 +175,6 @@ Route::group(['middleware' => 'auth'], function () {
     // edo template routes -------------------------------------------------------------
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboardIndex');
     // Route::get('/monitoring', [ProductController::class, 'index'])->name('monitoringIndex');
-    Route::get('/monitoring', [MonitoringController::class, 'index'])->name('monitoringIndex');
     // Task
     Route::get('/monitoring/fishka/{id}', [ProductController::class, 'fishka'])->name('monitoringFishka');
     Route::get('/task/add', [TaskController::class, 'add'])->name('taskAdd');

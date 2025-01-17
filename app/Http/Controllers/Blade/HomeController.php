@@ -15,7 +15,8 @@ class HomeController extends Controller
         $isRoleExists = DB::table('model_has_roles')->where('model_id', $userId)->exists();
 
         if ($isRoleExists) {
-            return view('pages.dashboard.index');
+            // dd('dw');
+            return view('pages.statistics.index');
         } else {
             return view('welcome');
         }
