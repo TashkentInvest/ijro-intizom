@@ -281,12 +281,12 @@ Route::middleware('auth')->group(function () {
     Route::get('task-histories/{taskHistory}', [TaskHistoryController::class, 'show']); // Show specific task history
 
     Route::get('email/index', [IjroController::class, 'index'])->name('ijro.index');
-    Route::get('email/read', [IjroController::class, 'read'])->name('ijro.read');
+    Route::get('email/read/{id}', [IjroController::class, 'read'])->name('ijro.read');
     Route::get('email/compose', [IjroController::class, 'compose'])->name('ijro.compose');
     Route::post('/email/create', [IjroController::class, 'create'])->name('ijroCreate');
+    Route::get('email/edit/{id}', [IjroController::class, 'edit'])->name('ijro.edit');
+    Route::post('email/update/{id}', [IjroController::class, 'update'])->name('ijro.update');
 
 
     Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
-
-
 });

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,6 +22,10 @@ class Task extends Model
 
     protected $dates = ['start_date', 'end_date', 'deleted_at'];
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'task_user');
+    }
     // Relationships
     public function user()
     {

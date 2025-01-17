@@ -13,22 +13,22 @@
                             <div class="email-head">
                                 <div class="email-head-title d-flex align-items-center">
                                     <span data-feather="edit" class="icon-md mr-2"></span>
-                                    Создать Новое Поручение
+                                    Edit Task
                                 </div>
                             </div>
-                            <form action="{{ route('ijroCreate') }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('ijro.update', $task->id) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="email-compose-fields">
                                     <div class="row">
                                         <!-- Document Selector -->
                                         <div class="col-md-12 col-lg-6 mb-3" id="documentField">
-                                            <label>Хужжат номи</label>
+                                            <label>Document Name</label>
                                             <select name="document_id" class="js-example-basic-single form-control w-100">
                                                 @foreach ($documents as $doc)
                                                     <option value="{{ $doc->id }}"
-                                                        @if (old('document_id') == $doc->id) selected @endif>
+                                                        @if ($task->document_id == $doc->id) selected @endif>
                                                         {{ $doc->title }}
-                                                        ({{ $doc->category ? $doc->category->name : 'Категория йўқ' }})
+                                                        ({{ $doc->category ? $doc->category->name : 'No Category' }})
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -36,24 +36,24 @@
 
                                         <!-- Task Type Selector -->
                                         <div class="col-md-12 col-lg-6 mb-3">
-                                            <label>Топшириқ тури</label>
+                                            <label>Task Type</label>
                                             <select name="task_type" id="taskType" class="form-control" required>
-                                                <option value="meeting" @if (old('task_type') == 'meeting') selected @endif>
-                                                    Учрашув</option>
-                                                <option value="hr_task" @if (old('task_type') == 'hr_task') selected @endif>HR
-                                                    вазифаси</option>
-                                                <option value="emp_task" @if (old('task_type') == 'emp_task') selected @endif>
-                                                    Ходим вазифаси</option>
+                                                <option value="meeting" @if ($task->task_type == 'meeting') selected @endif>
+                                                    Meeting</option>
+                                                <option value="hr_task" @if ($task->task_type == 'hr_task') selected @endif>
+                                                    HR Task</option>
+                                                <option value="emp_task" @if ($task->task_type == 'emp_task') selected @endif>
+                                                    Employee Task</option>
                                             </select>
                                         </div>
 
                                         <!-- Assign Users -->
                                         <div class="col-md-12 col-lg-6 mb-3">
-                                            <label>Фойдаланувчиларга</label>
-                                            <select name="users[]" class="form-control select2" multiple="multiple"
-                                                required>
+                                            <label>Assign to Users</label>
+                                            <select name="users[]" class="form-control select2" multiple="multiple" required>
                                                 @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}">
+                                                    <option value="{{ $user->id }}"
+                                                        @if ($task->users && in_array($user->id, $task->users->pluck('id')->toArray())) selected @endif>
                                                         {{ $user->name }} ({{ $user->email }})
                                                     </option>
                                                 @endforeach
@@ -62,28 +62,27 @@
 
                                         <!-- Completion Date -->
                                         <div class="col-md-6 col-lg-6 mb-3">
-                                            <label>Бажариш муддати</label>
+                                            <label>Completion Date</label>
                                             <input type="datetime-local" name="end_date" class="form-control"
-                                                value="{{ old('end_date') }}" required>
+                                                value="{{ $task->end_date ? $task->end_date->format('Y-m-d\TH:i') : '' }}" required>
                                         </div>
 
                                         <!-- File Upload -->
                                         <div class="col-md-12 col-lg-6 mb-3">
-                                            <label>Файллар (ихтиёрий)</label>
+                                            <label>Files (optional)</label>
                                             <input type="file" name="attached_file[]" class="form-control" multiple>
                                         </div>
 
                                         <!-- Short Name -->
                                         <div class="col-md-12 col-lg-6 mb-3">
-                                            <label>Қисқа ном</label>
-                                            <input name="short_name" class="form-control" value="{{ old('short_name') }}"
-                                                required>
+                                            <label>Short Name</label>
+                                            <input name="short_name" class="form-control" value="{{ $task->short_name }}" required>
                                         </div>
 
                                         <!-- Notes -->
                                         <div class="col-md-12 mb-3">
-                                            <label>Эслатма (Ихтиёрий)</label>
-                                            <textarea name="description" required rows="3" class="form-control">{{ old('description') }}</textarea>
+                                            <label>Notes (Optional)</label>
+                                            <textarea name="description" required rows="3" class="form-control">{{ $task->description }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -91,9 +90,9 @@
                                 <!-- Form Actions -->
                                 <div class="email action-send">
                                     <button type="submit" class="btn btn-primary btn-space"><i class="icon s7-mail"></i>
-                                        Сақлаш</button>
-                                    <a href="{{ route('monitoringIndex') }}" class="btn btn-secondary btn-space"><i
-                                            class="icon s7-close"></i> Бекор қилиш</a>
+                                        Save</button>
+                                    <a href="{{ route('ijro.index') }}" class="btn btn-secondary btn-space"><i class="icon s7-close"></i>
+                                        Cancel</a>
                                 </div>
                             </form>
                         </div>

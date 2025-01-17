@@ -67,9 +67,9 @@
                         <li class="nav-item">
                             <a href="{{route('ijro.index')}}" class="nav-link">Inbox</a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a href="{{route('ijro.read')}}" class="nav-link">Read</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a href="{{route('ijro.compose')}}" class="nav-link">Compose</a>
                         </li>

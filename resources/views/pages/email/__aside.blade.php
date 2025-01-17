@@ -7,7 +7,7 @@
         <p class="text-muted">{{auth()->user()->email}}</p>
     </div>
     <div class="aside-compose">
-        <a class="btn btn-primary btn-block" href="../../../demo_1/pages/email/compose.html">Топшириқ яратиш</a>
+        <a class="btn btn-primary btn-block" href="{{route('ijro.compose')}}">Топшириқ яратиш</a>
     </div>
     <div class="aside-nav collapse">
         <ul class="nav">
@@ -17,11 +17,11 @@
             <li><a href="#"><span class="icon"><i data-feather="star"></i></span>Теглар</a></li>
             <li><a href="#"><span class="icon"><i data-feather="trash"></i></span>Чиқиндилар</a></li>
         </ul>
-        <span class="title">Ёрлиқлар</span>
+        {{-- <span class="title">Ёрлиқлар</span>
         <ul class="nav nav-pills nav-stacked">
             <li><a href="#"><i data-feather="tag" class="text-warning"></i> Мухим </a></li>
             <li><a href="#"><i data-feather="tag" class="text-primary"></i> Бизнес </a></li>
             <li><a href="#"><i data-feather="tag" class="text-info"></i> Илҳом </a></li>
-        </ul>
+        </ul> --}}
     </div>
 </div>
