@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\IjroController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Blade\UserController;
@@ -21,6 +22,7 @@ use App\Http\Controllers\FileDownloadController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManualEventController;
 use App\Http\Controllers\QarorlarController;
+use App\Http\Controllers\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -277,4 +279,11 @@ Route::middleware('auth')->group(function () {
     // Task History Routes
     Route::get('task-histories', [TaskHistoryController::class, 'index']); // List all task histories
     Route::get('task-histories/{taskHistory}', [TaskHistoryController::class, 'show']); // Show specific task history
+
+    Route::get('email/index', [IjroController::class, 'index'])->name('ijro.index');
+    Route::get('email/read', [IjroController::class, 'read'])->name('ijro.read');
+    Route::get('email/compose', [IjroController::class, 'compose'])->name('ijro.compose');
+    Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
+
+
 });

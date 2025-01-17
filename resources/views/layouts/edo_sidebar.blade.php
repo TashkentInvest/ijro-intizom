@@ -13,6 +13,17 @@
     <div class="sidebar-body">
         <ul class="nav">
 
+            <li class="nav-item nav-category">Dashboard</li>
+
+            
+            <li class="nav-item">
+                <a href="{{ route('statistics.index') }}" class="nav-link">
+                    <i class="link-icon" data-feather="box"></i>
+                    <span class="link-title">Бошқарув панели</span>
+                </a>
+            </li>
+
+
             <li class="nav-item nav-category">Main</li>
 
             <li class="nav-item">
@@ -22,12 +33,6 @@
                 </a>
             </li>
 
-            {{-- <li class="nav-item">
-                <a href="{{ route('dashboardIndex') }}" class="nav-link">
-                    <i class="link-icon" data-feather="box"></i>
-                    <span class="link-title">Бошқарув панели</span>
-                </a>
-            </li> --}}
 
             
             <li class="nav-item">
@@ -47,12 +52,8 @@
             @endif
 
 
-         
-
-
-
-
-            {{-- 
+        
+            
             <li class="nav-item nav-category">web apps</li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#emails" role="button" aria-expanded="false"
@@ -64,17 +65,17 @@
                 <div class="collapse" id="emails">
                     <ul class="nav sub-menu">
                         <li class="nav-item">
-                            <a href="pages/email/inbox.html" class="nav-link">Inbox</a>
+                            <a href="{{route('ijro.index')}}" class="nav-link">Inbox</a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/email/read.html" class="nav-link">Read</a>
+                            <a href="{{route('ijro.read')}}" class="nav-link">Read</a>
                         </li>
                         <li class="nav-item">
-                            <a href="pages/email/compose.html" class="nav-link">Compose</a>
+                            <a href="{{route('ijro.compose')}}" class="nav-link">Compose</a>
                         </li>
                     </ul>
                 </div>
-            </li> --}}
+            </li> 
             {{-- <li class="nav-item">
                 <a href="pages/apps/chat.html" class="nav-link">
                     <i class="link-icon" data-feather="message-square"></i>

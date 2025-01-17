@@ -48,6 +48,8 @@
 
                 @endcan
 
+                
+
 
                 @can('monitoring.show')
                     <li class="{{ Request::is('monitoring*') ? 'mm-active' : '' }}">

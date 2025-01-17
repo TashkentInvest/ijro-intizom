@@ -45,7 +45,7 @@
 <body>
     <div class="main-wrapper">
         @include('layouts.edo_sidebar')
-        @include('layouts.edo-setting_nav')
+        {{-- @include('layouts.edo-setting_nav') --}}
 
         <div class="page-wrapper">
             <div class="page-content">
