@@ -67,9 +67,20 @@ class IjroController extends Controller
             $query->where('has_star', $hasStarFilter);
         }
 
-        // Apply Status Filter (assuming you use `status_id` field, if not, you can adjust it)
-        if ($statusFilter) {
-            $query->where('status_id', $statusFilter);
+        // Apply Status Filter for Task Assignments (status column in task_assignments)
+        if ($statusFilter && $statusFilter != 'all') {
+            // Apply specific status filters (in_progress, completed, rejected, delayed)
+            $query->whereHas('taskAssignments', function ($q) use ($statusFilter) {
+                if ($statusFilter == 'in_progress') {
+                    $q->where('status', 'in_progress');
+                } elseif ($statusFilter == 'completed') {
+                    $q->where('status', 'completed');
+                } elseif ($statusFilter == 'rejected') {
+                    $q->where('status', 'rejected');
+                } elseif ($statusFilter == 'delayed') {
+                    $q->where('status', 'delayed');
+                }
+            });
         }
 
         // Apply Date Range Filter
@@ -94,6 +105,8 @@ class IjroController extends Controller
 
         return view('pages.email.inbox', compact('tasks'));
     }
+
+
 
     public function read($id)
     {
