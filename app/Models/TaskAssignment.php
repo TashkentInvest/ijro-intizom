@@ -23,7 +23,10 @@ class TaskAssignment extends Model
         'nazoratchi_rejected_at',
         'user_accepted_at',
         'user_confirmed_at',
-        'user_rejected_at'
+        'user_rejected_at',
+        'emp_readed_at',
+        'nazoratchi_readed_at',
+        'user_readed_at'
     ];
 
     protected $dates = [
@@ -35,7 +38,10 @@ class TaskAssignment extends Model
         'user_accepted_at',
         'user_confirmed_at',
         'user_rejected_at',
-        'deleted_at'
+        'deleted_at',
+        'emp_readed_at',
+        'nazoratchi_readed_at',
+        'user_readed_at'
     ];
 
     // Relationships
