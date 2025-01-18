@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\IjroController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
@@ -10,20 +11,22 @@ use App\Http\Controllers\Blade\HomeController;
 use App\Http\Controllers\Blade\ApiUserController;
 use App\Http\Controllers\Blade\CategoryController;
 use App\Http\Controllers\Blade\DashboardController;
-use App\Http\Controllers\Blade\MonitoringController;
 use App\Http\Controllers\Blade\EmployeeController;
 use App\Http\Controllers\Blade\LongTextController;
 use App\Http\Controllers\Blade\TaskController;
 use App\Http\Controllers\Blade\OrderController;
+use App\Http\Controllers\CommentReadController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FileDownloadController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\ManualEventController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\QarorlarController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\TaskCommentController;
+use App\Http\Controllers\TaskHistoryController;
 
 /*
 |--------------------------------------------------------------------------

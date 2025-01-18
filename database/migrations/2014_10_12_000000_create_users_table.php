@@ -30,6 +30,8 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamp('last_finishedtask')->nullable();
+            $table->timestamp('last_login_at')->nullable();
+
             $table->timestamps();
         }); 
     }

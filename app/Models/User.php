@@ -25,7 +25,8 @@ class User extends Authenticatable
         'email',
         'password',
         'theme',
-        'last_finishedtask'
+        'last_finishedtask',
+        'last_login_at'
     ];
 
     public static function deepFilters()
