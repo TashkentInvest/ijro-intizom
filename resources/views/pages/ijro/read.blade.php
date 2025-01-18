@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-4 email-aside border-lg-right">
-                            @include('pages.email.__aside')
+                            @include('pages.ijro.__aside')
                         </div>
                         <div class="col-lg-8 email-content">
                             <!-- Task Header -->

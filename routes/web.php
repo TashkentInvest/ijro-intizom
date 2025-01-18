@@ -284,12 +284,12 @@ Route::middleware('auth')->group(function () {
     Route::get('task-histories', [TaskHistoryController::class, 'index']); // List all task histories
     Route::get('task-histories/{taskHistory}', [TaskHistoryController::class, 'show']); // Show specific task history
 
-    Route::get('email/index', [IjroController::class, 'index'])->name('ijro.index');
-    Route::get('email/read/{id}', [IjroController::class, 'read'])->name('ijro.read');
-    Route::get('email/compose', [IjroController::class, 'compose'])->name('ijro.compose');
-    Route::post('/email/create', [IjroController::class, 'create'])->name('ijroCreate');
-    Route::get('email/edit/{id}', [IjroController::class, 'edit'])->name('ijro.edit');
-    Route::post('email/update/{id}', [IjroController::class, 'update'])->name('ijro.update');
+    Route::get('ijro/index', [IjroController::class, 'index'])->name('ijro.index');
+    Route::get('ijro/read/{id}', [IjroController::class, 'read'])->name('ijro.read');
+    Route::get('ijro/compose', [IjroController::class, 'compose'])->name('ijro.compose');
+    Route::post('/ijro/create', [IjroController::class, 'create'])->name('ijroCreate');
+    Route::get('ijro/edit/{id}', [IjroController::class, 'edit'])->name('ijro.edit');
+    Route::post('ijro/update/{id}', [IjroController::class, 'update'])->name('ijro.update');
 
     Route::post('/task_assignments', [TaskAssignmentController::class, 'store'])->name('task_assignments.store');
     Route::post('/task_comments', [TaskCommentController::class, 'store'])->name('task_comments.store');

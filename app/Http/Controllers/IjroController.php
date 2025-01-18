@@ -20,6 +20,7 @@ class IjroController extends Controller
 {
     public function index(Request $request)
     {
+        // dd('te');
         // Get the current authenticated user
         $user = Auth::user();
         $isSuperAdmin = $user->roles()->where('name', 'Super Admin')->exists();
@@ -138,15 +139,14 @@ class IjroController extends Controller
         ];
 
         // Return view with tasks and counts
-        return view('pages.email.inbox', compact('tasks', 'statusCounts'));
+        return view('pages.ijro.inbox', compact('tasks', 'statusCounts'));
     }
-
 
     public function read($id)
     {
         $task = Task::find($id);
         $users = User::all(); // Retrieve all users
-        return view('pages.email.read', compact('task', 'users'));
+        return view('pages.ijro.read', compact('task', 'users'));
     }
     public function compose()
     {
@@ -162,8 +162,8 @@ class IjroController extends Controller
         else
             $roles = Role::where('name', '!=', 'Super Admin')->get();
 
-        return view('pages.email.compose', compact('categories', 'count', 'users', 'roles', 'documents'));
-        // return view('pages.email.compose');
+        return view('pages.ijro.compose', compact('categories', 'count', 'users', 'roles', 'documents'));
+        // return view('pages.ijro.compose');
     }
 
 
@@ -254,7 +254,7 @@ class IjroController extends Controller
         $users = User::all();
         $documents = Document::with('category')->get();
 
-        return view('pages.email.edit', compact('task', 'users', 'documents'));
+        return view('pages.ijro.edit', compact('task', 'users', 'documents'));
     }
 
     // Handle the update of a task

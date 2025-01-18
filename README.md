@@ -255,3 +255,9 @@ composer require guzzlehttp/guzzle
 
 
 https://ipinfo.io/ (Token: 09cb2c7a786667)
+
+https://codepen.io/vinaymuliya/pen/gOqjEaj
+
+https://codepen.io/NoSmoking/pen/MYgjYGo
+
+https://codepen.io/jkantner/pen/qBbWjaJ
