@@ -34,14 +34,6 @@
             </li>
 
 
-            
-            {{-- <li class="nav-item">
-                <a href="{{ route('monitoringIndex') }}" class="nav-link">
-                    <i class="link-icon" data-feather="box"></i>
-                    <span class="link-title">Топшириқлар</span>
-                </a>
-            </li> --}}
-            
             @if(auth()->user()->roles->first()->name == 'Super Admin')
             <li class="nav-item">
                 <a href="{{ route('documents.index') }}" class="nav-link">
@@ -50,11 +42,20 @@
                 </a>
             </li>
             @endif
+            
+            <li class="nav-item">
+                <a href="{{ route('ijro.index') }}" class="nav-link">
+                    <i class="link-icon" data-feather="box"></i>
+                    <span class="link-title">Топшириқлар</span>
+                </a>
+            </li>
+            
+     
 
 
         
             
-            <li class="nav-item nav-category">web apps</li>
+            {{-- <li class="nav-item nav-category">web apps</li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#emails" role="button" aria-expanded="false"
                     aria-controls="emails">
@@ -67,15 +68,13 @@
                         <li class="nav-item">
                             <a href="{{route('ijro.index')}}" class="nav-link">Inbox</a>
                         </li>
-                        {{-- <li class="nav-item">
-                            <a href="{{route('ijro.read')}}" class="nav-link">Read</a>
-                        </li> --}}
+                
                         <li class="nav-item">
                             <a href="{{route('ijro.compose')}}" class="nav-link">Compose</a>
                         </li>
                     </ul>
                 </div>
-            </li> 
+            </li>  --}}
             {{-- <li class="nav-item">
                 <a href="pages/apps/chat.html" class="nav-link">
                     <i class="link-icon" data-feather="message-square"></i>

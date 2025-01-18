@@ -19,7 +19,7 @@ class CreateTasksTable extends Migration
             $table->enum('task_type', ['meeting', 'hr_task', 'emp_task']);
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('nazoratchi_id')->nullable();
-            $table->integer('has_star')->default(0);
+            $table->boolean('has_star')->default(false);
             $table->string('short_name');
             $table->text('description');
             $table->timestamp('start_date')->default(DB::raw('CURRENT_TIMESTAMP'));

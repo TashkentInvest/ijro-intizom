@@ -52,7 +52,7 @@
 
                             <div class="email-list">
                                 @foreach ($tasks as $task)
-                                    <div class="email-list-item email-list-item--unread">
+                                    <div class="email-list-item {{$task->short_name != 'azzz' ? 'email-list-item--unread' : ''}}">
                                         <div class="email-list-actions">
                                             {{-- <div class="form-check form-check-flat form-check-primary">
                                                 <label class="form-check-label">
@@ -65,7 +65,7 @@
                                         <a href="{{ route('ijro.read', $task->id) }}" class="email-list-detail">
                                             <div>
                                                 <span class="from">{{ $task->short_name }}</span>
-                                                <p class="msg">{{ $task->description }}</p>
+                                                <p class="msg" style="max-width:300px">{{ $task->description }}</p>
                                             </div>
                                             <ul class="list-unstyled">
                                                 <b>Масул Шахс(лар): </b>
@@ -75,7 +75,7 @@
                                             </ul>
                                             <span class="date">
                                                 <span class="icon"><i data-feather="paperclip"></i> </span>
-                                                {{ $task->start_date->format('d M') }}
+                                                {{ $task->end_date->format('d M') }}
                                             </span>
                                         </a>
                                     </div>

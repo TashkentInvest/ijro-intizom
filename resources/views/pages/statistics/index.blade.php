@@ -67,7 +67,7 @@
                                         </p>
                                     </div>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                                         </p>
                                     </div>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>
@@ -124,8 +124,8 @@
                             <div class="d-flex justify-content-between align-items-baseline">
                                 <h6 class="card-title mb-0">Yakunlangan</h6>
                                 <div class="dropdown mb-2">
-                                    <button class="btn p-0" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn p-0" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -157,20 +157,20 @@
                                         </p>
                                     </div>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4 grid-margin stretch-card"> 
+                <div class="col-md-4 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline">
                                 <h6 class="card-title mb-0">Muddati o'tgan</h6>
                                 <div class="dropdown mb-2">
-                                    <button class="btn p-0" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn p-0" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -202,19 +202,19 @@
                                         </p>
                                     </div>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 grid-margin stretch-card"> 
+                <div class="col-md-4 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-baseline">
                                 <h6 class="card-title mb-0">Muddati o'tib yakunlangan</h6>
                                 <div class="dropdown mb-2">
-                                    <button class="btn p-0" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn p-0" type="button" id="dropdownMenuButton"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -246,25 +246,24 @@
                                         </p>
                                     </div>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>
                 </div>
-           
-                
+
+
             </div>
         </div>
     </div> <!-- row -->
 
-   
+
     <div class="row">
-    
         <div class="col-lg-12 col-xl-8 stretch-card">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-baseline mb-2">
-                        <h6 class="card-title mb-0">Projects</h6>
+                        <h6 class="card-title mb-0">Проектлар</h6>
                         <div class="dropdown mb-2">
                             <button class="btn p-0" type="button" id="dropdownMenuButton7" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
@@ -272,18 +271,18 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton7">
                                 <a class="dropdown-item d-flex align-items-center" href="#"><i data-feather="eye"
-                                        class="icon-sm mr-2"></i> <span class="">View</span></a>
+                                        class="icon-sm mr-2"></i> <span class="">Кўриш</span></a>
                                 <a class="dropdown-item d-flex align-items-center" href="#"><i
                                         data-feather="edit-2" class="icon-sm mr-2"></i> <span
-                                        class="">Edit</span></a>
+                                        class="">Тахрирлаш</span></a>
                                 <a class="dropdown-item d-flex align-items-center" href="#"><i data-feather="trash"
-                                        class="icon-sm mr-2"></i> <span class="">Delete</span></a>
+                                        class="icon-sm mr-2"></i> <span class="">Ўчириш</span></a>
                                 <a class="dropdown-item d-flex align-items-center" href="#"><i
-                                        data-feather="printer" class="icon-sm mr-2"></i> <span
-                                        class="">Print</span></a>
+                                        data-feather="printer" class="icon-sm mr-2"></i> <span class="">Чоп
+                                        этиш</span></a>
                                 <a class="dropdown-item d-flex align-items-center" href="#"><i
-                                        data-feather="download" class="icon-sm mr-2"></i> <span
-                                        class="">Download</span></a>
+                                        data-feather="download" class="icon-sm mr-2"></i> <span class="">Юклаб
+                                        олиш</span></a>
                             </div>
                         </div>
                     </div>
@@ -291,54 +290,51 @@
                         <table class="table table-hover mb-0">
                             <thead>
                                 <tr>
-                                    <th class="pt-0">#</th>
-                                    <th class="pt-0">Project Name</th>
-                                    <th class="pt-0">Start Date</th>
-                                    <th class="pt-0">Due Date</th>
-                                    <th class="pt-0">Status</th>
-                                    <th class="pt-0">Assign</th>
+                                    <th class="pt-0">№</th>
+                                    <th class="pt-0">Проект номи</th>
+                                    <th class="pt-0">Башланиш санаси</th>
+                                    <th class="pt-0">Тугаш санаси</th>
+                                    <th class="pt-0">Ҳолат</th>
+                                    <th class="pt-0">Таъинлаш</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>NobleUI jQuery</td>
-                                    <td>01/01/2020</td>
-                                    <td>26/04/2020</td>
-                                    <td><span class="badge badge-danger">Released</span></td>
-                                    <td>Leonardo Payne</td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>NobleUI Angular</td>
-                                    <td>01/01/2020</td>
-                                    <td>26/04/2020</td>
-                                    <td><span class="badge badge-success">Review</span></td>
-                                    <td>Carl Henson</td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>NobleUI ReactJs</td>
-                                    <td>01/05/2020</td>
-                                    <td>10/09/2020</td>
-                                    <td><span class="badge badge-info-muted">Pending</span></td>
-                                    <td>Jensen Combs</td>
-                                </tr>
-                                <tr>
-                                    <td>4</td>
-                                    <td>NobleUI VueJs</td>
-                                    <td>01/01/2020</td>
-                                    <td>31/11/2020</td>
-                                    <td><span class="badge badge-warning">Work in Progress</span>
-                                    </td>
-                                    <td>Amiah Burton</td>
-                                </tr>
-                             
+                                @forelse ($tasks ?? [] as $task)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $task->short_name }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($task->start_date)->format('d/m/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($task->end_date)->format('d/m/Y') }}</td>
+                                        <td>
+                                            @if ($task->status == 'released')
+                                                <span class="badge badge-danger">Релиз қилинган</span>
+                                            @elseif ($task->status == 'review')
+                                                <span class="badge badge-success">Рўйхатдан ўтказишда</span>
+                                            @elseif ($task->status == 'pending')
+                                                <span class="badge badge-info-muted">Кутмоқда</span>
+                                            @elseif ($task->status == 'work_in_progress')
+                                                <span class="badge badge-warning">Иш давом этмоқда</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @foreach ($task->users as $user)
+                                                {{ $user->name }}
+                                            @endforeach
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5">Ҳозирча топшириқлар мавжуд эмас.</td>
+                                    </tr>
+                                @endforelse
+
+
+
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-    </div> <!-- row -->
+    </div>
 @endsection

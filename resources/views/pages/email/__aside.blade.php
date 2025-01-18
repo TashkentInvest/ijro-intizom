@@ -3,7 +3,7 @@
         <button class="navbar-toggle" data-target=".aside-nav" data-toggle="collapse" type="button">
             <span class="icon"><i data-feather="chevron-down"></i></span>
         </button>
-        <span class="title text-muted font-weight-bold">Почта хизмати</span>
+        <span class="title text-muted font-weight-bold">Топшириқлар</span>
         <p class="text-muted">{{ auth()->user()->email }}</p>
     </div>
     <div class="aside-compose">

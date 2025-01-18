@@ -120,7 +120,12 @@
                                 <p>Get here on time, it's first come first serve. Be late, get turned away.
                                 </p>
 
-                                <span class="mt-2 text-sm text-small text-bold">12:30 - 1:00pm</span>
+                                <span class="mt-2 text-sm text-small text-bold">
+                                    
+                                    <span class="icon">
+                                        <i data-feather="clock" class="text-primary-muted"></i>
+                                    </span>
+                                    12:30 - 1:00pm</span>
                             </li>
                             <li class="event">
                                 <h3>Opening Ceremony</h3>
@@ -132,11 +137,7 @@
                                 <p>This is where it all goes down. You will compete head to head with your
                                     friends and rivals. Get ready!</p>
                             </li>
-                            <li class="event">
-                                <h3>Closing Ceremony</h3>
-                                <p>See how is the victor and who are the losers. The big stage is where the
-                                    winners bask in their own glory.</p>
-                            </li>
+                     
                         </ul>
                     </div>
                 </div>
@@ -152,8 +153,8 @@
                 margin: 0 auto;
                 letter-spacing: 0.2px;
                 position: relative;
-                line-height: 1.4em;
-                font-size: 1.03em;
+                line-height: 1.4em ;
+                font-size: 14px !important;
                 padding: 50px;
                 list-style: none;
                 text-align: left;
