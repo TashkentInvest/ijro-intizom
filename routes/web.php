@@ -11,6 +11,7 @@ use App\Http\Controllers\Blade\HomeController;
 use App\Http\Controllers\Blade\ApiUserController;
 use App\Http\Controllers\Blade\CategoryController;
 use App\Http\Controllers\Blade\DashboardController;
+use App\Http\Controllers\Blade\MonitoringController;
 use App\Http\Controllers\Blade\EmployeeController;
 use App\Http\Controllers\Blade\LongTextController;
 use App\Http\Controllers\Blade\TaskController;
