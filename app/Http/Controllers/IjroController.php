@@ -145,10 +145,12 @@ class IjroController extends Controller
 
     public function read($id)
     {
-        $task = Task::with('taskAssignments')->find($id);
+        $task = Task::with(['taskAssignments.history.user'])->find($id);
         $users = User::all(); // Retrieve all users
+
         return view('pages.ijro.read', compact('task', 'users'));
     }
+
     public function compose()
     {
 
@@ -367,8 +369,8 @@ class IjroController extends Controller
 
             // Check if a task assignment exists for the current task and the authenticated user
             $taskAssignment = TaskAssignment::where('task_id', $task->id)
-            ->where('employee_id', auth()->id())
-            ->first();
+                ->where('employee_id', auth()->id())
+                ->first();
             // dd($task);
 
             // If no assignment exists, create a new one
@@ -381,6 +383,16 @@ class IjroController extends Controller
                     'status' => 'in_progress', // Initial status
                     'emp_readed_at' => now(), // Current timestamp
                     'emp_accepted_at' => now(), // Current timestamp
+                ]);
+
+
+                TaskAssignmentHistory::create([
+                    'task_assignment_id' => $taskAssignment->id,
+                    'user_id' => auth()->id(),
+                    'action_type' => 'status_changed',
+                    'previous_status' => null,
+                    'new_status' => 'in_progress',
+                    'description' => 'Task accepted by employee',
                 ]);
             } else {
                 // If the task assignment exists, just update the timestamps

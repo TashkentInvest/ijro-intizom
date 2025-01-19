@@ -173,37 +173,36 @@
         <div class="col-md-12 col-lg-3">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title">Timeline</h6>
+                    <h6 class="card-title">Таймлайн</h6>
                     <div id="content">
                         <ul class="timeline">
-                            <li class="event">
-                                <h3>Registration</h3>
-                                <p>Get here on time, it's first come first serve. Be late, get turned away.
-                                </p>
-
-                                <span class="mt-2 text-sm text-small text-bold">
-
-                                    <span class="icon">
-                                        <i data-feather="clock" class="text-primary-muted"></i>
-                                    </span>
-                                    12:30 - 1:00pm</span>
-                            </li>
-                            <li class="event">
-                                <h3>Opening Ceremony</h3>
-                                <p>Get ready for an exciting event, this will kick off in amazing fashion
-                                    with MOP & Busta Rhymes as an opening show.</p>
-                            </li>
-                            <li class="event">
-                                <h3>Main Event</h3>
-                                <p>This is where it all goes down. You will compete head to head with your
-                                    friends and rivals. Get ready!</p>
-                            </li>
-
+                            @foreach ($task->taskAssignments as $assignment)
+                                @foreach ($assignment->history as $record)
+                                    <li class="event">
+                                        <h3>{{ ucfirst(str_replace('_', ' ', $record->action_type)) }}</h3>
+                                        <p>
+                                            <strong>{{ $record->user->name ?? 'Номаълум фойдаланувчи' }}</strong> бу амални
+                                            бажарди.
+                                            @if ($record->previous_status && $record->new_status)
+                                                <br><span class="badge bg-secondary">{{ $record->previous_status }}</span>
+                                                →
+                                                <span class="badge bg-success">{{ $record->new_status }}</span>
+                                            @endif
+                                            <br>
+                                            <span class="text-muted">{{ $record->created_at->format('d.m.Y H:i') }}</span>
+                                        </p>
+                                        @if ($record->description)
+                                            <p>{{ $record->description }}</p>
+                                        @endif
+                                    </li>
+                                @endforeach
+                            @endforeach
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <style>
             .timeline {
