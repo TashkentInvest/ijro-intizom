@@ -85,20 +85,29 @@
 
                             @if ($task->users->contains('id', auth()->id()))
                                 <div class="email-actions mt-4">
-                                    @if (isset($task->taskAssignments->first()->emp_accepted_at))
-                                        <!-- Показываем "Вазифани Якунлаш", если задание уже принято -->
+                                    @if ($task->users->contains('id', auth()->id()))
+                                        <div class="email-actions mt-4">
+                                            @php
+                                                $assignment = $task->taskAssignments->first();
+                                            @endphp
 
-                                        <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="modal"
-                                            data-bs-target="#completeTaskModal">
-                                            Вазифани Якунлаш
-                                        </button>
-                                    @else
-                                        <!-- Показываем "Қабул қилиш" кнопку, если задание не принято -->
-                                        <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-success shadow-sm">Қабул
-                                                қилиш</button>
-                                        </form>
+                                            @if ($assignment && isset($assignment->emp_accepted_at))
+                                                @if ($assignment->status !== 'pending')
+                                                    <!-- Показываем "Вазифани Якунлаш", если задание принято и статус не "pending" -->
+                                                    <button type="button" class="btn btn-primary shadow-sm"
+                                                        data-bs-toggle="modal" data-bs-target="#completeTaskModal">
+                                                        Вазифани Якунлаш
+                                                    </button>
+                                                @endif
+                                            @else
+                                                <!-- Показываем "Қабул қилиш", если задание не принято -->
+                                                <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success shadow-sm">Қабул
+                                                        қилиш</button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     @endif
                                 </div>
                             @else
@@ -146,22 +155,7 @@
 
                             <hr class="mt-4">
 
-                            {{-- @if (isset($task->taskAssignments) && $task->taskAssignments->where('employee_id', auth()->id())->first()->status === 'completed')
-                                <div class="mt-4">
-                                    <h5>Якунланган маълумотлар</h5>
-                                    <p><strong>Изоҳ:</strong>
-                                        {{ $task->taskAssignments->where('employee_id', auth()->id())->first()->history->last()->description }}
-                                    </p>
 
-                                    <h6>Юкланган файллар:</h6>
-                                    <ul>
-                                        @foreach ($task->files as $file)
-                                            <li><a href="{{ asset('storage/' . $file->file_path) }}"
-                                                    download>{{ $file->file_name }}</a></li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif --}}
 
                         </div>
 
