@@ -83,27 +83,88 @@
                             @endif
 
 
-                            <!-- Task Actions -->
                             @if ($task->users->contains('id', auth()->id()))
-                                <!-- Show Qabul qilish button if user is assigned -->
                                 <div class="email-actions mt-4">
-                                    <form action="{{ route('ijro.accept', $task->id) }}" method="POST">
-                                        @csrf
-                                        @method('POST') <!-- Use POST method -->
-                                        <button type="submit" class="btn btn-success shadow-sm">Қабул қилиш</button>
-                                    </form>
+                                    @if (isset($task->taskAssignments->first()->emp_accepted_at))
+                                        <!-- Показываем "Вазифани Якунлаш", если задание уже принято -->
+
+                                        <button type="button" class="btn btn-primary shadow-sm" data-bs-toggle="modal"
+                                            data-bs-target="#completeTaskModal">
+                                            Вазифани Якунлаш
+                                        </button>
+                                    @else
+                                        <!-- Показываем "Қабул қилиш" кнопку, если задание не принято -->
+                                        <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success shadow-sm">Қабул
+                                                қилиш</button>
+                                        </form>
+                                    @endif
                                 </div>
                             @else
-                                <!-- Show Back to Inbox and Edit Task buttons if user is not assigned -->
+                                <!-- Show Back and Edit buttons if user is not assigned -->
                                 <div class="email-actions mt-4 d-flex justify-content-between">
                                     <a href="{{ route('ijro.index') }}" class="btn btn-secondary shadow-sm">Ортга</a>
                                     <a href="{{ route('ijro.edit', $task->id) }}"
                                         class="btn btn-primary shadow-sm">Вазифани таҳрирлаш</a>
                                 </div>
                             @endif
+
+                            <!-- Modal Window for Task Completion -->
+                            <div class="modal fade" id="completeTaskModal" tabindex="-1"
+                                aria-labelledby="completeTaskModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="completeTaskModalLabel">Вазифани якунлаш</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('ijro.complete', $task->id) }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="completion_description" class="form-label">Изоҳ</label>
+                                                    <textarea class="form-control" id="completion_description" name="completion_description" required></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="completion_files" class="form-label">Файл юклаш</label>
+                                                    <input type="file" class="form-control" id="completion_files"
+                                                        name="completion_files[]" multiple>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Бекор қилиш</button>
+                                                <button type="submit" class="btn btn-primary">Якунлаш</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
                             <hr class="mt-4">
+
+                            {{-- @if (isset($task->taskAssignments) && $task->taskAssignments->where('employee_id', auth()->id())->first()->status === 'completed')
+                                <div class="mt-4">
+                                    <h5>Якунланган маълумотлар</h5>
+                                    <p><strong>Изоҳ:</strong>
+                                        {{ $task->taskAssignments->where('employee_id', auth()->id())->first()->history->last()->description }}
+                                    </p>
+
+                                    <h6>Юкланган файллар:</h6>
+                                    <ul>
+                                        @foreach ($task->files as $file)
+                                            <li><a href="{{ asset('storage/' . $file->file_path) }}"
+                                                    download>{{ $file->file_name }}</a></li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif --}}
+
                         </div>
-                    
+
                     </div>
                 </div>
             </div>
@@ -115,13 +176,13 @@
                     <h6 class="card-title">Timeline</h6>
                     <div id="content">
                         <ul class="timeline">
-                            <li class="event" >
+                            <li class="event">
                                 <h3>Registration</h3>
                                 <p>Get here on time, it's first come first serve. Be late, get turned away.
                                 </p>
 
                                 <span class="mt-2 text-sm text-small text-bold">
-                                    
+
                                     <span class="icon">
                                         <i data-feather="clock" class="text-primary-muted"></i>
                                     </span>
@@ -132,12 +193,12 @@
                                 <p>Get ready for an exciting event, this will kick off in amazing fashion
                                     with MOP & Busta Rhymes as an opening show.</p>
                             </li>
-                            <li class="event" >
+                            <li class="event">
                                 <h3>Main Event</h3>
                                 <p>This is where it all goes down. You will compete head to head with your
                                     friends and rivals. Get ready!</p>
                             </li>
-                     
+
                         </ul>
                     </div>
                 </div>
@@ -153,7 +214,7 @@
                 margin: 0 auto;
                 letter-spacing: 0.2px;
                 position: relative;
-                line-height: 1.4em ;
+                line-height: 1.4em;
                 font-size: 14px !important;
                 padding: 50px;
                 list-style: none;

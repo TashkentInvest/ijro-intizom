@@ -66,4 +66,14 @@ class TaskAssignment extends Model
     {
         return $this->belongsTo(User::class, 'employee_id');
     }
+
+    public function history()
+    {
+        return $this->hasMany(TaskAssignmentHistory::class);
+    }
+
+    public function files()
+    {
+        return $this->hasMany(File::class, 'task_id');
+    }
 }

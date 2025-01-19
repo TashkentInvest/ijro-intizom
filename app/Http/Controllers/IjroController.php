@@ -8,6 +8,7 @@ use App\Models\File;
 use App\Models\RoleTask;
 use App\Models\Task;
 use App\Models\TaskAssignment;
+use App\Models\TaskAssignmentHistory;
 use App\Models\TaskUser;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -144,7 +145,7 @@ class IjroController extends Controller
 
     public function read($id)
     {
-        $task = Task::find($id);
+        $task = Task::with('taskAssignments')->find($id);
         $users = User::all(); // Retrieve all users
         return view('pages.ijro.read', compact('task', 'users'));
     }
@@ -359,15 +360,16 @@ class IjroController extends Controller
     }
 
 
-    public function accept(Task $task)
+    public function emp_accept(Task $task)
     {
         // Ensure the authenticated user is allowed to accept this task
         if ($task->users->contains('id', auth()->id())) {
 
             // Check if a task assignment exists for the current task and the authenticated user
             $taskAssignment = TaskAssignment::where('task_id', $task->id)
-                ->where('employee_id', auth()->id())
-                ->first();
+            ->where('employee_id', auth()->id())
+            ->first();
+            // dd($task);
 
             // If no assignment exists, create a new one
             if (!$taskAssignment) {
@@ -376,7 +378,7 @@ class IjroController extends Controller
                     'user_id' => $task->user_id, // Assuming this is the manager or creator of the task
                     'nazoratchi_id' => $task->nazoratchi_id ?? $task->user_id, // Assuming this is the supervisor
                     'employee_id' => auth()->user()->id, // The employee accepting the task
-                    'status' => 'pending', // Initial status
+                    'status' => 'in_progress', // Initial status
                     'emp_readed_at' => now(), // Current timestamp
                     'emp_accepted_at' => now(), // Current timestamp
                 ]);
@@ -397,5 +399,54 @@ class IjroController extends Controller
 
         // If the user is not assigned to the task, show an error
         return redirect()->route('ijro.index')->with('error', 'You are not assigned to this task');
+    }
+
+    public function completeTask(Request $request, Task $task)
+    {
+        $request->validate([
+            'completion_description' => 'required|string',
+            'completion_files.*' => 'file|max:10240', // Макс. размер 10MB
+        ]);
+
+        $assignment = TaskAssignment::where('task_id', $task->id)
+            ->where('employee_id', auth()->id())
+            ->first();
+
+        if (!$assignment || $assignment->status !== 'in_progress') {
+            return back()->with('error', 'Бундай ҳаракатга рухсат йўқ.');
+        }
+
+        // Обновление статуса
+        $assignment->update([
+            'status' => 'pending',
+            'emp_finished_at' => now(),
+        ]);
+
+        // Добавление истории задачи
+        TaskAssignmentHistory::create([
+            'task_assignment_id' => $assignment->id,
+            'user_id' => auth()->id(),
+            'action_type' => 'status_changed',
+            'previous_status' => 'in_progress',
+            'new_status' => 'pending',
+            'description' => $request->completion_description,
+        ]);
+
+        // Обработка загруженных файлов
+        if ($request->hasFile('completion_files')) {
+            foreach ($request->file('completion_files') as $file) {
+                $path = $file->store('task_files', 'public');
+
+                File::create([
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_path' => $path,
+                    'file_type' => $file->getClientMimeType(),
+                    'user_id' => auth()->id(),
+                    'task_id' => $task->id,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Вазифа муваффақиятли якунланди!');
     }
 }
