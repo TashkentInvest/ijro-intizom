@@ -8,7 +8,7 @@
                 <div class="card-body">
                     <div class="row">
                         <!-- Sidebar Section -->
-                     
+
                         <!-- Main Content Section -->
                         <div class="col-lg-6 email-aside border-lg-right ">
                             <div class="email-head">
@@ -18,31 +18,47 @@
                                 </div>
                             </div>
 
-                            <form id="taskForm" action="{{ route('taskCreate') }}" method="post" enctype="multipart/form-data">
+                            <form id="taskForm" action="{{ route('taskCreate') }}" method="post"
+                                enctype="multipart/form-data">
                                 @csrf
                                 <div class="email-compose-fields">
                                     <div class="row">
                                         <!-- Document Selector -->
-                                   
-                                        
+
+
                                         <div class="col-md-12 mb-3">
                                             <label>Хужжат номи</label>
                                             <select name="document_id" class="js-example-basic-single w-100" required>
                                                 @foreach ($documents as $doc)
-                                                <option value="{{ $doc->id }}" @if(old('document_id') == $doc->id) selected @endif>
-                                                    {{ $doc->title }} ({{ $doc->category ? $doc->category->name : 'Категория йўқ' }})
-                                                </option>
-                                            @endforeach
+                                                    <option value="{{ $doc->id }}"
+                                                        @if (old('document_id') == $doc->id) selected @endif>
+                                                        {{ $doc->title }}
+                                                        ({{ $doc->category ? $doc->category->name : 'Категория йўқ' }})
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
 
-                                      
+
 
 
                                         <!-- Assign Users -->
                                         <div class="col-md-12 mb-3">
                                             <label>Фойдаланувчиларга</label>
-                                            <select name="users[]" class="form-control select2" multiple="multiple" required>
+                                            <select name="users[]" class="form-control select2" multiple="multiple"
+                                                required>
+                                                @foreach ($users as $user)
+                                                    <option value="{{ $user->id }}">
+                                                        {{ $user->name }} ({{ $user->email }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <!-- Assign Users -->
+                                        <div class="col-md-12 mb-3">
+                                            <label>Назоратчи</label>
+                                            <select name="nazoratchi_id" class="form-control select2">
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}">
                                                         {{ $user->name }} ({{ $user->email }})
@@ -55,7 +71,8 @@
                                         <!-- Completion Date -->
                                         <div class="col-md-6 mb-3">
                                             <label>Бажариш муддати</label>
-                                            <input type="datetime-local" name="planned_completion_date" class="form-control" value="{{ old('planned_completion_date') }}" required>
+                                            <input type="datetime-local" name="planned_completion_date" class="form-control"
+                                                value="{{ old('planned_completion_date') }}" required>
                                         </div>
 
                                         <!-- File Upload -->
@@ -64,7 +81,7 @@
                                             <input type="file" name="attached_file[]" class="form-control" multiple>
                                         </div>
 
-                                        
+
                                         <!-- Qisqa nom -->
                                         <div class="col-md-12 mb-3">
                                             <label>Қисқа ном</label>
@@ -81,8 +98,10 @@
 
                                 <!-- Form Actions -->
                                 <div class="email action-send">
-                                    <button type="submit" class="btn btn-primary btn-space"><i class="icon s7-mail"></i> Сақлаш</button>
-                                    <a href="{{ route('monitoringIndex') }}" class="btn btn-secondary btn-space"><i class="icon s7-close"></i> Бекор қилиш</a>
+                                    <button type="submit" class="btn btn-primary btn-space"><i class="icon s7-mail"></i>
+                                        Сақлаш</button>
+                                    <a href="{{ route('monitoringIndex') }}" class="btn btn-secondary btn-space"><i
+                                            class="icon s7-close"></i> Бекор қилиш</a>
                                 </div>
                             </form>
                         </div>

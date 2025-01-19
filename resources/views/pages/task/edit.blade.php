@@ -64,6 +64,31 @@
                                             </select>
                                         </div>
 
+                                        <div class="col-md-12 mb-3">
+                                            <label>Назоратчи:</label>
+                                            <select name="nazoratchi_id" class="js-example-basic-single w-100"  >
+                                                <option value="">-- Ҳужжат Йўқ --</option>
+                                                @foreach ($users as $user)
+                                                    <option value="{{ $user->id }}" {{ old('nazoratchi_id', $task->nazoratchi_id) == $user->id ? 'selected' : '' }}>
+                                                        {{ $user->name }} ({{ $user->email }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                               <!-- Assign Users -->
+                                               <div class="col-md-12 mb-3">
+                                                <label>Назоратчи</label>
+                                                <select name="nazoratchi_id" class="form-control select2">
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->id }}">
+                                                            {{ $user->name }} ({{ $user->email }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+    
+
                                         <!-- Issue Date -->
                                         <div class="col-md-6 mb-3">
                                             <label>Берилган санаси</label>
