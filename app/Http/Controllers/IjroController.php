@@ -444,20 +444,24 @@ class IjroController extends Controller
             'description' => $request->completion_description,
         ]);
 
-        // Обработка загруженных файлов
+     
+
         if ($request->hasFile('completion_files')) {
             foreach ($request->file('completion_files') as $file) {
+                // Store the file in the 'task_files' folder within the public disk (storage/app/public)
                 $path = $file->store('task_files', 'public');
-
+        
+                // Create an entry in the File model
                 File::create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $path,
+                    'file_path' => $path, // The file's relative path within storage/app/public
                     'file_type' => $file->getClientMimeType(),
                     'user_id' => auth()->id(),
                     'task_id' => $task->id,
                 ]);
             }
         }
+        
 
         return back()->with('success', 'Вазифа муваффақиятли якунланди!');
     }

@@ -9,156 +9,159 @@
                         <div class="col-lg-4 email-aside border-lg-right">
                             @include('pages.ijro.__aside')
                         </div>
-                        <div class="col-lg-8 email-content">
+                        <div class="col-lg-8 task-details-container">
                             <!-- Task Header -->
-                            <div class="email-head">
-                                <div class="email-head-subject">
-                                    <div class="title d-flex align-items-center justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <a class="active" href="#">
-                                                <span class="icon">
-                                                    <i data-feather="star" class="text-primary-muted"></i>
-                                                </span>
-                                            </a>
-                                            <span class="font-weight-bold">{{ $task->short_name }}</span>
-                                        </div>
-                                        <div class="date text-muted">{{ $task->created_at->format('d M, H:i') }}</div>
+                            <div class="task-header mb-4">
+                                <div class="d-flex justify-content-between">
+                                    <div class="task-header-left d-flex align-items-center">
+                                        <span class="task-status-icon">
+                                            <i data-feather="star" class="text-warning"></i>
+                                        </span>
+                                        <h3 class="font-weight-bold">{{ $task->short_name }}</h3>
+                                    </div>
+                                    <div class="task-header-right text-muted">
+                                        <small>Яратилган сана: {{ $task->created_at->format('d M, Y, H:i') }}</small>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Task Body -->
-                            <div class="email-body">
-                                <p>{{ $task->description }}</p>
+                        
+                            <!-- Task Description -->
+                            <div class="task-description mb-4">
+                                <h5 class="font-weight-bold">Вазифа Тасвири</h5>
+                                <p class="lead text-justify">{{ $task->description }}</p>
                             </div>
-
+                        
                             <!-- Task Details -->
-                            <div class="task-details mt-3">
+                            <div class="task-details mb-4">
                                 <div class="row">
-                                    <!-- Task Type -->
-                                    <div class="col-md-6">
-                                        <strong>Vazifa turi:</strong>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Вазифа Тури:</strong>
                                         <span class="badge badge-info">{{ ucfirst($task->task_type) }}</span>
                                     </div>
-
-                                    <!-- Assigned Users -->
-                                    <div class="col-md-6 mt-2">
-                                        <strong>Vazifani topshirgan foydalanuvchilar:</strong>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Якунланиш Санаси:</strong>
+                                        <span>{{ $task->end_date ? $task->end_date->format('d M, Y H:i') : 'Белгиланган Эмас' }}</span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <strong>Юборган Ҳодим:</strong>
                                         <ul class="list-unstyled">
                                             @foreach ($task->users as $user)
-                                                <li>{{ $user->name }} ({{ $user->email }})</li>
+                                                <li><i data-feather="user" class="mr-2"></i>{{ $user->name }} ({{ $user->email }})</li>
                                             @endforeach
                                         </ul>
                                     </div>
-
-                                    <!-- Completion Date -->
-                                    <div class="col-md-6 mt-2">
-                                        <strong>Yakunlanish sanasi:</strong>
-                                        <span>{{ $task->end_date ? $task->end_date->format('d M, Y H:i') : 'Belgilangan emas' }}</span>
-                                    </div>
                                 </div>
                             </div>
-
+                        
+                            <!-- Task Assignments -->
+                            @if ($task->taskAssignments->count() > 0)
+                                <div class="task-assignments mb-4">
+                                    <h5><i data-feather="check-circle" class="mr-2 mb-2"></i>Вазифа Таъинланган Ҳодимлар</h5>
+                                    <table class="table table-bordered table-striped">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Ҳодим</th>
+                                                <th>Ҳолат</th>
+                                                <th>Қабул Қилинган Санаси</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($task->taskAssignments as $assignment)
+                                                <tr>
+                                                    <td><i data-feather="user" class="mr-2"></i>{{ $assignment->employee->name ?? 'Белгиланмаган' }}</td>
+                                                    <td>
+                                                        <span class="badge 
+                                                            @if ($assignment->status == 'pending') bg-warning 
+                                                            @elseif($assignment->status == 'in_progress') bg-primary
+                                                            @elseif($assignment->status == 'completed') bg-success
+                                                            @elseif($assignment->status == 'rejected') bg-danger
+                                                            @else bg-secondary @endif">
+                                                            {{ ucfirst($assignment->status) }}
+                                                        </span>
+                                                    </td>
+                                                    <td>{{ $assignment->emp_accepted_at ? $assignment->emp_accepted_at->format('d M, Y H:i') : 'Қабул Қилинмаган' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                        
                             <!-- File Attachments -->
                             @if ($task->files->count() > 0)
-                                <div class="email-attachments mt-4">
-                                    <div class="title">Yuklamalar <span>({{ $task->files->count() }} fayl(lar))</span>
-                                    </div>
+                                <div class="file-attachments mb-4">
+                                    <h5><i data-feather="paperclip" class="mr-2 mb-2"></i>Юкламалар</h5>
                                     <ul class="list-unstyled">
                                         @foreach ($task->files as $file)
-                                            <li>
-                                                <!-- Updated file path to match public path -->
-                                                <a href="{{ asset('tasks/' . $task->id . '/' . $file->file_name) }}"
-                                                    target="_blank">
-                                                    <span data-feather="file"></span> {{ $file->file_name }}
-                                                    <span
-                                                        class="text-muted tx-11">({{ number_format($file->file_size / 1024, 2) }}
-                                                        MB)</span>
+                                            <li class="mb-3">
+                                                <a href="{{ asset('tasks/' . $task->id . '/' . $file->file_name) }}" target="_blank" class="text-decoration-none">
+                                                    <i data-feather="file" class="mr-2"></i>{{ $file->file_name }}
+                                                    <span class="text-muted">({{ number_format($file->file_size / 1024, 2) }} MB)</span>
                                                 </a>
-                                                <div class="text-muted tx-11">Yuklagan: {{ $file->user->name }}</div>
+                                                <div class="text-muted">Юклади: {{ $file->user->name }}</div>
                                             </li>
                                         @endforeach
                                     </ul>
                                 </div>
                             @endif
-
-
+                        
+                            <!-- Task Actions -->
                             @if ($task->users->contains('id', auth()->id()))
-                                <div class="email-actions mt-4">
-                                    @if ($task->users->contains('id', auth()->id()))
-                                        <div class="email-actions mt-4">
-                                            @php
-                                                $assignment = $task->taskAssignments->first();
-                                            @endphp
-
-                                            @if ($assignment && isset($assignment->emp_accepted_at))
-                                                @if ($assignment->status !== 'pending')
-                                                    <!-- Показываем "Вазифани Якунлаш", если задание принято и статус не "pending" -->
-                                                    <button type="button" class="btn btn-primary shadow-sm"
-                                                        data-bs-toggle="modal" data-bs-target="#completeTaskModal">
-                                                        Вазифани Якунлаш
-                                                    </button>
-                                                @endif
-                                            @else
-                                                <!-- Показываем "Қабул қилиш", если задание не принято -->
-                                                <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="btn btn-success shadow-sm">Қабул
-                                                        қилиш</button>
-                                                </form>
-                                            @endif
-                                        </div>
+                                <div class="task-actions mt-4">
+                                    @php
+                                        $assignment = $task->taskAssignments->first();
+                                    @endphp
+                        
+                                    @if ($assignment && isset($assignment->emp_accepted_at))
+                                        @if ($assignment->status !== 'pending')
+                                            <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#completeTaskModal">
+                                                <i data-feather="check-circle" class="mr-2"></i>Вазифани Якунлаш
+                                            </button>
+                                        @endif
+                                    @else
+                                        <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success shadow-sm"><i data-feather="check" class="mr-2"></i>Қабул Қилиш</button>
+                                        </form>
                                     @endif
                                 </div>
                             @else
-                                <!-- Show Back and Edit buttons if user is not assigned -->
-                                <div class="email-actions mt-4 d-flex justify-content-between">
-                                    <a href="{{ route('ijro.index') }}" class="btn btn-secondary shadow-sm">Ортга</a>
-                                    <a href="{{ route('ijro.edit', $task->id) }}"
-                                        class="btn btn-primary shadow-sm">Вазифани таҳрирлаш</a>
+                                <div class="task-actions mt-4 d-flex justify-content-between">
+                                    <a href="{{ route('ijro.index') }}" class="btn btn-secondary shadow-sm"><i data-feather="arrow-left" class="mr-2"></i>Ортга</a>
+                                    <a href="{{ route('ijro.edit', $task->id) }}" class="btn btn-primary shadow-sm"><i data-feather="edit" class="mr-2"></i>Вазифани Таҳрирлаш</a>
                                 </div>
                             @endif
-
-                            <!-- Modal Window for Task Completion -->
-                            <div class="modal fade" id="completeTaskModal" tabindex="-1"
-                                aria-labelledby="completeTaskModalLabel" aria-hidden="true">
+                        
+                            <!-- Modal for Task Completion -->
+                            <div class="modal fade" id="completeTaskModal" tabindex="-1" aria-labelledby="completeTaskModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="completeTaskModalLabel">Вазифани якунлаш</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
+                                        <div class="modal-header bg-success text-white">
+                                            <h5 class="modal-title" id="completeTaskModalLabel"><i data-feather="check-circle" class="mr-2"></i>Вазифани Якунлаш</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                        <form action="{{ route('ijro.complete', $task->id) }}" method="POST"
-                                            enctype="multipart/form-data">
+                                        <form action="{{ route('ijro.complete', $task->id) }}" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             <div class="modal-body">
                                                 <div class="mb-3">
-                                                    <label for="completion_description" class="form-label">Изоҳ</label>
+                                                    <label for="completion_description" class="form-label">Якунлаш Тасвири</label>
                                                     <textarea class="form-control" id="completion_description" name="completion_description" required></textarea>
                                                 </div>
                                                 <div class="mb-3">
-                                                    <label for="completion_files" class="form-label">Файл юклаш</label>
-                                                    <input type="file" class="form-control" id="completion_files"
-                                                        name="completion_files[]" multiple>
+                                                    <label for="completion_files" class="form-label">Файл Юклаш</label>
+                                                    <input type="file" class="form-control" id="completion_files" name="completion_files[]" multiple>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Бекор қилиш</button>
-                                                <button type="submit" class="btn btn-primary">Якунлаш</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i data-feather="x-circle" class="mr-2"></i>Бекор Қилиш</button>
+                                                <button type="submit" class="btn btn-primary"><i data-feather="check-circle" class="mr-2"></i>Якунлаш</button>
                                             </div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-
-                            <hr class="mt-4">
-
-
-
                         </div>
-
+                    
                     </div>
                 </div>
             </div>
@@ -167,7 +170,7 @@
         <div class="col-md-12 col-lg-3">
             <div class="card">
                 <div class="card-body">
-                    <h6 class="card-title">Таймлайн</h6>
+                    <h6 class="card-title">Вазифа тарихи</h6>
                     <div id="content">
                         <ul class="timeline">
                             @foreach ($task->taskAssignments as $assignment)
