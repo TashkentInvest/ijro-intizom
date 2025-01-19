@@ -106,7 +106,7 @@
                             </div>
                             <div id="viewEventBody" class="modal-body"></div>
                             <div class="modal-footer" id="viewEventFooter">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ёпиш</button>
+                                <button type="button" class="btn" data-dismiss="modal">Ёпиш</button>
                             </div>
                         </div>
                     </div>

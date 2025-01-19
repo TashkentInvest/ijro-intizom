@@ -36,7 +36,7 @@ class ManualEventController extends Controller
 
             // If the user is not a Super Admin, filter tasks by the user's own tasks
             if (!$isSuperAdmin) {
-                $query->whereHas('task_users', function ($q) {
+                $query->whereHas('users', function ($q) {
                     $q->where('user_id', auth()->id()); // Filter tasks assigned to the current user
                 });
             }
@@ -74,29 +74,29 @@ class ManualEventController extends Controller
                 }
 
                 // Determine color class based on status and planned completion date
-                $plannedDate = $task->planned_completion_date;
+                $plannedDate = $task->end_date;
                 $colorClass = 'white';
 
-                if ($plannedDate) {
-                    $daysDifference = $plannedDate->diffInDays($currentDate, false);
-                    if ($task->status->name == 'Completed') {
-                        $colorClass = 'lightgreen';
-                    } elseif ($currentDate->gt($plannedDate)) {
-                        $colorClass = 'red';
-                    } elseif ($daysDifference <= 2 && $daysDifference >= 0) {
-                        $colorClass = 'yellow';
-                    } else {
-                        $colorClass = 'white';
-                    }
-                }
+                // if ($plannedDate) {
+                //     $daysDifference = $plannedDate->diffInDays($currentDate, false);
+                //     if ($task->status->name == 'Completed') {
+                //         $colorClass = 'lightgreen';
+                //     } elseif ($currentDate->gt($plannedDate)) {
+                //         $colorClass = 'red';
+                //     } elseif ($daysDifference <= 2 && $daysDifference >= 0) {
+                //         $colorClass = 'yellow';
+                //     } else {
+                //         $colorClass = 'white';
+                //     }
+                // }
 
                 $calendarData[] = [
                     'id'         => 'task-' . $task->id,
                     'task_link'  => url('/task/' . $task->id),
                     'title'      => $task->short_name ?? '-' . ' - ' .
-                        ($task->planned_completion_date ? date('d/m/Y', strtotime($task->planned_completion_date)) : 'No End Date'),
+                        ($task->end_date ? date('d/m/Y', strtotime($task->end_date)) : 'No End Date'),
                     'start'      => $task->issue_date,
-                    'end'        => $task->planned_completion_date,
+                    'end'        => $task->end_date,
                     'note'       => $task->note,
                     'emp_names'  => $empNames,
                     'emp_about'  => $empAbouts,
