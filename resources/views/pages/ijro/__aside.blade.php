@@ -25,6 +25,13 @@
                     {{-- <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $statusCounts['in_progress'] }}</span> --}}
                 </a>
             </li>
+
+            <li class="{{ request('status') == 'pending' ? 'active' : '' }}">
+                <a href="{{ route('ijro.index', ['status' => 'pending']) }}">
+                    <span class="icon"><i data-feather="clock"></i></span>Корилмаганлар
+                    {{-- <span class="badge badge-danger-muted text-white font-weight-bold float-right">{{ $statusCounts['in_progress'] }}</span> --}}
+                </a>
+            </li>
             {{-- @dump($statusCounts) --}}
             <li class="{{ request('status') == 'completed' ? 'active' : '' }}">
                 <a href="{{ route('ijro.index', ['status' => 'completed']) }}">

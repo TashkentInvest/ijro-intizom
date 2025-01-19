@@ -129,6 +129,9 @@ class IjroController extends Controller
             'in_progress' => $countQuery->whereHas('taskAssignments', function ($query) {
                 $query->where('status', 'in_progress');
             })->count(),
+            'pending' => $countQuery->whereHas('taskAssignments', function ($query) {
+                $query->where('status', 'pending');
+            })->count(),
             'completed' => $countQuery->whereHas('taskAssignments', function ($query) {
                 $query->where('status', 'completed');
             })->count(),
@@ -515,7 +518,7 @@ class IjroController extends Controller
 
         return redirect()->back()->with('error', 'Вазифа топилмади.');
     }
-    
+
     public function rejectByAdmin(Request $request, Task $task)
     {
 
