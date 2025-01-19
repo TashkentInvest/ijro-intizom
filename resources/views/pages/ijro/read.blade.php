@@ -14,7 +14,7 @@
                             <div class="task-header mb-4">
                                 <div class="d-flex justify-content-between">
                                     <div class="task-header-left d-flex align-items-center">
-                                        <span class="task-status-icon">
+                                        <span class="task-status-icon mr-2">
                                             <i data-feather="star" class="text-warning"></i>
                                         </span>
                                         <h3 class="font-weight-bold">{{ $task->short_name }}</h3>
