@@ -47,8 +47,7 @@
                                         <ul class="list-unstyled">
                                             @foreach ($task->users as $user)
                                                 <li><i data-feather="user" class="mr-2"></i>{{ $user->name }}
-                                                    ({{ $user->email }})
-                                                </li>
+                                                    ({{ $user->email }})</li>
                                             @endforeach
                                         </ul>
                                     </div>
@@ -66,6 +65,7 @@
                                                 <th style="color: #fff;">Ҳодим</th>
                                                 <th style="color: #fff;">Ҳолат</th>
                                                 <th style="color: #fff;">Қабул Қилинган Санаси</th>
+                                                <th style="color: #fff;">Рейтинг</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -87,6 +87,7 @@
                                                     </td>
                                                     <td>{{ $assignment->emp_accepted_at ? $assignment->emp_accepted_at->format('d M, Y H:i') : 'Қабул Қилинмаган' }}
                                                     </td>
+                                                    <td>{{ $assignment->confirm_rating ?? 'N/A' }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -124,8 +125,27 @@
                                 </div>
                             @endif
 
-
-
+                            <!-- Task Comments -->
+                            @if ($task->taskComments->count() > 0)
+                                <div class="task-comments mb-4">
+                                    <h5><i data-feather="message-circle" class="mr-2 mb-2"></i>Изоҳлар</h5>
+                                    <ul class="list-unstyled">
+                                        @foreach ($task->taskComments as $comment)
+                                            <li class="mb-3">
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <i data-feather="user"
+                                                            class="mr-2"></i><strong>{{ $comment->user->name }}</strong>
+                                                        <span
+                                                            class="text-muted">({{ $comment->created_at->format('d M, Y H:i') }})</span>
+                                                    </div>
+                                                </div>
+                                                <p class="mt-2">{{ $comment->comment }}</p>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
                             <!-- Task Actions -->
                             @if ($task->users->contains('id', auth()->id()))
@@ -135,10 +155,10 @@
                                     @endphp
 
                                     @if ($assignment && isset($assignment->emp_accepted_at))
-                                        @if ($assignment->status !== 'pending')
+                                        @if ($assignment->status == 'in_progress')
                                             <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
                                                 data-bs-target="#completeTaskModal">
-                                                <i data-feather="check-circle" class="mr-2"></i>Вазифани Якунлаш
+                                                <i data-feather="check-circle" class="mr-2"></i>Вазифани Якунлаш 
                                             </button>
                                         @endif
                                     @else
@@ -158,7 +178,6 @@
                                 </div>
 
                                 <div class="mt-3">
-
                                     @if ($assignment->status == 'pending')
                                         <!-- Confirm Task Button -->
                                         <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
@@ -173,7 +192,6 @@
                                         </button>
                                     @endif
                                 </div>
-
                             @endif
 
                             <!-- Modal for Confirming Task by Admin -->
@@ -350,11 +368,11 @@
             }
 
             /* html,
-                    body {
-                        margin: 0;
-                        padding: 0;
-                        font: 1em/1.5 Verdana, sans-serif;
-                    } */
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            font: 1em/1.5 Verdana, sans-serif;
+                        } */
 
             .slider {
                 --thumb-diameter: 2em;
