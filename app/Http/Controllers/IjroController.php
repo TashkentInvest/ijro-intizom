@@ -476,11 +476,17 @@ class IjroController extends Controller
         return back()->with('success', 'Вазифа муваффақиятли якунланди!');
     }
 
-    public function confirm(Request $request, Task $task)
+    public function confirmByAdmin(Request $request, Task $task)
     {
-        $assignment = $task->taskAssignments()->where('employee_id', auth()->id())->first();
+        // Assume the admin user is authenticated
+        $adminUser = auth()->user();
+
+        // Find the task assignment for the specified employee
+        $assignment = $task->taskAssignments()->where('employee_id', $request->employee_id)->first();
 
         if ($assignment) {
+            $previousStatus = $assignment->status;
+
             $assignment->update([
                 'status' => 'completed',
                 'confirm_rating' => $request->confirm_rating,
@@ -490,8 +496,18 @@ class IjroController extends Controller
             // Add a comment
             TaskComment::create([
                 'task_id' => $task->id,
-                'user_id' => auth()->id(),
+                'user_id' => $adminUser->id,
                 'comment' => $request->confirm_comment,
+            ]);
+
+            // Add to task assignment history
+            TaskAssignmentHistory::create([
+                'task_assignment_id' => $assignment->id,
+                'user_id' => $adminUser->id,
+                'action_type' => 'status_changed',
+                'previous_status' => $previousStatus,
+                'new_status' => 'completed',
+                'description' => 'Task confirmed by admin with rating: ' . $request->confirm_rating,
             ]);
 
             return redirect()->back()->with('success', 'Вазифа тасдиқланди.');
@@ -499,11 +515,19 @@ class IjroController extends Controller
 
         return redirect()->back()->with('error', 'Вазифа топилмади.');
     }
-    public function reject(Request $request, Task $task)
+    
+    public function rejectByAdmin(Request $request, Task $task)
     {
-        $assignment = $task->taskAssignments()->where('employee_id', auth()->id())->first();
+
+        // Assume the admin user is authenticated
+        $adminUser = auth()->user();
+
+        // Find the task assignment for the specified employee
+        $assignment = $task->taskAssignments()->where('employee_id', $request->employee_id)->first();
 
         if ($assignment) {
+            $previousStatus = $assignment->status;
+
             $assignment->update([
                 'status' => 'rejected',
                 'user_rejected_at' => now(),
@@ -512,8 +536,18 @@ class IjroController extends Controller
             // Add a comment
             TaskComment::create([
                 'task_id' => $task->id,
-                'user_id' => auth()->id(),
+                'user_id' => $adminUser->id,
                 'comment' => $request->reject_comment,
+            ]);
+
+            // Add to task assignment history
+            TaskAssignmentHistory::create([
+                'task_assignment_id' => $assignment->id,
+                'user_id' => $adminUser->id,
+                'action_type' => 'status_changed',
+                'previous_status' => $previousStatus,
+                'new_status' => 'rejected',
+                'description' => 'Task rejected by admin with comment: ' . $request->reject_comment,
             ]);
 
             return redirect()->back()->with('success', 'Вазифа рад қилинди.');

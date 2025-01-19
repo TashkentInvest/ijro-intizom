@@ -299,8 +299,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/tasks/{task}/complete', [IjroController::class, 'completeTask'])->name('ijro.complete');
 
 
-    Route::post('/tasks/{task}/confirm', [IjroController::class, 'confirm'])->name('ijro.confirm');
-    Route::post('/tasks/{task}/reject', [IjroController::class, 'reject'])->name('ijro.reject');
+    Route::post('/tasks/{task}/confirm-by-admin', [IjroController::class, 'confirmByAdmin'])->name('ijro.confirmByAdmin');
+    Route::post('/tasks/{task}/reject-by-admin', [IjroController::class, 'rejectByAdmin'])->name('ijro.rejectByAdmin');
 
 
     Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');

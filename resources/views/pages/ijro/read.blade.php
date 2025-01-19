@@ -162,13 +162,13 @@
                                     @if ($assignment->status == 'pending')
                                         <!-- Confirm Task Button -->
                                         <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
-                                            data-bs-target="#confirmTaskModal">
+                                            data-bs-target="#confirmTaskByAdminModal">
                                             <i data-feather="check-circle" class="mr-2"></i> Вазифани Тасдиқлаш
                                         </button>
 
                                         <!-- Reject Task Button -->
                                         <button type="button" class="btn btn-danger shadow-sm" data-bs-toggle="modal"
-                                            data-bs-target="#rejectTaskModal">
+                                            data-bs-target="#rejectTaskByAdminModal">
                                             <i data-feather="x-circle" class="mr-2"></i> Вазифани Рад Қлиш
                                         </button>
                                     @endif
@@ -176,28 +176,30 @@
 
                             @endif
 
-                            <!-- Modal for Confirming Task -->
-                            <div class="modal fade" id="confirmTaskModal" tabindex="-1"
-                                aria-labelledby="confirmTaskModalLabel" aria-hidden="true">
+                            <!-- Modal for Confirming Task by Admin -->
+                            <div class="modal fade" id="confirmTaskByAdminModal" tabindex="-1"
+                                aria-labelledby="confirmTaskByAdminModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header bg-success text-white">
-                                            <h5 class="modal-title" id="confirmTaskModalLabel">
+                                            <h5 class="modal-title" id="confirmTaskByAdminModalLabel">
                                                 <i data-feather="check-circle" class="mr-2"></i> Вазифани Тасдиқлаш
                                             </h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <form action="{{ route('ijro.confirm', $task->id) }}" method="POST">
+                                        <form action="{{ route('ijro.confirmByAdmin', $task->id) }}" method="POST">
                                             @csrf
                                             <div class="modal-body">
+                                                <input type="hidden" name="employee_id"
+                                                    value="{{ $assignment->employee_id }}">
                                                 <div class="mb-3">
                                                     <label for="confirm_comment" class="form-label">Изоҳ</label>
                                                     <textarea class="form-control" id="confirm_comment" name="confirm_comment" required></textarea>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="confirm_rating" class="form-label">Рейтинг</label>
-                                                    <div class="slider slider-blue" data-style="blue">
+                                                    <div class="slider slider-blue" data-style="Рейтинг">
                                                         <output class="slider-tooltip"></output>
                                                         <input class="slider-range" name="confirm_rating" max="100"
                                                             min="1" type="range" value="50">
@@ -217,21 +219,23 @@
                                 </div>
                             </div>
 
-                            <!-- Modal for Rejecting Task -->
-                            <div class="modal fade" id="rejectTaskModal" tabindex="-1"
-                                aria-labelledby="rejectTaskModalLabel" aria-hidden="true">
+                            <!-- Modal for Rejecting Task by Admin -->
+                            <div class="modal fade" id="rejectTaskByAdminModal" tabindex="-1"
+                                aria-labelledby="rejectTaskByAdminModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header bg-danger text-white">
-                                            <h5 class="modal-title" id="rejectTaskModalLabel">
+                                            <h5 class="modal-title" id="rejectTaskByAdminModalLabel">
                                                 <i data-feather="x-circle" class="mr-2"></i> Вазифани Рад Қлиш
                                             </h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
-                                        <form action="{{ route('ijro.reject', $task->id) }}" method="POST">
+                                        <form action="{{ route('ijro.rejectByAdmin', $task->id) }}" method="POST">
                                             @csrf
                                             <div class="modal-body">
+                                                <input type="hidden" name="employee_id"
+                                                    value="{{ $assignment->employee_id ?? null }}">
                                                 <div class="mb-3">
                                                     <label for="reject_comment" class="form-label">Изоҳ</label>
                                                     <textarea class="form-control" id="reject_comment" name="reject_comment" required></textarea>
@@ -346,11 +350,11 @@
             }
 
             /* html,
-            body {
-                margin: 0;
-                padding: 0;
-                font: 1em/1.5 Verdana, sans-serif;
-            } */
+                    body {
+                        margin: 0;
+                        padding: 0;
+                        font: 1em/1.5 Verdana, sans-serif;
+                    } */
 
             .slider {
                 --thumb-diameter: 2em;
@@ -484,7 +488,7 @@
                 outline: none;
             }
 
-          
+
 
             .slider-blue {
                 --thumb-border: 2px solid #FFF;
