@@ -328,15 +328,15 @@ class IjroController extends Controller
                 foreach ($request->file('attached_file') as $file) {
                     // Define the directory for saving files directly in the public folder
                     $fileDirectory = public_path('tasks/' . $task->id);
-
+            
                     // Create the directory if it doesn't exist
                     if (!file_exists($fileDirectory)) {
                         mkdir($fileDirectory, 0777, true);
                     }
-
+            
                     // Move the file to the public folder
                     $filePath = $file->move($fileDirectory, $file->getClientOriginalName());
-
+            
                     // Store the file path relative to the public folder in the database
                     File::create([
                         'file_name' => $file->getClientOriginalName(),
@@ -347,6 +347,7 @@ class IjroController extends Controller
                     ]);
                 }
             }
+            
 
             // Commit transaction
             DB::commit();
@@ -417,7 +418,7 @@ class IjroController extends Controller
     {
         $request->validate([
             'completion_description' => 'required|string',
-            'completion_files.*' => 'file|max:10240', // Макс. размер 10MB
+            'completion_files.*' => 'nullable', // Макс. размер 10MB
         ]);
 
         $assignment = TaskAssignment::where('task_id', $task->id)
@@ -445,22 +446,30 @@ class IjroController extends Controller
         ]);
 
      
-
         if ($request->hasFile('completion_files')) {
             foreach ($request->file('completion_files') as $file) {
-                // Store the file in the 'task_files' folder within the public disk (storage/app/public)
-                $path = $file->store('task_files', 'public');
+                // Define the directory for saving files directly in the public folder
+                $fileDirectory = public_path('tasks/' . $task->id);
         
-                // Create an entry in the File model
+                // Create the directory if it doesn't exist
+                if (!file_exists($fileDirectory)) {
+                    mkdir($fileDirectory, 0777, true);
+                }
+        
+                // Move the file to the public folder
+                $filePath = $file->move($fileDirectory, $file->getClientOriginalName());
+        
+                // Store the file path relative to the public folder in the database
                 File::create([
                     'file_name' => $file->getClientOriginalName(),
-                    'file_path' => $path, // The file's relative path within storage/app/public
+                    'file_path' => 'tasks/' . $task->id . '/' . $file->getClientOriginalName(), // Path relative to public
                     'file_type' => $file->getClientMimeType(),
                     'user_id' => auth()->id(),
                     'task_id' => $task->id,
                 ]);
             }
         }
+        
         
 
         return back()->with('success', 'Вазифа муваффақиятли якунланди!');

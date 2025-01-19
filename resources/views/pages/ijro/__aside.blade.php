@@ -6,9 +6,11 @@
         <span class="title text-muted font-weight-bold">Топшириқлар</span>
         <p class="text-muted">{{ auth()->user()->email }}</p>
     </div>
+    @if(@auth()->user()->roles->first()->name == 'Super Admin')
     <div class="aside-compose">
         <a class="btn btn-primary btn-block" href="{{ route('ijro.compose') }}">Топшириқ яратиш</a>
     </div>
+    @endif
     <div class="aside-nav collapse">
         <ul class="nav">
             <li class="{{ request('status') == 'all' ? 'active' : '' }}">
