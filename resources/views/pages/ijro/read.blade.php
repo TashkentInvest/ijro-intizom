@@ -63,9 +63,9 @@
                                     <table class="table table-bordered table-striped">
                                         <thead class="table-dark">
                                             <tr>
-                                                <th>Ҳодим</th>
-                                                <th>Ҳолат</th>
-                                                <th>Қабул Қилинган Санаси</th>
+                                                <th style="color: #fff;">Ҳодим</th>
+                                                <th style="color: #fff;">Ҳолат</th>
+                                                <th style="color: #fff;">Қабул Қилинган Санаси</th>
                                             </tr>
                                         </thead>
                                         <tbody>
