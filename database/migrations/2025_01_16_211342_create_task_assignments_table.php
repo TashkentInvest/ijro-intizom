@@ -20,6 +20,8 @@ class CreateTaskAssignmentsTable extends Migration
             $table->unsignedBigInteger('nazoratchi_id')->nullable();
             $table->unsignedBigInteger('employee_id');
             $table->enum('status', ['pending', 'in_progress', 'completed', 'rejected','delayed']);
+
+            $table->unsignedInteger('confirm_rating')->nullable();
             // $table->enum('status', ['кутилмоқда', 'бажарилаётган', 'бажарилган', 'бажарилмаган']);
 
             $table->boolean('is_expired')->default(false);

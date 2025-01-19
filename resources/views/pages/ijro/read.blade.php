@@ -58,7 +58,7 @@
                             <!-- Task Assignments -->
                             @if ($task->taskAssignments->count() > 0)
                                 <div class="task-assignments mb-4">
-                                    <h5><i data-feather="check-circle" class="mr-2 mb-2"></i>Вазифа Таъинланган Ҳодимлар
+                                    <h5><i data-feather="check-circle" class="mr-2 mb-2"></i>Вазифа Таминланган Ҳодимлар
                                     </h5>
                                     <table class="table table-bordered table-striped">
                                         <thead class="table-dark">
@@ -125,25 +125,6 @@
                             @endif
 
 
-                            <!-- File Attachments -->
-                            {{-- @if ($task->files->count() > 0)
-                               <div class="file-attachments mb-4">
-                                   <h5><i data-feather="paperclip" class="mr-2 mb-2"></i>Юкламалар</h5>
-                                   <ul class="list-unstyled">
-                                       @foreach ($task->files as $file)
-                                           <li class="mb-3">
-                                               <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank" class="text-decoration-none">
-                                                   <i data-feather="file" class="mr-2"></i>{{ $file->file_name }}
-                                                   <span class="text-muted">
-                                                     
-                                                   </span>
-                                               </a>
-                                               <div class="text-muted">Юклади: {{ $file->user->name }}</div>
-                                           </li>
-                                       @endforeach
-                                   </ul>
-                               </div>
-                           @endif --}}
 
 
                             <!-- Task Actions -->
@@ -175,7 +156,99 @@
                                     <a href="{{ route('ijro.edit', $task->id) }}" class="btn btn-primary shadow-sm"><i
                                             data-feather="edit" class="mr-2"></i>Вазифани Таҳрирлаш</a>
                                 </div>
+
+                                <div class="mt-3">
+
+                                    @if ($assignment->status == 'pending')
+                                        <!-- Confirm Task Button -->
+                                        <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
+                                            data-bs-target="#confirmTaskModal">
+                                            <i data-feather="check-circle" class="mr-2"></i> Вазифани Тасдиқлаш
+                                        </button>
+
+                                        <!-- Reject Task Button -->
+                                        <button type="button" class="btn btn-danger shadow-sm" data-bs-toggle="modal"
+                                            data-bs-target="#rejectTaskModal">
+                                            <i data-feather="x-circle" class="mr-2"></i> Вазифани Рад Қлиш
+                                        </button>
+                                    @endif
+                                </div>
+
                             @endif
+
+                            <!-- Modal for Confirming Task -->
+                            <div class="modal fade" id="confirmTaskModal" tabindex="-1"
+                                aria-labelledby="confirmTaskModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-success text-white">
+                                            <h5 class="modal-title" id="confirmTaskModalLabel">
+                                                <i data-feather="check-circle" class="mr-2"></i> Вазифани Тасдиқлаш
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('ijro.confirm', $task->id) }}" method="POST">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="confirm_comment" class="form-label">Изоҳ</label>
+                                                    <textarea class="form-control" id="confirm_comment" name="confirm_comment" required></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="confirm_rating" class="form-label">Рейтинг</label>
+                                                    <div class="slider slider-blue" data-style="blue">
+                                                        <output class="slider-tooltip"></output>
+                                                        <input class="slider-range" name="confirm_rating" max="100"
+                                                            min="1" type="range" value="50">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    <i data-feather="x-circle" class="mr-2"></i> Бекор Қилиш
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i data-feather="check-circle" class="mr-2"></i> Тасдиқлаш
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal for Rejecting Task -->
+                            <div class="modal fade" id="rejectTaskModal" tabindex="-1"
+                                aria-labelledby="rejectTaskModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-danger text-white">
+                                            <h5 class="modal-title" id="rejectTaskModalLabel">
+                                                <i data-feather="x-circle" class="mr-2"></i> Вазифани Рад Қлиш
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <form action="{{ route('ijro.reject', $task->id) }}" method="POST">
+                                            @csrf
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="reject_comment" class="form-label">Изоҳ</label>
+                                                    <textarea class="form-control" id="reject_comment" name="reject_comment" required></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    <i data-feather="x-circle" class="mr-2"></i> Бекор Қилиш
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i data-feather="x-circle" class="mr-2"></i> Рад Қлиш
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Modal for Task Completion -->
                             <div class="modal fade" id="completeTaskModal" tabindex="-1"
@@ -271,6 +344,176 @@
                 text-align: left;
                 max-width: 100% !important;
             }
+
+            /* html,
+            body {
+                margin: 0;
+                padding: 0;
+                font: 1em/1.5 Verdana, sans-serif;
+            } */
+
+            .slider {
+                --thumb-diameter: 2em;
+                --thumb-radius: calc(var(--thumb-diameter) / 2);
+                --thumb-background: #C3C3C3;
+                --thumb-border: 2px solid #FFF;
+
+                --track-height: .7em;
+                --track-background: linear-gradient(#9D9D9D, #F0F0F0);
+                --track-border-color: #CFCFCF;
+                --track-border-width: 1px;
+
+                --tooltip-background: #FFF;
+                --tooltip-border-color: #888;
+                --tooltip-border-width: 1px;
+                --tooltip-hight-arrow: 1em;
+                --tooltip-text-color: #666;
+
+                --effect-over: 0 0 0 .75em #AAA2;
+                --effect-active: 0 0 0 .75em #5F03;
+                --value: 50;
+                --pos: calc(var(--thumb-radius) + .01 * var(--value) *(100% - var(--thumb-diameter)));
+
+                position: relative;
+                max-width: 30em;
+                margin: 2em auto;
+                text-align: center;
+                font-size: 1.25em;
+            }
+
+            .slider:before {
+                content: attr(data-style) " : " attr(data-value);
+                position: absolute;
+                left: 0;
+                margin-top: 1em;
+                text-transform: capitalize;
+                color: var(--tooltip-text-color);
+            }
+
+            .slider-tooltip {
+                display: block;
+                width: fit-content;
+                margin: auto;
+                margin-bottom: 2em;
+                margin-left: calc(var(--pos) + var(--track-border-width));
+                padding: .5em 1em;
+                min-width: 2em;
+                border: var(--tooltip-border-width) solid var(--tooltip-border-color);
+                border-radius: 5px;
+                font-weight: 700;
+                white-space: nowrap;
+                color: var(--tooltip-text-color);
+                background-color: var(--tooltip-background);
+                box-shadow: 0 .25em .75em #0006;
+                transition: .25s;
+                translate: calc(-50%);
+            }
+
+            .slider-tooltip::after {
+                content: "";
+                position: absolute;
+                top: calc(100% + var(--tooltip-border-width));
+                left: 50%;
+                width: var(--tooltip-hight-arrow);
+                height: var(--tooltip-hight-arrow);
+                border: inherit;
+                border-top: none;
+                border-left: none;
+                background-color: inherit;
+                box-shadow: none;
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            .slider-range {
+                display: block;
+                -webkit-appearance: none;
+                box-sizing: content-box;
+                width: 100%;
+                height: var(--track-height);
+                margin: 0;
+                border: var(--track-border-width) solid var(--track-border-color);
+                border-radius: var(--track-height);
+                font-size: inherit;
+                outline: none;
+                background: #ECECEC;
+                background-image: var(--track-background);
+                background-position: 0 center;
+                background-repeat: no-repeat;
+                background-size: var(--pos) var(--track-height);
+                box-shadow: 0 0 1em #DCDCDC;
+                cursor: pointer;
+            }
+
+            .slider-range::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                box-sizing: border-box;
+                width: var(--thumb-diameter);
+                height: var(--thumb-diameter);
+                border: var(--thumb-border);
+                border-radius: 50%;
+                background: var(--thumb-background);
+                box-shadow: 0 0 .5em #888;
+                cursor: ew-resize;
+            }
+
+            .slider-range::-moz-range-thumb {
+                box-sizing: border-box;
+                width: var(--thumb-diameter);
+                height: var(--thumb-diameter);
+                border: var(--thumb-border);
+                border-radius: 50%;
+                background: var(--thumb-background);
+                box-shadow: 0 0 .5em #888;
+                cursor: ew-resize;
+            }
+
+            input[type="range"]::-webkit-slider-thumb:hover {
+                box-shadow: var(--effect-over);
+            }
+
+            input[type="range"]::-moz-range-thumb:hover {
+                box-shadow: var(--effect-over);
+            }
+
+            input[type=range]:focus {
+                outline: 3px dashed #4B8FE8;
+                outline-offset: .5em;
+            }
+
+            input[type=range]:active {
+                outline: none;
+            }
+
+          
+
+            .slider-blue {
+                --thumb-border: 2px solid #FFF;
+                --thumb-background: #4C7CC3;
+                --track-background: linear-gradient(#5296BA, #E2E2FC);
+                --tooltip-background: #FAFAFF;
+                --tooltip-border-color: #008;
+                --tooltip-text-color: #04A;
+                --effect-over: 0 0 0 .75em #04A2;
+                --effect-active: 0 0 0 .75em #05F;
+            }
         </style>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const allRange = document.querySelectorAll(".slider-range");
+            allRange.forEach((el) => {
+                const ratio = 100 / (+el.max - +el.min);
+                const parent = el.parentNode;
+                const tooltip = el.previousElementSibling;
+                el.addEventListener("input", function() {
+                    const value = ratio * (this.value - this.min);
+                    tooltip && (tooltip.textContent = this.value);
+                    parent.style.setProperty('--value', +value);
+                    parent.dataset.value = this.value;
+                });
+                el.dispatchEvent(new Event("input"));
+            });
+        });
+    </script>
 @endsection

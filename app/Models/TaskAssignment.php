@@ -28,7 +28,8 @@ class TaskAssignment extends Model
         'nazoratchi_readed_at',
         'user_readed_at',
 
-        'is_expired'
+        'is_expired',
+        'confirm_rating'
     ];
 
     protected $dates = [

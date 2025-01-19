@@ -9,6 +9,7 @@ use App\Models\RoleTask;
 use App\Models\Task;
 use App\Models\TaskAssignment;
 use App\Models\TaskAssignmentHistory;
+use App\Models\TaskComment;
 use App\Models\TaskUser;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -328,15 +329,15 @@ class IjroController extends Controller
                 foreach ($request->file('attached_file') as $file) {
                     // Define the directory for saving files directly in the public folder
                     $fileDirectory = public_path('tasks/' . $task->id);
-            
+
                     // Create the directory if it doesn't exist
                     if (!file_exists($fileDirectory)) {
                         mkdir($fileDirectory, 0777, true);
                     }
-            
+
                     // Move the file to the public folder
                     $filePath = $file->move($fileDirectory, $file->getClientOriginalName());
-            
+
                     // Store the file path relative to the public folder in the database
                     File::create([
                         'file_name' => $file->getClientOriginalName(),
@@ -347,7 +348,7 @@ class IjroController extends Controller
                     ]);
                 }
             }
-            
+
 
             // Commit transaction
             DB::commit();
@@ -445,20 +446,20 @@ class IjroController extends Controller
             'description' => $request->completion_description,
         ]);
 
-     
+
         if ($request->hasFile('completion_files')) {
             foreach ($request->file('completion_files') as $file) {
                 // Define the directory for saving files directly in the public folder
                 $fileDirectory = public_path('tasks/' . $task->id);
-        
+
                 // Create the directory if it doesn't exist
                 if (!file_exists($fileDirectory)) {
                     mkdir($fileDirectory, 0777, true);
                 }
-        
+
                 // Move the file to the public folder
                 $filePath = $file->move($fileDirectory, $file->getClientOriginalName());
-        
+
                 // Store the file path relative to the public folder in the database
                 File::create([
                     'file_name' => $file->getClientOriginalName(),
@@ -469,9 +470,55 @@ class IjroController extends Controller
                 ]);
             }
         }
-        
-        
+
+
 
         return back()->with('success', 'Вазифа муваффақиятли якунланди!');
+    }
+
+    public function confirm(Request $request, Task $task)
+    {
+        $assignment = $task->taskAssignments()->where('employee_id', auth()->id())->first();
+
+        if ($assignment) {
+            $assignment->update([
+                'status' => 'completed',
+                'confirm_rating' => $request->confirm_rating,
+                'user_confirmed_at' => now(),
+            ]);
+
+            // Add a comment
+            TaskComment::create([
+                'task_id' => $task->id,
+                'user_id' => auth()->id(),
+                'comment' => $request->confirm_comment,
+            ]);
+
+            return redirect()->back()->with('success', 'Вазифа тасдиқланди.');
+        }
+
+        return redirect()->back()->with('error', 'Вазифа топилмади.');
+    }
+    public function reject(Request $request, Task $task)
+    {
+        $assignment = $task->taskAssignments()->where('employee_id', auth()->id())->first();
+
+        if ($assignment) {
+            $assignment->update([
+                'status' => 'rejected',
+                'user_rejected_at' => now(),
+            ]);
+
+            // Add a comment
+            TaskComment::create([
+                'task_id' => $task->id,
+                'user_id' => auth()->id(),
+                'comment' => $request->reject_comment,
+            ]);
+
+            return redirect()->back()->with('success', 'Вазифа рад қилинди.');
+        }
+
+        return redirect()->back()->with('error', 'Вазифа топилмади.');
     }
 }
