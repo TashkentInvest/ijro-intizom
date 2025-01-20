@@ -54,10 +54,10 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 col-md-12 col-xl-5">
-                                    <h3 class="mb-2">{{ $statusCounts[$status] }}</h3>
+                                    <h3 class="mb-2">{{ $statusCounts[$status] ?? ''}}</h3>
                                     <div class="d-flex align-items-baseline">
                                         <p class="text-success">
-                                            <span>+{{ $percentageGrowth[$status] }}%</span>
+                                            <span>+{{ $percentageGrowth[$status] ?? ''}}%</span>
                                             <i data-feather="arrow-up" class="icon-sm mb-1"></i>
                                         </p>
                                     </div>
