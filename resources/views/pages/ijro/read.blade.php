@@ -47,7 +47,8 @@
                                         <ul class="list-unstyled">
                                             @foreach ($task->users as $user)
                                                 <li><i data-feather="user" class="mr-2"></i>{{ $user->name }}
-                                                    ({{ $user->email }})</li>
+                                                    ({{ $user->email }})
+                                                </li>
                                             @endforeach
                                         </ul>
                                     </div>
@@ -154,19 +155,21 @@
                                         $assignment = $task->taskAssignments->first();
                                     @endphp
 
-                                    @if ($assignment && isset($assignment->emp_accepted_at))
-                                        @if ($assignment->status == 'in_progress')
-                                            <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
-                                                data-bs-target="#completeTaskModal">
-                                                <i data-feather="check-circle" class="mr-2"></i>Вазифани Якунлаш 
-                                            </button>
+                                    @if (isset($assignment))
+                                        @if ($assignment && isset($assignment->emp_accepted_at))
+                                            @if ($assignment->status == 'in_progress')
+                                                <button type="button" class="btn btn-success shadow-sm"
+                                                    data-bs-toggle="modal" data-bs-target="#completeTaskModal">
+                                                    <i data-feather="check-circle" class="mr-2"></i>Вазифани Якунлаш
+                                                </button>
+                                            @endif
+                                        @else
+                                            <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success shadow-sm"><i
+                                                        data-feather="check" class="mr-2"></i>Қабул Қилиш</button>
+                                            </form>
                                         @endif
-                                    @else
-                                        <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-success shadow-sm"><i data-feather="check"
-                                                    class="mr-2"></i>Қабул Қилиш</button>
-                                        </form>
                                     @endif
                                 </div>
                             @else
@@ -368,11 +371,11 @@
             }
 
             /* html,
-                        body {
-                            margin: 0;
-                            padding: 0;
-                            font: 1em/1.5 Verdana, sans-serif;
-                        } */
+                            body {
+                                margin: 0;
+                                padding: 0;
+                                font: 1em/1.5 Verdana, sans-serif;
+                            } */
 
             .slider {
                 --thumb-diameter: 2em;
