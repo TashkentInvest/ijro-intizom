@@ -90,7 +90,7 @@ class IjroController extends Controller
         $countQuery = Task::query();
 
         if (!$isSuperAdmin) {
-            $countQuery->where('status_id', '!=', true); // Exclude completed or archived tasks
+            $countQuery; // Exclude completed or archived tasks
         }
 
         // Apply filters to the count query
