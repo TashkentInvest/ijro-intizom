@@ -179,6 +179,7 @@
                                     <a href="{{ route('ijro.edit', $task->id) }}" class="btn btn-primary shadow-sm"><i
                                             data-feather="edit" class="mr-2"></i>Вазифани Таҳрирлаш</a>
                                 </div>
+                                @if (isset($assignment))
 
                                 <div class="mt-3">
                                     @if ($assignment->status == 'pending')
@@ -195,6 +196,7 @@
                                         </button>
                                     @endif
                                 </div>
+                                @endif
                             @endif
 
                             <!-- Modal for Confirming Task by Admin -->
