@@ -22,7 +22,6 @@
     <style>
         .date-danger {
             background-color: #ffe6e6;
-            
         }
 
         .date-warning {
@@ -36,6 +35,14 @@
         .date-success {
             background-color: #d4edda;
         }
+
+        .date-primary {
+            background-color: #cce5ff;
+        }
+
+        .date-info {
+            background-color: #d1ecf1;
+        }
     </style>
 
     <script src="{{ asset('edo_template/assets/vendors/core/core.js') }}"></script>
@@ -45,7 +52,6 @@
 <body class="sidebar-dark">
     <div class="main-wrapper">
         @include('layouts.edo_sidebar')
-        {{-- @include('layouts.edo-setting_nav') --}}
 
         <div class="page-wrapper">
             <div class="page-content">
@@ -78,11 +84,12 @@
 
                 <div class="row mb-3">
                     <div class="col-md-4">
-                        <label for="calendarFilter" class="mr-2">Фильтр:</label>
-                        <select id="calendarFilter" class="form-control">
-                            <option value="all">Барчаси</option>
-                            <option value="task">Фақат топшириқлар</option>
-                            <option value="manual">Фақат учрашувлар</option>
+                        <label for="taskTypeFilter" class="mr-2">Топшириқ тури:</label>
+                        <select id="taskTypeFilter" class="form-control">
+                            <option value="">Барчаси</option>
+                            <option value="meeting">Учрашув</option>
+                            <option value="hr_task">HR Топшириқ</option>
+                            <option value="emp_task">Ходим Топшириқ</option>
                         </select>
                     </div>
                 </div>
@@ -213,6 +220,7 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
+                firstDay: 1, // Start the calendar week from Monday
                 editable: false,
                 events: originalEvents,
                 displayEventTime: false,
@@ -231,10 +239,10 @@
                     let emp_about = event.emp_about ? event.emp_about.join('; ') : '';
 
                     let htmlContent = `
-                        <p> ${emp_about}</p><br/>
-                        <p>${desc}</p><br/>
+                        <p><strong>Ҳодиса ҳақида:</strong> ${emp_about}</p>
+                        <p>${desc}</p>
                         <p><strong>Бошланиши:</strong> ${startTxt}</p>
-                        <p><strong>Тугаши:</strong> ${endTxt}</p> <br/>
+                        <p><strong>Тугаши:</strong> ${endTxt}</p>
                         <p><a href="${event.task_link ?? ''}">Кўриш</a></p>
                     `;
                     $('#viewEventBody').html(htmlContent);
@@ -284,14 +292,16 @@
 
                 if (plannedDate.isValid()) {
                     const daysDifference = plannedDate.diff(currentDate, 'days');
-                    if (event.status === 'Completed') {
+                    if (event.status === 'completed') {
                         colorClass = 'date-success';
-                    } else if (currentDate.isAfter(plannedDate)) {
+                    } else if (event.status === 'in_progress') {
+                        colorClass = 'date-primary';
+                    } else if (event.status === 'pending') {
+                        colorClass = 'date-info';
+                    } else if (event.status === 'rejected') {
                         colorClass = 'date-danger';
-                    } else if (daysDifference <= 2 && daysDifference >= 0) {
+                    } else if (event.status === 'delayed') {
                         colorClass = 'date-warning';
-                    } else {
-                        colorClass = 'date-default';
                     }
                 }
 
@@ -303,108 +313,35 @@
                 applyFilter(val);
             });
 
-            $('#saveEvent').on('click', function() {
-                var formData = {
-                    title: $('#eventTitle').val(),
-                    start_date: $('#eventStart').val(),
-                    end_date: $('#eventEnd').val(),
-                    description: $('#eventDescription').val(),
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                };
-
-                $.post("{{ route('manual-events.store') }}", formData, function(response) {
-                    if (response.status === 'success') {
-                        let newEvt = {
-                            id: 'manual-' + response.data.id,
-                            title: response.data.title,
-                            start: response.data.start_date,
-                            end: response.data.end_date,
-                            description: response.data.description,
-                            color: '#f39c12',
-                            type: 'manual'
-                        };
-                        $('#fullcalendar').fullCalendar('renderEvent', newEvt, true);
-                        originalEvents.push(newEvt);
-                        $('#createEventForm')[0].reset();
-                        $('#createEventModal').modal('hide');
-                    } else {
-                        alert('Хатолик: Ҳодиса сақланмади!');
-                    }
-                });
+            $('#taskTypeFilter').on('change', function() {
+                let val = $(this).val();
+                applyTaskTypeFilter(val);
             });
 
-            $('#updateEventBtn').on('click', function() {
-                let eventId = $('#editEventId').val();
-                let putData = {
-                    title: $('#editEventTitle').val(),
-                    start_date: $('#editEventStart').val(),
-                    end_date: $('#editEventEnd').val(),
-                    description: $('#editEventDescription').val(),
-                    _token: $('meta[name="csrf-token"]').attr('content'),
-                    _method: 'PUT'
-                };
-
-                $.ajax({
-                    url: '/calendar/update/' + eventId,
-                    type: 'POST',
-                    data: putData,
-                    success: function(resp) {
-                        if (resp.status === 'success') {
-                            alert(resp.message);
-                            let evts = $('#fullcalendar').fullCalendar('clientEvents', eventId);
-                            if (evts.length > 0) {
-                                let e = evts[0];
-                                e.title = resp.data.title;
-                                e.start = resp.data.start_date;
-                                e.end = resp.data.end_date;
-                                e.description = resp.data.description;
-                                $('#fullcalendar').fullCalendar('updateEvent', e);
-                            }
-                            $('#editEventModal').modal('hide');
-                        }
-                    },
-                    error: function() {
-                        alert('Хатолик: Таҳрирлаш муваффақиятсиз!');
-                    }
-                });
-            });
-
-            $('#deleteEventBtn').on('click', function() {
-                if (!confirm('Ростдан ҳам ушбу ҳодисани ўчирмоқчимисиз?')) return;
-                let eventId = $('#editEventId').val();
-                $.ajax({
-                    url: '/calendar/destroy/' + eventId,
-                    type: 'DELETE',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(resp) {
-                        if (resp.status === 'success') {
-                            alert(resp.message);
-                            $('#fullcalendar').fullCalendar('removeEvents', eventId);
-                            $('#editEventModal').modal('hide');
-                            originalEvents = originalEvents.filter(e => e.id !== eventId);
-                        }
-                    },
-                    error: function() {
-                        alert('Хатолик: Ўчириш муваффақиятсиз!');
-                    }
-                });
-            });
-        });
-
-        function applyFilter(filterVal) {
-            $('#fullcalendar').fullCalendar('removeEvents');
-            let filteredEvents = [];
-            if (filterVal === 'all') {
-                filteredEvents = originalEvents;
-            } else if (filterVal === 'task') {
-                filteredEvents = originalEvents.filter(e => e.type === 'task');
-            } else if (filterVal === 'manual') {
-                filteredEvents = originalEvents.filter(e => e.type === 'manual');
+            function applyFilter(filterVal) {
+                $('#fullcalendar').fullCalendar('removeEvents');
+                let filteredEvents = [];
+                if (filterVal === 'all') {
+                    filteredEvents = originalEvents;
+                } else if (filterVal === 'task') {
+                    filteredEvents = originalEvents.filter(e => e.type === 'task');
+                } else if (filterVal === 'manual') {
+                    filteredEvents = originalEvents.filter(e => e.type === 'manual');
+                }
+                $('#fullcalendar').fullCalendar('addEventSource', filteredEvents);
             }
-            $('#fullcalendar').fullCalendar('addEventSource', filteredEvents);
-        }
+
+            function applyTaskTypeFilter(taskType) {
+                $('#fullcalendar').fullCalendar('removeEvents');
+                let filteredEvents = originalEvents.filter(e => {
+                    if (e.type === 'task') {
+                        return taskType === '' || e.task_type === taskType;
+                    }
+                    return true; // Include all manual events
+                });
+                $('#fullcalendar').fullCalendar('addEventSource', filteredEvents);
+            }
+        });
     </script>
 </body>
 
