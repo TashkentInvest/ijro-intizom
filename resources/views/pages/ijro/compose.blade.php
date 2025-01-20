@@ -50,8 +50,9 @@
                                         <!-- Assign Users -->
                                         <div class="col-md-12 col-lg-6 mb-3">
                                             <label>Фойдаланувчиларга</label>
-                                            <select name="users[]" class="form-control select2" multiple="multiple"
+                                            <select name="users[]" class="form-control select2" 
                                                 required>
+                                                <option value="---">---</option>
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}">
                                                         {{ $user->name }} ({{ $user->email }})
@@ -64,6 +65,8 @@
                                         <div class="col-md-12 mb-3">
                                             <label>Назоратчи</label>
                                             <select name="nazoratchi_id" class="form-control select2">
+                                                <option value="---">---</option>
+
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}">
                                                         {{ $user->name }} ({{ $user->email }})

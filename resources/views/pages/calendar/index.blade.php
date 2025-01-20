@@ -16,8 +16,8 @@
     <link rel="stylesheet" href="{{ asset('edo_template/assets/fonts/feather-font/css/iconfont.css') }}">
     <link rel="stylesheet" href="{{ asset('edo_template/assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
     <link rel="shortcut icon" href="{{ asset('edo_template/assets/images/favicon.png') }}" />
-
     <link rel="stylesheet" href="https://edo.ijro.uz/styles.04475aa9e38b0bd3.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <style>
         .date-danger {
@@ -47,6 +47,9 @@
 
     <script src="{{ asset('edo_template/assets/vendors/core/core.js') }}"></script>
     <script src="{{ asset('edo_template/assets/vendors/feather-icons/feather.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/locale/uz.js"></script>
 </head>
 
 <body class="sidebar-dark">
@@ -60,8 +63,6 @@
                 <button id="clearCacheButton" class="btn btn-danger btn-sm my-2">Кэшни тозалаш</button>
                 <script>
                     $(document).ready(function() {
-                        // Existing fullcalendar initialization and other scripts
-                        
                         // Clear Cache Button Click Handler
                         $('#clearCacheButton').on('click', function() {
                             $.ajax({
@@ -113,7 +114,7 @@
                             </div>
                             <div id="viewEventBody" class="modal-body"></div>
                             <div class="modal-footer" id="viewEventFooter">
-                                <button type="button" class="btn" data-dismiss="modal">Ёпиш</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ёпиш</button>
                             </div>
                         </div>
                     </div>
@@ -197,11 +198,26 @@
         </div>
     </div>
 
+    <div id="dayEventsModal" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ҳодисалар</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                </div>
+                <div class="modal-body" id="dayEventsBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ёпиш</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="{{ asset('edo_template/assets/vendors/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('edo_template/assets/vendors/moment/moment.min.js') }}"></script>
     <script src="{{ asset('edo_template/assets/vendors/fullcalendar/fullcalendar.min.js') }}"></script>
     <script src="{{ asset('edo_template/assets/js/template.js') }}"></script>
-
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
         var originalEvents = @json($calendarData);
 
@@ -224,7 +240,7 @@
                 editable: false,
                 events: originalEvents,
                 displayEventTime: false,
-                locale: 'uz',
+                locale: 'uz', // Set the locale to Uzbek
                 eventRender: function(event, element) {
                     const colorClass = getColorClass(event);
                     element.addClass(colorClass);
@@ -280,8 +296,55 @@
                     $('#viewEventModal').modal('show');
                 },
                 dayClick: function(date) {
-                    $('#eventStart').val(moment(date).format('YYYY-MM-DDTHH:mm:ss'));
-                    $('#createEventModal').modal('show');
+                    const selectedDate = date.format('YYYY-MM-DD');
+                    const eventsOnSelectedDate = originalEvents.filter(event => {
+                        return moment(event.start).isSame(selectedDate, 'day') || (event.end && moment(event.end).isSame(selectedDate, 'day'));
+                    });
+
+                    const taskType = $('#taskTypeFilter').val();
+                    const filteredEvents = eventsOnSelectedDate.filter(event => {
+                        return taskType === '' || event.task_type === taskType;
+                    });
+
+                    let tableContent = `
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="pt-0">№</th>
+                                        <th class="pt-0">Сарлавҳа</th>
+                                        <th class="pt-0">Бошланиш санаси</th>
+                                        <th class="pt-0">Тугаш санаси</th>
+                                        <th class="pt-0">Изоҳ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                    `;
+
+                    filteredEvents.forEach((event, index) => {
+                        let startTxt = event.realStart ? moment(event.realStart).format('DD/MM/YYYY HH:mm:ss') : 'Йўқ';
+                        let endTxt = event.realEnd ? moment(event.realEnd).format('DD/MM/YYYY HH:mm:ss') : 'Йўқ';
+                        let desc = event.description ?? event.note ?? '';
+
+                        tableContent += `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${event.title}</td>
+                                <td>${startTxt}</td>
+                                <td>${endTxt}</td>
+                                <td>${desc}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableContent += `
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+
+                    $('#dayEventsBody').html(tableContent);
+                    $('#dayEventsModal').modal('show');
                 }
             });
 

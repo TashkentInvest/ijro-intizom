@@ -51,7 +51,7 @@
                                         <!-- Фойдаланувчиларга топшириқни берганлик -->
                                         <div class="col-md-12 col-lg-6 mb-3">
                                             <label>Фойдаланувчиларга топшириқ бериш</label>
-                                            <select name="users[]" class="form-control select2" multiple="multiple"
+                                            <select name="users[]" class="form-control select2"
                                                 required>
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}"
@@ -64,7 +64,7 @@
 
                                         <div class="col-md-12 mb-3">
                                             <label>Назоратчи:</label>
-                                            <select name="nazoratchi_id" class="js-example-basic-single w-100"  >
+                                            <select name="nazoratchi_id" class="form-control select2">
                                                 <option value="">-- Йўқ --</option>
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}" {{ old('nazoratchi_id', $task->nazoratchi_id) == $user->id ? 'selected' : '' }}>
