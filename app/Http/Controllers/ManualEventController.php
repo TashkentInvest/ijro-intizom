@@ -82,24 +82,24 @@ class ManualEventController extends Controller
 
                 // Get the first task assignment status to determine the color class
                 $assignment = $task->taskAssignments->first();
-                $colorClass = 'date-default';
+                $colorClass = 'default';
 
                 if ($assignment) {
                     switch ($assignment->status) {
                         case 'completed':
-                            $colorClass = 'date-success';
+                            $colorClass = 'lightgreen';
                             break;
                         case 'in_progress':
-                            $colorClass = 'date-primary';
+                            $colorClass = 'blue';
                             break;
                         case 'pending':
-                            $colorClass = 'date-info';
+                            $colorClass = 'lightblue';
                             break;
                         case 'rejected':
-                            $colorClass = 'date-danger';
+                            $colorClass = 'red';
                             break;
                         case 'delayed':
-                            $colorClass = 'date-warning';
+                            $colorClass = 'yellow';
                             break;
                     }
                 }
@@ -121,18 +121,7 @@ class ManualEventController extends Controller
                 ];
             }
 
-            // Loop through manual events and build calendar data for them
-            foreach ($manualEvents as $event) {
-                $calendarData[] = [
-                    'id'         => 'manual-' . $event->id,
-                    'title'      => $event->title,
-                    'start'      => $event->start_date,
-                    'end'        => $event->end_date,
-                    'description' => $event->description,
-                    'color'      => 'date-default',
-                    'type'       => 'manual'
-                ];
-            }
+     
 
             return $calendarData;
         });
