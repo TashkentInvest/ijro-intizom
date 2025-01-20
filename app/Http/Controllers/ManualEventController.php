@@ -106,7 +106,7 @@ class ManualEventController extends Controller
 
                 $calendarData[] = [
                     'id'         => 'task-' . $task->id,
-                    'task_link'  => url('/task/' . $task->id),
+                    'task_link'  => url('/ijro/read/' . $task->id),
                     'title'      => ($task->short_name ?? '-') . ' - ' .
                         ($task->end_date ? date('d/m/Y', strtotime($task->end_date)) : 'No End Date'),
                     'start'      => $task->start_date,
