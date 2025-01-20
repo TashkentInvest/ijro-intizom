@@ -34,7 +34,7 @@ class ManualEventController extends Controller
         // We'll cache the calendar data for 60 minutes (adjust as needed).
         $calendarData = Cache::remember('calendar_data', 60, function () use ($isSuperAdmin, $taskTypeFilter) {
             // 1. Fetch tasks with non-null issue_date, eager load relationships
-            $query = Task::where('status_id', '!=', true)->with('users', 'taskAssignments');
+            $query = Task::with('users', 'taskAssignments');
 
             // If the user is not a Super Admin, filter tasks by the user's own tasks
             if (!$isSuperAdmin) {
