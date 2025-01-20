@@ -50,7 +50,7 @@ class IjroController extends Controller
 
         // If the user is not a super admin, restrict the query to exclude completed or archived tasks
         if (!$isSuperAdmin) {
-            $query->where('status_id', '!=', true);  // Exclude completed or archived tasks
+            $query;  // Exclude completed or archived tasks
         }
 
         // Apply filters (task type, starred, status, date range, etc.)
