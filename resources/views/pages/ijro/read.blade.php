@@ -170,6 +170,15 @@
                                                         data-feather="check" class="mr-2"></i>Қабул Қилиш</button>
                                             </form>
                                         @endif
+
+                                    @endif
+
+                                    @if (!isset($assignment))
+                                        <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success shadow-sm"><i data-feather="check"
+                                                    class="mr-2"></i>Қабул Қилиш</button>
+                                        </form>
                                     @endif
                                 </div>
                             @else
@@ -376,11 +385,11 @@
             }
 
             /* html,
-                                    body {
-                                        margin: 0;
-                                        padding: 0;
-                                        font: 1em/1.5 Verdana, sans-serif;
-                                    } */
+                                            body {
+                                                margin: 0;
+                                                padding: 0;
+                                                font: 1em/1.5 Verdana, sans-serif;
+                                            } */
 
             .slider {
                 --thumb-diameter: 2em;
