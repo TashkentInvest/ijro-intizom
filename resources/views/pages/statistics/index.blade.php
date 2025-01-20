@@ -26,7 +26,7 @@
     </div>
 
     <div class="row">
-        @foreach(['all' => 'Барча топшириқлар', 'in_progress' => 'Ижрода', 'pending' => 'Кўрилмаганлар', 'completed' => 'Якунланган', 'rejected' => 'Муддати ўтган', 'delayed' => 'Муддати ўтиб якунланган'] as $status => $label)
+        @foreach (['all' => 'Барча топшириқлар', 'in_progress' => 'Ижрода', 'pending' => 'Кўрилмаганлар', 'completed' => 'Якунланган', 'rejected' => 'Муддати ўтган', 'delayed' => 'Муддати ўтиб якунланган'] as $status => $label)
             <div class="col-md-4 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
@@ -39,8 +39,8 @@
                                         <i class="icon-lg text-muted pb-3px" data-feather="more-horizontal"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item d-flex align-items-center" href="#"><i data-feather="eye"
-                                                class="icon-sm mr-2"></i> <span>Кўриш</span></a>
+                                        <a class="dropdown-item d-flex align-items-center" href="#"><i
+                                                data-feather="eye" class="icon-sm mr-2"></i> <span>Кўриш</span></a>
                                         <a class="dropdown-item d-flex align-items-center" href="#"><i
                                                 data-feather="edit-2" class="icon-sm mr-2"></i> <span>Таҳрирлаш</span></a>
                                         <a class="dropdown-item d-flex align-items-center" href="#"><i
@@ -48,16 +48,17 @@
                                         <a class="dropdown-item d-flex align-items-center" href="#"><i
                                                 data-feather="printer" class="icon-sm mr-2"></i> <span>Чоп этиш</span></a>
                                         <a class="dropdown-item d-flex align-items-center" href="#"><i
-                                                data-feather="download" class="icon-sm mr-2"></i> <span>Юклаб олиш</span></a>
+                                                data-feather="download" class="icon-sm mr-2"></i> <span>Юклаб
+                                                олиш</span></a>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-6 col-md-12 col-xl-5">
-                                    <h3 class="mb-2">{{ $statusCounts[$status] ?? ''}}</h3>
+                                    <h3 class="mb-2">{{ $statusCounts[$status] ?? '' }}</h3>
                                     <div class="d-flex align-items-baseline">
                                         <p class="text-success">
-                                            <span>+{{ $percentageGrowth[$status] ?? ''}}%</span>
+                                            <span>+{{ $percentageGrowth[$status] ?? '' }}%</span>
                                             <i data-feather="arrow-up" class="icon-sm mb-1"></i>
                                         </p>
                                     </div>
@@ -76,15 +77,18 @@
                 <div class="form-row">
                     <div class="form-group col-md-3">
                         <label for="date_from">Сана бошидан</label>
-                        <input type="date" class="form-control" id="date_from" name="date_from" value="{{ request('date_from') }}">
+                        <input type="date" class="form-control" id="date_from" name="date_from"
+                            value="{{ request('date_from') }}">
                     </div>
                     <div class="form-group col-md-3">
                         <label for="date_to">Санагача</label>
-                        <input type="date" class="form-control" id="date_to" name="date_to" value="{{ request('date_to') }}">
+                        <input type="date" class="form-control" id="date_to" name="date_to"
+                            value="{{ request('date_to') }}">
                     </div>
                     <div class="form-group col-md-3">
                         <label for="search">Қидириш</label>
-                        <input type="text" class="form-control" id="search" name="search" value="{{ request('search') }}">
+                        <input type="text" class="form-control" id="search" name="search"
+                            value="{{ request('search') }}">
                     </div>
                     <div class="form-group col-md-3 align-self-end">
                         <button type="submit" class="btn btn-primary">Филтр</button>
@@ -166,7 +170,9 @@
                         </table>
                     </div>
                     <div class="mt-3">
-                        {{ $tasks->links() }}
+                        @if (isset($tasks))
+                            {{ $tasks->links() }}
+                        @endif
                     </div>
                 </div>
             </div>
