@@ -180,22 +180,21 @@
                                             data-feather="edit" class="mr-2"></i>Вазифани Таҳрирлаш</a>
                                 </div>
                                 @if (isset($assignment))
+                                    <div class="mt-3">
+                                        @if ($assignment->status == 'pending')
+                                            <!-- Confirm Task Button -->
+                                            <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
+                                                data-bs-target="#confirmTaskByAdminModal">
+                                                <i data-feather="check-circle" class="mr-2"></i> Вазифани Тасдиқлаш
+                                            </button>
 
-                                <div class="mt-3">
-                                    @if ($assignment->status == 'pending')
-                                        <!-- Confirm Task Button -->
-                                        <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
-                                            data-bs-target="#confirmTaskByAdminModal">
-                                            <i data-feather="check-circle" class="mr-2"></i> Вазифани Тасдиқлаш
-                                        </button>
-
-                                        <!-- Reject Task Button -->
-                                        <button type="button" class="btn btn-danger shadow-sm" data-bs-toggle="modal"
-                                            data-bs-target="#rejectTaskByAdminModal">
-                                            <i data-feather="x-circle" class="mr-2"></i> Вазифани Рад Қлиш
-                                        </button>
-                                    @endif
-                                </div>
+                                            <!-- Reject Task Button -->
+                                            <button type="button" class="btn btn-danger shadow-sm" data-bs-toggle="modal"
+                                                data-bs-target="#rejectTaskByAdminModal">
+                                                <i data-feather="x-circle" class="mr-2"></i> Вазифани Рад Қлиш
+                                            </button>
+                                        @endif
+                                    </div>
                                 @endif
                             @endif
 
@@ -214,8 +213,10 @@
                                         <form action="{{ route('ijro.confirmByAdmin', $task->id) }}" method="POST">
                                             @csrf
                                             <div class="modal-body">
-                                                <input type="hidden" name="employee_id"
-                                                    value="{{ $assignment->employee_id }}">
+                                                @if (isset($assignment))
+                                                    <input type="hidden" name="employee_id"
+                                                        value="{{ $assignment->employee_id }}">
+                                                @endif
                                                 <div class="mb-3">
                                                     <label for="confirm_comment" class="form-label">Изоҳ</label>
                                                     <textarea class="form-control" id="confirm_comment" name="confirm_comment" required></textarea>
@@ -257,8 +258,10 @@
                                         <form action="{{ route('ijro.rejectByAdmin', $task->id) }}" method="POST">
                                             @csrf
                                             <div class="modal-body">
-                                                <input type="hidden" name="employee_id"
-                                                    value="{{ $assignment->employee_id ?? null }}">
+                                                @if (isset($assignment))
+                                                    <input type="hidden" name="employee_id"
+                                                        value="{{ $assignment->employee_id ?? null }}">
+                                                @endif
                                                 <div class="mb-3">
                                                     <label for="reject_comment" class="form-label">Изоҳ</label>
                                                     <textarea class="form-control" id="reject_comment" name="reject_comment" required></textarea>
@@ -373,11 +376,11 @@
             }
 
             /* html,
-                            body {
-                                margin: 0;
-                                padding: 0;
-                                font: 1em/1.5 Verdana, sans-serif;
-                            } */
+                                    body {
+                                        margin: 0;
+                                        padding: 0;
+                                        font: 1em/1.5 Verdana, sans-serif;
+                                    } */
 
             .slider {
                 --thumb-diameter: 2em;
