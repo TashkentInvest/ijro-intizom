@@ -3,180 +3,182 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>@lang('panel.site_title')</title>
-
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
-
-    
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <!-- Styles -->
-    <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
     <style>
         html, body {
-            /* background-color: #fff; */
-            color: #636b6f;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 200;
             margin: 0;
-            background: url('assets/images/banner_home.jpg');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-        }
-
-        canvas{
-            display:block;
-            vertical-align:bottom;
-        }
-
-        #particles-js{
-            width: 100%;
+            font-family: 'Roboto', sans-serif;
             height: 100%;
+            /* background-color: #f8f9fa; */
+            overflow: hidden;
+            color: #343a40; /* Dark text color */
         }
+
         .full-height {
             height: 100vh;
-        }
-
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
-
-        .position-ref {
-            position: relative;
-        }
-
-        .top-right {
-            position: absolute;
-            right: 10px;
-            top: 18px;
-        }
-
-        .content {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: space-between;
-            height: 100vh;
-            text-align: center;
+            background-image: url('https://demo.toshkentinvest.uz/assets/frontend/Content/Gallery/Image/banner3.webp');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
         }
 
-        .panel_site_title{
-            margin: 20px 0 0 0;
-            text-transform: uppercase;
-            color: #fff;
-            font-weight: 700;
-            font-size: 20px;
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.4); /* Dark overlay */
+            z-index: -1;
         }
 
-        /* .title {
-            font-size: 84px;
-        } */
-        .content .welcome_box h1{
-            font-size: 60px;
-            color: #fff;
-            font-weight: 700;
-            margin-bottom: 0;
-        }
-
-        .content .welcome_box .btn{
-            font-size: 20px;
-            padding: 13px 0;
-            color: #fff;
-            background-color: #03D0C9;
-            width: 200px;
-            color: #fff;
-            font-weight: 700;
-            display: inline-flex;
+        .content {
+            position: relative;
             text-align: center;
-            justify-content: center;
-            text-decoration: unset;
-            border-radius: 5px;
-        }
-        .panel_footer{
-            margin: 0 0 20px 0;
-            color: #fff;
-        }
-
-        .panel_footer a{
-            color: #fff;
-            text-decoration: none;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9); /* White background with opacity */
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
         }
 
-        .links > a {
-            color: #636b6f;
-            padding: 0 25px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: .1rem;
-            text-decoration: none;
+        .panel_site_title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0057b8; /* Primary blue color */
+            margin-bottom: 30px;
             text-transform: uppercase;
         }
 
-        .m-b-md {
-            margin-bottom: 30px;
+        .welcome_box h1 {
+            font-size: 60px;
+            font-weight: 700;
+            color: #343a40; /* Dark grey text */
+            margin-bottom: 40px;
+            text-transform: uppercase;
         }
 
-        @media (max-width: 575px){
-            .content .welcome_box h1 {
-                font-size: 45px;
-                color: #fff;
-                font-weight: 700;
-                margin-bottom: 0;
+        .btn {
+            font-size: 18px;
+            padding: 12px 30px;
+            color: #fff;
+            background-color: #0057b8; /* Primary blue */
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 100000000 !important;
+        }
+
+        .btn:hover {
+            background-color: #003f89; /* Darker blue on hover */
+            transform: translateY(-4px);
+        }
+
+        .panel_footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #6c757d; /* Light grey text */
+        }
+
+        .panel_footer a {
+            color: #0057b8; /* Primary blue */
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Logo Styles */
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .panel_site_title {
+                font-size: 28px;
+            }
+
+            .welcome_box h1 {
+                font-size: 48px;
+            }
+
+            .btn {
+                font-size: 16px;
+                padding: 10px 25px;
             }
         }
 
-        @media (max-width: 475px){
-            .content .welcome_box h1 {
-                font-size: 39px;
-                color: #fff;
-                font-weight: 700;
-                margin-bottom: 0;
+        @media (max-width: 480px) {
+            .panel_site_title {
+                font-size: 24px;
+            }
+
+            .welcome_box h1 {
+                font-size: 36px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 20px;
             }
         }
     </style>
 </head>
 <body>
-<div class="wrapper flex-center position-ref full-height">
-    <div id="particles-js">
-        <div class="content" >
-            <h3 class="panel_site_title">@lang('panel.site_title')</h3>
+    <div class="full-height">
+        <div class="overlay"></div>
+        <div class="content">
+            <!-- Toshkent Invest Logo -->
+            <img src="https://toshkentinvest.uz/assets/frontend/tild6238-3031-4265-a564-343037346231/tic_logo_blue.png" alt="Toshkent Invest Logo" class="logo">
+
+            {{-- <h3 class="panel_site_title">@lang('panel.site_title')</h3> --}}
+
             <div class="welcome_box">
-                <h1>@lang('panel.welcome')</h1>
+                <h1>Хуш келибсиз!</h1>
+
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ url('/  ') }}" class="btn btn-success">@lang('global.home')</a>
+                        <a href="{{ route('aktivs.index') }}" class="btn">Кириш</a>
                     @else
-                        <a href="{{ route('login') }}" class="btn btn-success">@lang('global.login')</a>
+                        <a href="{{ route('login') }}" class="btn">Логин</a>
                     @endauth
                 @endif
             </div>
-            <span class="panel_footer">
-                <strong>&copy; {{ date('Y') }} 
-                    <a href="https://t.me/az_etc">Toshkent Invest Company </a>.</strong>
-            </span>
+
+            <div class="panel_footer">
+                <strong>&copy; {{ date('Y') }}
+                    <a href="#">Tashkent Invest Company</a>.
+                </strong>
+            </div>
         </div>
     </div>
-</div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
+    <script>
+        $(window).on('load', function() {
+            $(".loader-in").fadeOut();
+            $(".loader").delay(150).fadeOut("fast");
+            $(".wrapper").fadeIn("fast");
+            $("#app").fadeIn("fast");
+        });
+    </script>
 </body>
 </html>
-
-<script src="{{asset('assets/libs/jquery/jquery.min.js')}}"></script>
-<script src="{{ asset('assets/js/particles/particles.js') }}"></script>
-<script src="{{ asset('assets/js/particles/app.js') }}"></script>
-<script>
-    $(window).on('load', function() {
-        $(".loader-in").fadeOut();
-        $(".loader").delay(150).fadeOut("fast");
-        $(".wrapper").fadeIn("fast");
-        $("#app").fadeIn("fast");
-    });
-</script>

@@ -142,7 +142,7 @@
                                         <td>{{ $task->short_name }}</td>
                                         <td>{{ \Carbon\Carbon::parse($task->start_date)->format('d/m/Y') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($task->end_date)->format('d/m/Y') }}</td>
-                                        <td>
+<td></td>                                        {{-- <td>
                                             @if ($task->taskAssignments->first()->status == 'completed')
                                                 <span class="badge badge-success">Якунланган</span>
                                             @elseif ($task->taskAssignments->first()->status == 'in_progress')
@@ -154,7 +154,7 @@
                                             @elseif ($task->taskAssignments->first()->status == 'delayed')
                                                 <span class="badge badge-warning">Кечиктирилган</span>
                                             @endif
-                                        </td>
+                                        </td> --}}
                                         <td>
                                             @foreach ($task->users as $user)
                                                 {{ $user->name }}
