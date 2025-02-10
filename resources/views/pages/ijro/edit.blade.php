@@ -51,8 +51,7 @@
                                         <!-- Фойдаланувчиларга топшириқни берганлик -->
                                         <div class="col-md-12 col-lg-6 mb-3">
                                             <label>Фойдаланувчиларга топшириқ бериш</label>
-                                            <select name="users[]" class="form-control select2"
-                                                required>
+                                            <select name="users[]" class="form-control select2 "multiple required>
                                                 @foreach ($users as $user)
                                                     <option value="{{ $user->id }}"
                                                         @if ($task->users && in_array($user->id, $task->users->pluck('id')->toArray())) selected @endif>
@@ -64,10 +63,11 @@
 
                                         <div class="col-md-12 mb-3">
                                             <label>Назоратчи:</label>
-                                            <select name="nazoratchi_id" class="form-control select2">
+                                            <select name="nazoratchi_id" class="form-control select2 "multiple>
                                                 <option value="">-- Йўқ --</option>
                                                 @foreach ($users as $user)
-                                                    <option value="{{ $user->id }}" {{ old('nazoratchi_id', $task->nazoratchi_id) == $user->id ? 'selected' : '' }}>
+                                                    <option value="{{ $user->id }}"
+                                                        {{ old('nazoratchi_id', $task->nazoratchi_id) == $user->id ? 'selected' : '' }}>
                                                         {{ $user->name }} ({{ $user->email }})
                                                     </option>
                                                 @endforeach
@@ -88,7 +88,7 @@
                                             <input type="file" name="attached_file[]" class="form-control" multiple>
                                         </div>
 
-                                       
+
 
                                         <!-- Қисқа ном -->
                                         <div class="col-md-12 col-lg-6 mb-3">
@@ -104,26 +104,26 @@
                                         </div>
 
                                         @foreach ($task->files as $file)
-                                        <div class="col-md-12 col-lg-4 col-xl-4 col-4">
+                                            <div class="col-md-12 col-lg-4 col-xl-4 col-4">
 
-                                            <div class="file-item">
-                                                <label>
-                                                    <input type="checkbox" name="delete_files[]"
-                                                        value="{{ $file->id }}">
-                                                    {{ $file->file_name }}
-                                                </label>
+                                                <div class="file-item">
+                                                    <label>
+                                                        <input type="checkbox" name="delete_files[]"
+                                                            value="{{ $file->id }}">
+                                                        {{ $file->file_name }}
+                                                    </label>
 
-                                                <a href="{{ asset('tasks/' . $task->id . '/' . $file->file_name) }}"
-                                                    target="_blank">
-                                                    <span data-feather="file"></span> {{ $file->file_name }}
-                                                    <span
-                                                        class="text-muted tx-11">({{ number_format($file->file_size / 1024, 2) }}
-                                                        MB)</span>
-                                                </a>
+                                                    <a href="{{ asset('tasks/' . $task->id . '/' . $file->file_name) }}"
+                                                        target="_blank">
+                                                        <span data-feather="file"></span> {{ $file->file_name }}
+                                                        <span
+                                                            class="text-muted tx-11">({{ number_format($file->file_size / 1024, 2) }}
+                                                            MB)</span>
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                        
+                                        @endforeach
+
                                     </div>
                                 </div>
 
