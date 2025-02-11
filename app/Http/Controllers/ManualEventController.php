@@ -90,7 +90,7 @@ class ManualEventController extends Controller
                             $colorClass = 'lightgreen';
                             break;
                         case 'in_progress':
-                            $colorClass = 'blue';
+                            $colorClass = 'lightsteelblue';
                             break;
                         case 'pending':
                             $colorClass = 'lightblue';
@@ -121,7 +121,7 @@ class ManualEventController extends Controller
                 ];
             }
 
-     
+
 
             return $calendarData;
         });
