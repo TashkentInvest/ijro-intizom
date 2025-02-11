@@ -10,7 +10,7 @@
                 <span class="input-group-addon bg-transparent"><i data-feather="calendar" class=" text-primary"></i></span>
                 <input type="text" class="form-control">
             </div>
-            <button type="button" class="btn btn-outline-info btn-icon-text mr-2 d-none d-md-block">
+            {{-- <button type="button" class="btn btn-outline-info btn-icon-text mr-2 d-none d-md-block">
                 <i class="btn-icon-prepend" data-feather="download"></i>
                 Импорт қилиш
             </button>
@@ -21,7 +21,7 @@
             <button type="button" class="btn btn-primary btn-icon-text mb-2 mb-md-0">
                 <i class="btn-icon-prepend" data-feather="download-cloud"></i>
                 Ҳисоботни юклаб олиш
-            </button>
+            </button> --}}
         </div>
     </div>
 
@@ -71,7 +71,7 @@
         @endforeach
     </div> <!-- row -->
 
-    <div class="row mb-4">
+    {{-- <div class="row mb-4">
         <div class="col-12">
             <form method="GET" action="{{ route('ijro.index') }}">
                 <div class="form-row">
@@ -96,10 +96,10 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
 
     <div class="row">
-        <div class="col-lg-12 col-xl-8 stretch-card">
+        <div class="col-lg-12 col-xl-12 stretch-card">
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-baseline mb-2">
