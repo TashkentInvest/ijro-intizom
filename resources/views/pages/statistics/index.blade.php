@@ -103,7 +103,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-baseline mb-2">
-                        <h6 class="card-title mb-0">Проектлар</h6>
+                        <h6 class="card-title mb-0">Топшириқлар</h6>
                         <div class="dropdown mb-2">
                             <button class="btn p-0" type="button" id="dropdownMenuButton7" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false">
@@ -128,11 +128,11 @@
                             <thead>
                                 <tr>
                                     <th class="pt-0">№</th>
-                                    <th class="pt-0">Проект номи</th>
+                                    <th class="pt-0">Топшириқ мазмуни</th>
                                     <th class="pt-0">Бошланиш санаси</th>
                                     <th class="pt-0">Тугаш санаси</th>
                                     <th class="pt-0">Ҳолат</th>
-                                    <th class="pt-0">Таъинлаш</th>
+                                    <th class="pt-0">Масул Ижрочи</th>
                                 </tr>
                             </thead>
                             <tbody>

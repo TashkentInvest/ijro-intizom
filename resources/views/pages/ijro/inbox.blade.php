@@ -68,7 +68,7 @@
                                                 <p class="msg" style="max-width:300px">{{ $task->description }}</p>
                                             </div>
                                             <ul class="list-unstyled">
-                                                <b>Масул Шахс(лар): </b>
+                                                <b>Масул Ижрочи(лар): </b>
                                                 @foreach ($task->users as $user)
                                                     <li>{{ $user->name }} ({{ $user->email }})</li>
                                                 @endforeach

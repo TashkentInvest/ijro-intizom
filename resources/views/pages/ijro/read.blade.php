@@ -27,7 +27,7 @@
 
                             <!-- Task Description -->
                             <div class="task-description mb-4">
-                                <h5 class="font-weight-bold">Вазифа Тасвири</h5>
+                                <h5 class="font-weight-bold">Топшириқ Мазмуни</h5>
                                 <p class="lead text-justify">{{ $task->description }}</p>
                             </div>
 
@@ -43,7 +43,7 @@
                                         <span>{{ $task->end_date ? $task->end_date->format('d M, Y H:i') : 'Белгиланган Эмас' }}</span>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <strong>Юборган Ҳодим:</strong>
+                                        <strong>Масул Ижрочи:</strong>
                                         <ul class="list-unstyled">
                                             @foreach ($task->users as $user)
                                                 <li><i data-feather="user" class="mr-2"></i>{{ $user->name }}
@@ -77,8 +77,8 @@
                                                     </td>
                                                     <td>
                                                         <span
-                                                            class="badge 
-                                                            @if ($assignment->status == 'pending') bg-warning 
+                                                            class="badge
+                                                            @if ($assignment->status == 'pending') bg-warning
                                                             @elseif($assignment->status == 'in_progress') bg-primary
                                                             @elseif($assignment->status == 'completed') bg-success
                                                             @elseif($assignment->status == 'rejected') bg-danger
