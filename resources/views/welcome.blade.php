@@ -155,7 +155,7 @@
 
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ route('aktivs.index') }}" class="btn">Кириш</a>
+                        <a href="{{ route('ijro.index') }}" class="btn">Кириш</a>
                     @else
                         <a href="{{ route('login') }}" class="btn">Логин</a>
                     @endauth

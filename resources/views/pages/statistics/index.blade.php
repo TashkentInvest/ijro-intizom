@@ -140,8 +140,8 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $task->short_name }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($task->start_date)->format('d/m/Y') }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($task->end_date)->format('d/m/Y') }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($task->start_date)}}</td>
+                                        <td>{{ \Carbon\Carbon::parse($task->end_date)}}</td>
 <td></td>                                        {{-- <td>
                                             @if ($task->taskAssignments->first()->status == 'completed')
                                                 <span class="badge badge-success">Якунланган</span>
