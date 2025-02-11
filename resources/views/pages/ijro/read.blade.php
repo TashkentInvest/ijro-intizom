@@ -342,7 +342,7 @@
                             @foreach ($task->taskAssignments as $assignment)
                                 @foreach ($assignment->history as $record)
                                     <li class="event">
-                                        <h3>{{ ucfirst(str_replace('_', ' ', $record->action_type)) }}</h3>
+                                        {{-- <h3>{{ ucfirst(str_replace('_', ' ', $record->action_type)) }}</h3> --}}
                                         <p>
                                             <strong>{{ $record->user->name ?? 'Номаълум фойдаланувчи' }}</strong> бу амални
                                             бажарди.
