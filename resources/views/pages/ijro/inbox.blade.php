@@ -53,7 +53,7 @@
                             <div class="email-list">
                                 @foreach ($tasks as $task)
                                     <div
-                                        class="email-list-item {{ $task->short_name != 'azzz' ? 'email-list-item--unread' : '' }}">
+                                        class="email-list-item {{isset($task->taskAssignments) && $task->taskAssignments->isEmpty() ? 'email-list-item--unread' : '' }}">
                                         <div class="email-list-actions">
 
                                             @if (isset($task->taskAssignments) && $task->taskAssignments->isNotEmpty())
@@ -87,7 +87,7 @@
                                                 @endforeach
                                             </ul>
                                             <span class="date">
-                                                <span class="icon"><i data-feather="paperclip"></i> </span>
+                                                {{-- <span class="icon"><i data-feather="paperclip"></i> </span> --}}
                                                 {{ $task->end_date->format('d M') }}
                                             </span>
                                         </a>
