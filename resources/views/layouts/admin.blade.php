@@ -20,7 +20,7 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('edo_template/assets/css/demo_1/style.css') }}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="{{ asset('edo_template/assets/images/favicon.png') }}" />
+    <link rel="shortcut icon" href="https://toshkentinvest.uz/assets/frontend/tild6238-3031-4265-a564-343037346231/tic_logo_blue.png" />
 
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
