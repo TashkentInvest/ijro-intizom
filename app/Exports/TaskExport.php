@@ -7,7 +7,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
-use PhpOffice\PhpSpreadsheet\Style\Font;
 use Illuminate\Support\Facades\Response;
 use App\Models\Task;
 
@@ -26,9 +25,8 @@ class TaskExport
             'Топшириқ мазмуни',
             'Топшириқ муддати',
             'Ижрочилар',
-            'Масъул ижрочи',
-            'Бажармаган ижрочилар',
-            'Топшириқ ҳолати' // New column for Task Status
+            'Масъул ижрочи(лар)',
+            'Топшириқ ҳолати'
         ];
 
         // Apply styles to header row
@@ -43,28 +41,45 @@ class TaskExport
             'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
         ]);
 
-        // Fetch tasks
-        $tasks = Task::with(['user', 'taskAssignments'])->get();
+        // Fetch tasks with relations
+        $tasks = Task::with(['users', 'user', 'taskAssignments'])->get();
         $row = 2;
 
         foreach ($tasks as $index => $task) {
+            // Task status label
             $status = $this->getStatusLabel($task->taskAssignments->pluck('status')->toArray());
 
+            // Task type mapping
+            $taskTypeLabels = [
+                'meeting' => 'Эслатмалар',
+                'hr_task' => 'Ҳужжат алмашинуви',
+                'emp_task' => 'Шахсий топшириқ'
+            ];
+            $documentType = $taskTypeLabels[$task->task_type] ?? 'Номаълум';
+
+            // Assigned executors
+            $executors = implode("\n", $task->users->pluck('name')->toArray());
+
+            // Uncompleted executors
+            $uncompletedExecutors = optional($task->taskAssignments->where('status', '!=', 'completed'))
+                ->pluck('user.name')->implode("\n");
+
+            // Set values in cells
             $sheet->setCellValue('A' . $row, $index + 1);
-            $sheet->setCellValue('B' . $row, 'Кирувчи хужжат'); // Static document type
+            $sheet->setCellValue('B' . $row, $documentType);
             $sheet->setCellValue('C' . $row, $task->id . "\n" . $task->start_date->format('Y-m-d'));
             $sheet->setCellValue('D' . $row, $task->description);
             $sheet->setCellValue('E' . $row, optional($task->end_date)->format('d.m.Y') ?? '');
-            $sheet->setCellValue('F' . $row, implode("\n", $task->taskAssignments->pluck('user.name')->toArray()));
+            $sheet->setCellValue('F' . $row, $executors);
             $sheet->setCellValue('G' . $row, optional($task->user)->name ?? '');
-            $sheet->setCellValue('H' . $row, optional($task->taskAssignments->where('status', '!=', 'completed'))->pluck('user.name')->implode("\n"));
-            $sheet->setCellValue('I' . $row, $status); // Task status column
+            $sheet->setCellValue('I' . $row, $status);
 
             // Apply styles to content rows
             $sheet->getStyle("A{$row}:I{$row}")->applyFromArray([
                 'alignment' => ['vertical' => Alignment::VERTICAL_TOP, 'wrapText' => true],
                 'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
             ]);
+
             $row++;
         }
 
