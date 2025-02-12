@@ -109,16 +109,16 @@
                                                             @elseif($assignment->status == 'rejected') bg-danger
                                                             @else bg-secondary @endif">
                                                             {{-- {{ ucfirst($assignment->status) }} --}}
-                                                            @if($assignment->status == 'in_progress')
-                                                            Бажарилмоқда
+                                                            @if ($assignment->status == 'in_progress')
+                                                                Бажарилмоқда
                                                             @elseif ($assignment->status == 'pending')
-                                                            Корилмаган
+                                                                Корилмаган
                                                             @elseif ($assignment->status == 'completed')
-                                                            Бажарилган
+                                                                Бажарилган
                                                             @elseif ($assignment->status == 'rejected')
-                                                            Бажарилмаган
+                                                                Бажарилмаган
                                                             @elseif ($assignment->status == 'delayed')
-                                                            Муддатидан кеч бажарилган
+                                                                Муддатидан кеч бажарилган
                                                             @endif
 
                                                         </span>
@@ -213,8 +213,8 @@
                                     @if (!isset($assignment))
                                         <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="btn btn-success shadow-sm"><i
-                                                    data-feather="check" class="mr-2"></i>Қабул Қилиш</button>
+                                            <button type="submit" class="btn btn-success shadow-sm"><i data-feather="check"
+                                                    class="mr-2"></i>Қабул Қилиш</button>
                                         </form>
                                     @endif
                                 </div>
@@ -229,8 +229,8 @@
                                     <div class="mt-3">
                                         @if ($assignment->status == 'pending')
                                             <!-- Confirm Task Button -->
-                                            <button type="button" class="btn btn-success shadow-sm"
-                                                data-bs-toggle="modal" data-bs-target="#confirmTaskByAdminModal">
+                                            <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
+                                                data-bs-target="#confirmTaskByAdminModal">
                                                 <i data-feather="check-circle" class="mr-2"></i> Вазифани Тасдиқлаш
                                             </button>
 
@@ -384,9 +384,35 @@
                                             <strong>{{ $record->user->name ?? 'Номаълум фойдаланувчи' }}</strong> бу амални
                                             бажарди.
                                             @if ($record->previous_status && $record->new_status)
-                                                <br><span class="badge bg-secondary">{{ $record->previous_status }}</span>
+                                                <br><span class="badge bg-secondary">
+                                                    @if ($record->previous_status == 'in_progress')
+                                                        Бажарилмоқда
+                                                    @elseif ($record->previous_status == 'pending')
+                                                        Корилмаган
+                                                    @elseif ($record->previous_status == 'completed')
+                                                        Бажарилган
+                                                    @elseif ($record->previous_status == 'rejected')
+                                                        Бажарилмаган
+                                                    @elseif ($record->previous_status == 'delayed')
+                                                        Муддатидан кеч бажарилган
+                                                    @endif
+
+                                                </span>
                                                 →
-                                                <span class="badge bg-success">{{ $record->new_status }}</span>
+                                                <span class="badge bg-success">
+                                                   @if ($record->new_status == 'in_progress')
+                                                        Бажарилмоқда
+                                                    @elseif ($record->new_status == 'pending')
+                                                        Корилмаган
+                                                    @elseif ($record->new_status == 'completed')
+                                                        Бажарилган
+                                                    @elseif ($record->new_status == 'rejected')
+                                                        Бажарилмаган
+                                                    @elseif ($record->new_status == 'delayed')
+                                                        Муддатидан кеч бажарилган
+                                                    @endif
+
+                                                </span>
                                             @endif
                                             <br>
                                             <span class="text-muted">{{ $record->created_at->format('d.m.Y H:i') }}</span>
@@ -422,11 +448,11 @@
             }
 
             /* html,
-                                                                        body {
-                                                                            margin: 0;
-                                                                            padding: 0;
-                                                                            font: 1em/1.5 Verdana, sans-serif;
-                                                                        } */
+                                                                                body {
+                                                                                    margin: 0;
+                                                                                    padding: 0;
+                                                                                    font: 1em/1.5 Verdana, sans-serif;
+                                                                                } */
 
             .slider {
                 --thumb-diameter: 2em;
