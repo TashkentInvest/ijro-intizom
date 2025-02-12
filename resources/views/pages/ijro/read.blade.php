@@ -51,8 +51,6 @@
                                     <div class="col-md-6 mb-3">
                                         <strong>Вазифа Тури:</strong>
                                         <span class="badge badge-info">
-
-
                                             @if ($task->task_type == 'meeting')
                                                 Эслатмалар
                                             @elseif($task->task_type == 'hr_task')
@@ -60,7 +58,6 @@
                                             @elseif($task->task_type == 'emp_task')
                                                 Шахсий топшириқ
                                             @endif
-
                                         </span>
 
 
@@ -111,12 +108,24 @@
                                                             @elseif($assignment->status == 'completed') bg-success
                                                             @elseif($assignment->status == 'rejected') bg-danger
                                                             @else bg-secondary @endif">
-                                                            {{ ucfirst($assignment->status) }}
+                                                            {{-- {{ ucfirst($assignment->status) }} --}}
+                                                            @if($assignment->status == 'in_progress')
+                                                            Бажарилмоқда
+                                                            @elseif ($assignment->status == 'pending')
+                                                            Корилмаган
+                                                            @elseif ($assignment->status == 'completed')
+                                                            Бажарилган
+                                                            @elseif ($assignment->status == 'rejected')
+                                                            Бажарилмаган
+                                                            @elseif ($assignment->status == 'delayed')
+                                                            Муддатидан кеч бажарилган
+                                                            @endif
+
                                                         </span>
                                                     </td>
                                                     <td>{{ $assignment->emp_accepted_at ? $assignment->emp_accepted_at->format('d M, Y H:i') : 'Қабул Қилинмаган' }}
                                                     </td>
-                                                    <td>{{ $assignment->confirm_rating ?? 'N/A' }}</td>
+                                                    <td>{{ $assignment->confirm_rating ?? 'Мавжуд эмас' }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -204,8 +213,8 @@
                                     @if (!isset($assignment))
                                         <form action="{{ route('ijro.emp_accept', $task->id) }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="btn btn-success shadow-sm"><i data-feather="check"
-                                                    class="mr-2"></i>Қабул Қилиш</button>
+                                            <button type="submit" class="btn btn-success shadow-sm"><i
+                                                    data-feather="check" class="mr-2"></i>Қабул Қилиш</button>
                                         </form>
                                     @endif
                                 </div>
@@ -220,8 +229,8 @@
                                     <div class="mt-3">
                                         @if ($assignment->status == 'pending')
                                             <!-- Confirm Task Button -->
-                                            <button type="button" class="btn btn-success shadow-sm" data-bs-toggle="modal"
-                                                data-bs-target="#confirmTaskByAdminModal">
+                                            <button type="button" class="btn btn-success shadow-sm"
+                                                data-bs-toggle="modal" data-bs-target="#confirmTaskByAdminModal">
                                                 <i data-feather="check-circle" class="mr-2"></i> Вазифани Тасдиқлаш
                                             </button>
 
@@ -413,11 +422,11 @@
             }
 
             /* html,
-                                                                body {
-                                                                    margin: 0;
-                                                                    padding: 0;
-                                                                    font: 1em/1.5 Verdana, sans-serif;
-                                                                } */
+                                                                        body {
+                                                                            margin: 0;
+                                                                            padding: 0;
+                                                                            font: 1em/1.5 Verdana, sans-serif;
+                                                                        } */
 
             .slider {
                 --thumb-diameter: 2em;
