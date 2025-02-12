@@ -20,9 +20,13 @@
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{ asset('edo_template/assets/css/demo_1/style.css') }}">
     <!-- End layout styles -->
-    <link rel="shortcut icon" href="https://toshkentinvest.uz/assets/frontend/tild6238-3031-4265-a564-343037346231/tic_logo_blue.png" />
+    <link rel="shortcut icon"
+        href="https://toshkentinvest.uz/assets/frontend/tild6238-3031-4265-a564-343037346231/tic_logo_blue.png" />
 
     <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
     @yield('styles')
 </head>
@@ -133,8 +137,8 @@
                                         <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="">
                                     </div>
                                     <div class="info text-center">
-                                        <p class="name font-weight-bold mb-0">{{auth()->user()->name ?? '--'}}</p>
-                                        <p class="email text-muted mb-3">{{auth()->user()->email ?? '--'}}</p>
+                                        <p class="name font-weight-bold mb-0">{{ auth()->user()->name ?? '--' }}</p>
+                                        <p class="email text-muted mb-3">{{ auth()->user()->email ?? '--' }}</p>
                                     </div>
                                 </div>
                                 <div class="dropdown-body">
@@ -146,7 +150,7 @@
                                             </a>
                                         </li> --}}
                                         <li class="nav-item">
-                                            <a href="{{route('userEdit', auth()->user()->id)}}" class="nav-link">
+                                            <a href="{{ route('userEdit', auth()->user()->id) }}" class="nav-link">
                                                 <i data-feather="edit"></i>
                                                 <span>Таҳрир қилиш</span>
                                             </a>

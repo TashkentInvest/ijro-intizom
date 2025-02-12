@@ -52,15 +52,28 @@
 
                             <div class="email-list">
                                 @foreach ($tasks as $task)
-                                    <div class="email-list-item {{$task->short_name != 'azzz' ? 'email-list-item--unread' : ''}}">
+                                    <div
+                                        class="email-list-item {{ $task->short_name != 'azzz' ? 'email-list-item--unread' : '' }}">
                                         <div class="email-list-actions">
-                                            {{-- <div class="form-check form-check-flat form-check-primary">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input">
-                                                </label>
-                                            </div> --}}
-                                            <a class="favorite active" href="#"><span><i
-                                                        data-feather="star"></i></span></a>
+
+                                            @if (isset($task->taskAssignments) && $task->taskAssignments->isNotEmpty())
+                                                <a class="success active" href="#">
+                                                    <span class="check-icon">
+                                                        <i class="fa-solid fa-check-double"></i>
+                                                    </span>
+                                                </a>
+                                            @else
+                                                <a class="success active" href="#">
+                                                    <span class="check-icon">
+                                                        <i class="fa-solid fa-check"></i>
+                                                    </span>
+                                                </a>
+                                            @endif
+
+
+                                            {{-- @dump($task->taskAssignments->first()->status ?? '') --}}
+
+
                                         </div>
                                         <a href="{{ route('ijro.read', $task->id) }}" class="email-list-detail">
                                             <div>
