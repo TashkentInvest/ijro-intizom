@@ -30,9 +30,9 @@ class TaskExport
 
         // Apply styles to header row
         $sheet->fromArray($headers, null, 'A1');
-        $sheet->getStyle('A1:I1')->applyFromArray([
+        $sheet->getStyle('A1:G1')->applyFromArray([
             'font' => ['bold' => true, 'size' => 12],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER, 'vertical' => Alignment::VERTICAL_CENTER],
             'fill' => [
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => ['rgb' => 'D9D9D9']
@@ -56,24 +56,23 @@ class TaskExport
             ];
             $documentType = $taskTypeLabels[$task->task_type] ?? 'Номаълум';
 
+            // Format Document Number and Date (Fixing Incorrect Quotes)
+            $documentNumberAndDate = "{$task->id}\n" . optional($task->start_date)->format('Y-m-d');
+
             // Assigned executors
             $executors = implode("\n", $task->users->pluck('name')->toArray());
-
-            // Uncompleted executors
-            $uncompletedExecutors = optional($task->taskAssignments->where('status', '!=', 'completed'))
-                ->pluck('user.name')->implode("\n");
 
             // Set values in cells
             $sheet->setCellValue('A' . $row, $index + 1);
             $sheet->setCellValue('B' . $row, $documentType);
-            $sheet->setCellValue('C' . $row, $task->id . "\n" . $task->start_date->format('Y-m-d'));
+            $sheet->setCellValue('C' . $row, $documentNumberAndDate);
             $sheet->setCellValue('D' . $row, $task->description);
             $sheet->setCellValue('E' . $row, optional($task->end_date)->format('d.m.Y') ?? '');
             $sheet->setCellValue('F' . $row, $executors);
-            $sheet->setCellValue('I' . $row, $status);
+            $sheet->setCellValue('G' . $row, $status);
 
             // Apply styles to content rows
-            $sheet->getStyle("A{$row}:I{$row}")->applyFromArray([
+            $sheet->getStyle("A{$row}:G{$row}")->applyFromArray([
                 'alignment' => ['vertical' => Alignment::VERTICAL_TOP, 'wrapText' => true],
                 'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
             ]);
@@ -82,7 +81,7 @@ class TaskExport
         }
 
         // Adjust column widths
-        foreach (range('A', 'I') as $col) {
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
