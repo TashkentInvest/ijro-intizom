@@ -22,7 +22,6 @@ class IjroController extends Controller
 {
     public function index(Request $request)
     {
-        // dd('te');
         // Get the current authenticated user
         $user = Auth::user();
         $isSuperAdmin = $user->roles()->where('name', 'Super Admin')->exists();
@@ -48,11 +47,6 @@ class IjroController extends Controller
             });
         }
 
-        // If the user is not a super admin, restrict the query to exclude completed or archived tasks
-        if (!$isSuperAdmin) {
-            $query;  // Exclude completed or archived tasks
-        }
-
         // Apply filters (task type, starred, status, date range, etc.)
         if ($taskTypeFilter) {
             $query->where('task_type', $taskTypeFilter);
@@ -64,7 +58,17 @@ class IjroController extends Controller
 
         if ($statusFilter && $statusFilter !== 'all') {
             $query->whereHas('taskAssignments', function ($q) use ($statusFilter) {
-                $q->where('status', $statusFilter);
+                if ($statusFilter === 'rejected') {
+                    // Rejected tasks: Tasks with status not 'completed', but confirmed and expired
+                    $q->where('status', '!=', 'completed');
+                } elseif ($statusFilter === 'delayed') {
+                    // Delayed tasks: Completed tasks where the end date is past the current date
+                    $q->where('status', 'completed')
+                        ->whereDate('end_date', '<', now()); // Tasks with completed status but past end_date
+                } else {
+                    // For all other statuses
+                    $q->where('status', $statusFilter);
+                }
             });
         }
 
@@ -89,10 +93,6 @@ class IjroController extends Controller
         // Initialize a new query for counting tasks with the same filters
         $countQuery = Task::query();
 
-        if (!$isSuperAdmin) {
-            $countQuery; // Exclude completed or archived tasks
-        }
-
         // Apply filters to the count query
         if ($taskTypeFilter) {
             $countQuery->where('task_type', $taskTypeFilter);
@@ -104,7 +104,15 @@ class IjroController extends Controller
 
         if ($statusFilter && $statusFilter !== 'all') {
             $countQuery->whereHas('taskAssignments', function ($q) use ($statusFilter) {
-                $q->where('status', $statusFilter);
+                if ($statusFilter === 'rejected') {
+                    // Rejected tasks: Tasks with status not 'completed', but confirmed and expired
+                    $q->where('status', '!=', 'completed');
+                } elseif ($statusFilter === 'delayed') {
+                    $q->where('status', 'completed')
+                        ->whereDate('end_date', '<', now()); // Completed tasks with past end_date
+                } else {
+                    $q->where('status', $statusFilter);
+                }
             });
         }
 
@@ -136,16 +144,21 @@ class IjroController extends Controller
                 $query->where('status', 'completed');
             })->count(),
             'rejected' => $countQuery->whereHas('taskAssignments', function ($query) {
-                $query->where('status', 'rejected');
+                // Assuming 'rejected' is where the status is not 'completed'
+                $query->where('status', '!=', 'completed')
+                    ;
             })->count(),
             'delayed' => $countQuery->whereHas('taskAssignments', function ($query) {
-                $query->where('status', 'delayed');
+                // Delayed tasks: Completed tasks where the end date is past the current date
+                $query->where('status', 'completed')
+                    ->whereDate('end_date', '<', now());
             })->count(),
         ];
 
         // Return view with tasks and counts
         return view('pages.ijro.inbox', compact('tasks', 'statusCounts'));
     }
+
 
     public function read($id)
     {
