@@ -73,7 +73,8 @@
                                 },
                                 success: function(response) {
                                     alert('Кэш муваффақиятли тозаланди!');
-                                    location.reload(); // Optionally refresh the page to reload calendar data
+                                    location
+                                        .reload(); // Optionally refresh the page to reload calendar data
                                 },
                                 error: function() {
                                     alert('Кэшни тозалашда хатолик юз берди!');
@@ -110,7 +111,8 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 id="viewEventTitle" class="modal-title"></h5>
-                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                                <button type="button" class="btn-close" data-dismiss="modal"
+                                    aria-label="close"></button>
                             </div>
                             <div id="viewEventBody" class="modal-body"></div>
                             <div class="modal-footer" id="viewEventFooter">
@@ -125,22 +127,26 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Янги Ҳодиса Қўшиш</h5>
-                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                                <button type="button" class="btn-close" data-dismiss="modal"
+                                    aria-label="close"></button>
                             </div>
                             <div class="modal-body">
                                 <form id="createEventForm">
                                     @csrf
                                     <div class="form-group mb-3">
                                         <label for="eventTitle" class="form-label">Сарлавҳа</label>
-                                        <input type="text" class="form-control" id="eventTitle" name="title" required>
+                                        <input type="text" class="form-control" id="eventTitle" name="title"
+                                            required>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="eventStart" class="form-label">Бошланиш санаси</label>
-                                        <input type="datetime-local" class="form-control" id="eventStart" name="start_date" required>
+                                        <input type="datetime-local" class="form-control" id="eventStart"
+                                            name="start_date" required>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="eventEnd" class="form-label">Тугаш санаси</label>
-                                        <input type="datetime-local" class="form-control" id="eventEnd" name="end_date">
+                                        <input type="datetime-local" class="form-control" id="eventEnd"
+                                            name="end_date">
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="eventDescription" class="form-label">Изоҳ</label>
@@ -149,7 +155,8 @@
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Бекор қилиш</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Бекор
+                                    қилиш</button>
                                 <button type="button" id="saveEvent" class="btn btn-primary">Сақлаш</button>
                             </div>
                         </div>
@@ -161,7 +168,8 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Ҳодисани Таҳрирлаш</h5>
-                                <button type="button" class="btn-close" data-dismiss="modal" aria-label="close"></button>
+                                <button type="button" class="btn-close" data-dismiss="modal"
+                                    aria-label="close"></button>
                             </div>
                             <div class="modal-body">
                                 <form id="editEventForm">
@@ -169,15 +177,18 @@
                                     <input type="hidden" id="editEventId" name="event_id">
                                     <div class="form-group mb-3">
                                         <label for="editEventTitle" class="form-label">Сарлавҳа</label>
-                                        <input type="text" class="form-control" id="editEventTitle" name="title" required>
+                                        <input type="text" class="form-control" id="editEventTitle"
+                                            name="title" required>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="editEventStart" class="form-label">Бошланиш санаси</label>
-                                        <input type="datetime-local" class="form-control" id="editEventStart" name="start_date" required>
+                                        <input type="datetime-local" class="form-control" id="editEventStart"
+                                            name="start_date" required>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="editEventEnd" class="form-label">Тугаш санаси</label>
-                                        <input type="datetime-local" class="form-control" id="editEventEnd" name="end_date">
+                                        <input type="datetime-local" class="form-control" id="editEventEnd"
+                                            name="end_date">
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="editEventDescription" class="form-label">Изоҳ</label>
@@ -187,7 +198,8 @@
                             </div>
                             <div class="modal-footer" id="editEventFooter">
                                 <button type="button" class="btn btn-danger" id="deleteEventBtn">Ўчириш</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Бекор қилиш</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Бекор
+                                    қилиш</button>
                                 <button type="button" id="updateEventBtn" class="btn btn-primary">Сақлаш</button>
                             </div>
                         </div>
@@ -247,8 +259,10 @@
                 },
                 eventClick: function(event) {
                     $('#viewEventTitle').text(event.title);
-                    let startTxt = event.realStart ? moment(event.realStart).format('DD/MM/YYYY HH:mm:ss') : 'Йўқ';
-                    let endTxt = event.realEnd ? moment(event.realEnd).format('DD/MM/YYYY HH:mm:ss') : 'Йўқ';
+                    let startTxt = event.realStart ? moment(event.realStart).format(
+                        'DD/MM/YYYY HH:mm:ss') : 'Йўқ';
+                    let endTxt = event.realEnd ? moment(event.realEnd).format('DD/MM/YYYY HH:mm:ss') :
+                        'Йўқ';
                     let desc = event.description ?? event.note ?? '';
 
                     let emp_names = event.emp_names ? event.emp_names.join(', ') : '';
@@ -280,9 +294,11 @@
                                 let evt = found[0];
                                 $('#editEventId').val(eid);
                                 $('#editEventTitle').val(evt.title);
-                                $('#editEventStart').val(moment(evt.realStart).format('YYYY-MM-DDTHH:mm:ss'));
+                                $('#editEventStart').val(moment(evt.realStart).format(
+                                    'YYYY-MM-DDTHH:mm:ss'));
                                 if (evt.realEnd) {
-                                    $('#editEventEnd').val(moment(evt.realEnd).format('YYYY-MM-DDTHH:mm:ss'));
+                                    $('#editEventEnd').val(moment(evt.realEnd).format(
+                                        'YYYY-MM-DDTHH:mm:ss'));
                                 } else {
                                     $('#editEventEnd').val('');
                                 }
@@ -298,7 +314,8 @@
                 dayClick: function(date) {
                     const selectedDate = date.format('YYYY-MM-DD');
                     const eventsOnSelectedDate = originalEvents.filter(event => {
-                        return moment(event.start).isSame(selectedDate, 'day') || (event.end && moment(event.end).isSame(selectedDate, 'day'));
+                        return moment(event.start).isSame(selectedDate, 'day') || (event.end &&
+                            moment(event.end).isSame(selectedDate, 'day'));
                     });
 
                     const taskType = $('#taskTypeFilter').val();
@@ -316,14 +333,17 @@
                                         <th class="pt-0">Бошланиш санаси</th>
                                         <th class="pt-0">Тугаш санаси</th>
                                         <th class="pt-0">Изоҳ</th>
+                                        <th class="pt-0">Кўриш</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                     `;
 
                     filteredEvents.forEach((event, index) => {
-                        let startTxt = event.realStart ? moment(event.realStart).format('DD/MM/YYYY HH:mm:ss') : 'Йўқ';
-                        let endTxt = event.realEnd ? moment(event.realEnd).format('DD/MM/YYYY HH:mm:ss') : 'Йўқ';
+                        let startTxt = event.realStart ? moment(event.realStart).format(
+                            'DD/MM/YYYY HH:mm:ss') : 'Йўқ';
+                        let endTxt = event.realEnd ? moment(event.realEnd).format(
+                            'DD/MM/YYYY HH:mm:ss') : 'Йўқ';
                         let desc = event.description ?? event.note ?? '';
 
                         tableContent += `
@@ -333,6 +353,8 @@
                                 <td>${startTxt}</td>
                                 <td>${endTxt}</td>
                                 <td>${desc}</td>
+                        <td><a href="${event.task_link ?? ''}">Кўриш</a></td>
+
                             </tr>
                         `;
                     });
