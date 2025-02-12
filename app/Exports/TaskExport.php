@@ -24,8 +24,7 @@ class TaskExport
             'Ҳужжат рақами ва санаси',
             'Топшириқ мазмуни',
             'Топшириқ муддати',
-            'Ижрочилар',
-            'Масъул ижрочи(лар)',
+            'Ижрочи(лар)',
             'Топшириқ ҳолати'
         ];
 
@@ -71,7 +70,6 @@ class TaskExport
             $sheet->setCellValue('D' . $row, $task->description);
             $sheet->setCellValue('E' . $row, optional($task->end_date)->format('d.m.Y') ?? '');
             $sheet->setCellValue('F' . $row, $executors);
-            $sheet->setCellValue('G' . $row, optional($task->user)->name ?? '');
             $sheet->setCellValue('I' . $row, $status);
 
             // Apply styles to content rows
