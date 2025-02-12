@@ -332,7 +332,6 @@
                                         <th class="pt-0">Сарлавҳа</th>
                                         <th class="pt-0">Бошланиш санаси</th>
                                         <th class="pt-0">Тугаш санаси</th>
-                                        <th class="pt-0">Изоҳ</th>
                                         <th class="pt-0">Кўриш</th>
                                     </tr>
                                 </thead>
@@ -352,7 +351,6 @@
                                 <td>${event.title}</td>
                                 <td>${startTxt}</td>
                                 <td>${endTxt}</td>
-                                <td>${desc}</td>
                         <td><a href="${event.task_link ?? ''}">Кўриш</a></td>
 
                             </tr>
