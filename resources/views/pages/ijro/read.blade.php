@@ -14,10 +14,24 @@
                             <div class="task-header mb-4">
                                 <div class="d-flex justify-content-between">
                                     <div class="task-header-left d-flex align-items-center">
-                                        <span class="task-status-icon mr-2">
+                                        {{-- <span class="task-status-icon mr-2">
                                             <i data-feather="star" class="text-warning"></i>
-                                        </span>
-                                        <h3 class="font-weight-bold">{{ $task->short_name }}</h3>
+                                        </span> --}}
+
+                                        <h3 class="font-weight-bold">{{ $task->short_name }} @if (isset($task->taskAssignments) && $task->taskAssignments->isNotEmpty())
+                                                <a class="success active" href="#">
+                                                    <span class="check-icon">
+                                                        <i class="fa-solid fa-check-double"></i>
+                                                    </span>
+                                                </a>
+                                            @else
+                                                <a class="success active" href="#">
+                                                    <span class="check-icon">
+                                                        <i class="fa-solid fa-check"></i>
+                                                    </span>
+                                                </a>
+                                            @endif
+                                        </h3>
                                     </div>
                                     <div class="task-header-right text-muted">
                                         <small>Яратилган сана: {{ $task->created_at->format('d M, Y, H:i') }}</small>
@@ -36,7 +50,21 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <strong>Вазифа Тури:</strong>
-                                        <span class="badge badge-info">{{ ucfirst($task->task_type) }}</span>
+                                        <span class="badge badge-info">
+
+
+                                            @if ($task->task_type == 'meeting')
+                                                Эслатмалар
+                                            @elseif($task->task_type == 'hr_task')
+                                                Ҳужжат алмашинуви
+                                            @elseif($task->task_type == 'emp_task')
+                                                Шахсий топшириқ
+                                            @endif
+
+                                        </span>
+
+
+                                        {{-- <span class="badge badge-info">{{ ucfirst($task->task_type) }}</span> --}}
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <strong>Якунланиш Санаси:</strong>
@@ -198,8 +226,8 @@
                                             </button>
 
                                             <!-- Reject Task Button -->
-                                            <button type="button" class="btn btn-danger shadow-sm" data-bs-toggle="modal"
-                                                data-bs-target="#rejectTaskByAdminModal">
+                                            <button type="button" class="btn btn-danger shadow-sm"
+                                                data-bs-toggle="modal" data-bs-target="#rejectTaskByAdminModal">
                                                 <i data-feather="x-circle" class="mr-2"></i> Вазифани Рад Қлиш
                                             </button>
                                         @endif
@@ -385,11 +413,11 @@
             }
 
             /* html,
-                                            body {
-                                                margin: 0;
-                                                padding: 0;
-                                                font: 1em/1.5 Verdana, sans-serif;
-                                            } */
+                                                                body {
+                                                                    margin: 0;
+                                                                    padding: 0;
+                                                                    font: 1em/1.5 Verdana, sans-serif;
+                                                                } */
 
             .slider {
                 --thumb-diameter: 2em;
