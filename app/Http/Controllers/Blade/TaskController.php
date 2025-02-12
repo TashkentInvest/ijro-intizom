@@ -21,7 +21,7 @@ class TaskController extends Controller
     public function index()
     {
         $tasksHistories = Task::with('document')
-      
+
         ->get()->all();
         return view('tasks.index', compact('tasksHistories'));
     }
@@ -211,7 +211,7 @@ class TaskController extends Controller
             $task->user_id = auth()->user()->id; // Update with the current user (can be changed as needed)
             $task->poruchenie = $validatedData['poruchenie'] ?? $task->poruchenie;
             $task->short_name = $validatedData['short_name'] ?? $task->short_name;
-            
+
             $task->issue_date = $validatedData['issue_date'] ?? $task->issue_date;
             $task->planned_completion_date = $validatedData['planned_completion_date'] ?? $task->planned_completion_date;
             $task->note = $validatedData['note'] ?? $task->note;
@@ -320,15 +320,16 @@ class TaskController extends Controller
     {
         // Find the task by its ID
         $task = Task::find($id);
-    
+
         // Only approve if the task is not already approved
         if ($task->status_id != TaskStatus::SHEF_APPROVED) {
             $task->status_id = TaskStatus::SHEF_APPROVED; // Set to approved
             $task->save(); // Save the updated task status
         }
-    
+
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Task approved!');
     }
-    
+
+
 }

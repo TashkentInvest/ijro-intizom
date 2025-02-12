@@ -304,4 +304,7 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
+
+    Route::get('/export-tasks', [IjroController::class, 'exportTasks'])->name('exportTasks');
+
 });

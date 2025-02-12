@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TaskExport;
 use App\Models\Category;
 use App\Models\Document;
 use App\Models\File;
@@ -145,8 +146,7 @@ class IjroController extends Controller
             })->count(),
             'rejected' => $countQuery->whereHas('taskAssignments', function ($query) {
                 // Assuming 'rejected' is where the status is not 'completed'
-                $query->where('status', '!=', 'completed')
-                    ;
+                $query->where('status', '!=', 'completed');
             })->count(),
             'delayed' => $countQuery->whereHas('taskAssignments', function ($query) {
                 // Delayed tasks: Completed tasks where the end date is past the current date
@@ -570,5 +570,10 @@ class IjroController extends Controller
         }
 
         return redirect()->back()->with('error', 'Вазифа топилмади.');
+    }
+    public function exportTasks()
+    {
+        $exporter = new TaskExport();
+        return $exporter->export();
     }
 }

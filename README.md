@@ -261,3 +261,8 @@ https://codepen.io/vinaymuliya/pen/gOqjEaj
 https://codepen.io/NoSmoking/pen/MYgjYGo
 
 https://codepen.io/jkantner/pen/qBbWjaJ
+
+composer require phpoffice/phpspreadsheet
+
+composer update --with-all-dependencies
+

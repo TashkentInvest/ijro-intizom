@@ -4,6 +4,10 @@
     <div class="d-flex justify-content-between align-items-center flex-wrap grid-margin">
         <div>
             <h4 class="mb-3 mb-md-0">Тахлил панелига хуш келибсиз</h4>
+            <form action="{{ route('exportTasks') }}">
+                <button class="btn btn-primary text-ligth" type="submit">Excel</button>
+            </form>
+
         </div>
         <div class="d-flex align-items-center flex-wrap text-nowrap">
             <div class="input-group date datepicker dashboard-date mr-2 mb-2 mb-md-0 d-md-none d-xl-flex" id="dashboardDate">
@@ -112,14 +116,14 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton7">
                                 <a class="dropdown-item d-flex align-items-center" href="#"><i data-feather="eye"
                                         class="icon-sm mr-2"></i> <span>Кўриш</span></a>
-                                <a class="dropdown-item d-flex align-items-center" href="#"><i
-                                        data-feather="edit-2" class="icon-sm mr-2"></i> <span>Таҳрирлаш</span></a>
+                                <a class="dropdown-item d-flex align-items-center" href="#"><i data-feather="edit-2"
+                                        class="icon-sm mr-2"></i> <span>Таҳрирлаш</span></a>
                                 <a class="dropdown-item d-flex align-items-center" href="#"><i data-feather="trash"
                                         class="icon-sm mr-2"></i> <span>Ўчириш</span></a>
-                                <a class="dropdown-item d-flex align-items-center" href="#"><i
-                                        data-feather="printer" class="icon-sm mr-2"></i> <span>Чоп этиш</span></a>
-                                <a class="dropdown-item d-flex align-items-center" href="#"><i
-                                        data-feather="download" class="icon-sm mr-2"></i> <span>Юклаб олиш</span></a>
+                                <a class="dropdown-item d-flex align-items-center" href="#"><i data-feather="printer"
+                                        class="icon-sm mr-2"></i> <span>Чоп этиш</span></a>
+                                <a class="dropdown-item d-flex align-items-center" href="#"><i data-feather="download"
+                                        class="icon-sm mr-2"></i> <span>Юклаб олиш</span></a>
                             </div>
                         </div>
                     </div>
@@ -140,9 +144,9 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $task->short_name }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($task->start_date)}}</td>
-                                        <td>{{ \Carbon\Carbon::parse($task->end_date)}}</td>
-<td></td>                                        {{-- <td>
+                                        <td>{{ \Carbon\Carbon::parse($task->start_date) }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($task->end_date) }}</td>
+                                        <td></td> {{-- <td>
                                             @if ($task->taskAssignments->first()->status == 'completed')
                                                 <span class="badge badge-success">Якунланган</span>
                                             @elseif ($task->taskAssignments->first()->status == 'in_progress')
